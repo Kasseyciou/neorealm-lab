@@ -231,6 +231,7 @@ function setupWaterfallMotion() {
       });
       document.querySelectorAll('[data-trail-card]').forEach((card) => {
         card.style.setProperty('--depth-shift', '0px');
+        card.style.setProperty('--perspective-x', '0px');
       });
       return;
     }
@@ -238,19 +239,24 @@ function setupWaterfallMotion() {
     sections.forEach((section) => {
       const rect = section.getBoundingClientRect();
       const progress = clamp((window.innerHeight - rect.top) / (rect.height + window.innerHeight));
+      const columnRange = Number(section.dataset.columnRange || 420);
+      const depthRange = Number(section.dataset.depthRange || 46);
 
       section.querySelectorAll('[data-waterfall-column]').forEach((column) => {
         const speed = Number(column.dataset.speed || 1);
-        const shift = (progress - 0.5) * (speed - 0.9) * 420;
+        const shift = (progress - 0.5) * (speed - 0.9) * columnRange;
         column.style.setProperty('--column-shift', `${shift.toFixed(2)}px`);
       });
 
       section.querySelectorAll('[data-trail-card]').forEach((card) => {
         const cardRect = card.getBoundingClientRect();
         const depth = Number(card.dataset.depth || 0.6);
+        const driftX = Number(card.dataset.driftX || 0);
         const centerDelta = window.innerHeight / 2 - (cardRect.top + cardRect.height / 2);
-        const shift = clamp(centerDelta * 0.045 * depth, -46, 46);
+        const shift = clamp(centerDelta * 0.045 * depth, -depthRange, depthRange);
+        const lateralShift = clamp(centerDelta * driftX, -38, 38);
         card.style.setProperty('--depth-shift', `${shift.toFixed(2)}px`);
+        card.style.setProperty('--perspective-x', `${lateralShift.toFixed(2)}px`);
       });
     });
   };

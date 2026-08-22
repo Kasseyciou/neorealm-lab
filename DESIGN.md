@@ -74,10 +74,11 @@ Customer-facing sequence:
 
 1. Supplied moving-image KV and primary promise.
 2. Sticky Studio introduction with three generated abstract scenes.
-3. `Worlds in motion` — twelve selected visual works in two long streams.
-4. AI visual, motion and web service sequence.
-5. `Selected web archive` — four real cases plus two detail crops in a flowing evidence wall.
-6. Generated cinematic studio contact scene and project CTA.
+3. `Worlds in motion` — twelve selected visual works in a three-depth gallery.
+4. A horizontal low-chroma Instagram field that restores color on hover or focus.
+5. AI visual, motion and web service sequence.
+6. `Selected web archive` — four real cases plus two detail crops in a flowing evidence wall.
+7. Generated cinematic studio contact scene and project CTA.
 
 ## Identity
 
@@ -111,11 +112,17 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 
 ### Visual work waterfall
 
-- Sticky narrative occupies the left field; two media columns continue upward on the right.
-- Twelve cards mix landscape, portrait, square and tall ratios.
-- Columns use different scroll speeds and cards use bounded depth offsets (maximum 46px).
+- Sticky narrative occupies the left field; three asymmetric media lanes pass it like exhibits in a salon wall.
+- Twelve cards mix landscape, portrait, square and tall ratios across far, middle and near planes.
+- Far work is smaller, quieter and slower; the near lane is larger and faster. The selected gallery uses bounded vertical depth up to 84px and lateral drift up to 38px.
 - Fine-pointer hover shifts the media slightly and displaces two clipped image bands up to about 42px, creating a visible dragged-image trail.
 - This is perceptual drag, not draggable/reorderable UI.
+
+### Instagram field
+
+- The gallery resolves into one horizontally scrollable row of nine Instagram crops before Services.
+- Tiles are grayscale and low-chroma by default; hover and keyboard focus restore the original color and full opacity.
+- The rail never auto-marquees. Horizontal scrolling is explicit on touch devices so it does not compete with the authored gallery motion.
 
 ### Web archive waterfall
 
@@ -126,7 +133,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 ### Mobile and reduced motion
 
 - At 720px and below, work and archive remain two compact media columns while the narrative becomes a sticky top veil.
-- Scroll-speed transforms, depth shifts and image trails are disabled on mobile.
+- The three desktop lanes collapse through `display: contents` into two compact mobile columns; scroll-speed transforms, depth shifts and image trails are disabled.
 - Reduced motion pauses video and removes parallax, displacement animation, depth and trail layers while keeping all information available.
 - Reduced motion also removes typographic crops, blur and spatial travel; copy remains immediately visible.
 
@@ -161,6 +168,8 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 
 - **The Site-Is-The-Proof Rule:** demonstrate current web skill through the current experience; never narrate internal strategy to clients.
 - **The Sticky Evidence Rule:** copy holds position while enough media passes to establish range and depth.
+- **The Perspective Salon Rule:** work changes scale, speed and lateral position by plane; it must never return to equal card columns.
+- **The Color-on-Approach Rule:** the Instagram field stays quiet until pointer hover or keyboard focus restores color.
 - **The Bounded Trail Rule:** hover may smear clipped image bands, but never destabilize reading or imply free dragging.
 - **The One-Signal Rule:** Acid Signal directs attention; it does not become ambient decoration.
 - **The Sharp System Rule:** production geometry remains rectangular.
