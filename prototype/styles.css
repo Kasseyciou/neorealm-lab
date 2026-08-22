@@ -1966,7 +1966,7 @@ html {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: clamp(22px, 3vw, 46px);
+  gap: clamp(32px, 4.2vw, 64px);
   transform: translate3d(0, var(--column-shift, 0px), 0);
   will-change: transform;
 }
@@ -2006,18 +2006,20 @@ html {
   --piece-scale: 0.82;
   width: 106%;
   opacity: 0.68;
+  box-shadow: 0 18px 58px rgba(0, 0, 0, 0.18);
 }
 
 .waterfall-column-near .waterfall-card {
   --piece-scale: 1.08;
   width: 108%;
-  box-shadow: 0 38px 120px rgba(0, 0, 0, 0.34);
+  box-shadow: 0 44px 132px rgba(0, 0, 0, 0.4);
 }
 
 .waterfall-column-mid .waterfall-card {
   --piece-scale: 0.93;
   width: 102%;
   opacity: 0.9;
+  box-shadow: 0 30px 92px rgba(0, 0, 0, 0.28);
 }
 
 .waterfall-card.piece-left {
@@ -2357,6 +2359,38 @@ html {
 
   .waterfall-column-far {
     display: none;
+  }
+}
+
+@media (min-width: 721px) and (max-width: 980px) {
+  .waterfall-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas: none;
+    gap: 34px 24px;
+  }
+
+  .waterfall-column,
+  .waterfall-column-far {
+    display: contents;
+  }
+
+  .waterfall-column-near .waterfall-card,
+  .waterfall-column-mid .waterfall-card,
+  .waterfall-column-far .waterfall-card {
+    --piece-x: 0%;
+    width: 100%;
+  }
+
+  .waterfall-column-near .waterfall-card {
+    --piece-scale: 1.02;
+  }
+
+  .waterfall-column-mid .waterfall-card {
+    --piece-scale: 0.96;
+  }
+
+  .waterfall-column-far .waterfall-card {
+    --piece-scale: 0.9;
   }
 }
 

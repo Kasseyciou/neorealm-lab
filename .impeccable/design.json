@@ -60,8 +60,8 @@
       "name": "Cinematic Navigation",
       "kind": "nav",
       "refersTo": "navigation",
-      "description": "Fixed Silk Veil navigation with the white SVG wordmark, Marcellus routes, and Acid Signal action.",
-      "html": "<nav class=\"ds-nav\"><strong>NeoRealm LAB</strong><div><a href=\"#\">Work</a><a href=\"#\">Services</a><a href=\"#\">Studio</a></div><a class=\"ds-nav-action\" href=\"#\">Start a Project</a></nav>",
+      "description": "Fixed Silk Veil navigation with Studio, Work, and Services at left, the white SVG wordmark centered on the viewport, and an Acid Signal project action at right.",
+      "html": "<nav class=\"ds-nav\"><strong>NeoRealm LAB</strong><div><a href=\"#\">Studio</a><a href=\"#\">Work</a><a href=\"#\">Services</a></div><a class=\"ds-nav-action\" href=\"#\">Start a Project</a></nav>",
       "css": ".ds-nav { position:fixed; inset:0 0 auto; z-index:18; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; min-height:72px; padding:10px 4vw; border-bottom:1px solid rgba(255,255,255,.16); background:rgba(12,13,12,.22); backdrop-filter:blur(18px) saturate(128%); color:#f2f1eb; font-family:Marcellus,serif; } .ds-nav div { display:flex; gap:32px; } .ds-nav a { color:inherit; font-size:12px; text-decoration:none; } .ds-nav a:focus-visible { outline:2px solid currentColor; outline-offset:4px; } .ds-nav-action { justify-self:end; padding:10px 14px; border:1px solid #d9f45f; color:#d9f45f!important; }"
     },
     {
@@ -69,7 +69,7 @@
       "kind": "custom",
       "refersTo": "kv-stage",
       "description": "A 178dvh video and poster stage with a two-message scroll sequence.",
-      "html": "<section class=\"ds-kv\"><p>I DESIGN<br>NEW REALMS.</p><span>Design × AI × Motion × Web</span></section>",
+      "html": "<section class=\"ds-kv\"><p>WE DESIGN<br>NEW REALMS.</p><span>Design × AI × Motion × Web</span></section>",
       "css": ".ds-kv { position:relative; display:flex; min-height:560px; align-items:center; padding:6vw; overflow:hidden; background:linear-gradient(90deg,rgba(8,9,8,.9),rgba(8,9,8,.2)),#080908; color:#f2f1eb; font-family:Marcellus,serif; } .ds-kv p { margin:0; font-size:clamp(58px,7vw,96px); line-height:.92; } .ds-kv span { position:absolute; right:6vw; bottom:8vh; color:#d9f45f; font-size:12px; letter-spacing:.08em; }"
     },
     {
@@ -84,7 +84,7 @@
       "name": "Perspective Salon Gallery",
       "kind": "custom",
       "refersTo": "web-case-stage",
-      "description": "Sticky narrative beside three asymmetric exhibit lanes; twelve works are sampled from a twenty-image pool on load, preserve their full 4:5 canvas, and use bounded scale, parallax, and focus-clearing optical blur for depth.",
+      "description": "Sticky narrative beside three asymmetric exhibit lanes; ten works are sampled from a twenty-image pool in a 4/3/3 distribution, preserve their full 4:5 canvas, and use generous spacing, plane-specific shadows, parallax, and focus-clearing blur for depth.",
       "html": "<section class=\"ds-waterfall\"><header><h2>Worlds in motion.</h2></header><div class=\"ds-streams\"><div class=\"far\"></div><div class=\"near\"></div><div class=\"mid\"></div></div></section>",
       "css": ".ds-waterfall { display:grid; grid-template-columns:.54fr 1.46fr; background:#1b1b18; color:#f2f1eb; } .ds-waterfall header { position:sticky; top:20vh; align-self:start; padding:15vh 6vw; } .ds-streams { display:grid; grid-template-columns:.72fr 1.12fr .78fr; gap:1.8vw; padding:18vh 3vw 20vh 0; } .ds-streams div { min-height:1200px; background:#11110f; } .ds-streams .far { transform:scale(.82); opacity:.68; } .ds-streams .near { transform:scale(1.08); } .ds-streams .mid { transform:scale(.93); opacity:.9; }"
     },
@@ -92,7 +92,7 @@
       "name": "Low-Chroma Instagram Rail",
       "kind": "custom",
       "refersTo": "instagram-field",
-      "description": "One load-shuffled row of all twenty supplied 4:5 Instagram works; images remain uncropped, lazy-load, restore color on focus, and convert bounded vertical wheel input into horizontal movement.",
+      "description": "One load-shuffled row of all twenty supplied 4:5 Instagram works; the complete More from section converts bounded vertical wheel input into horizontal movement while images remain uncropped, lazy-load, and restore color on focus.",
       "html": "<section class=\"ds-instagram\"><h2>More from @neorealmlab.</h2><div><a href=\"#\"></a><a href=\"#\"></a><a href=\"#\"></a></div></section>",
       "css": ".ds-instagram { overflow:hidden; padding:10vw 0; background:#11110f; color:#f2f1eb; } .ds-instagram div { display:grid; width:max-content; grid-auto-columns:clamp(180px,18vw,292px); grid-auto-flow:column; gap:1vw; overflow-x:auto; scroll-snap-type:x proximity; } .ds-instagram a { aspect-ratio:4/5; scroll-snap-align:start; filter:grayscale(1) saturate(.1); opacity:.7; transition:filter 360ms cubic-bezier(.16,1,.3,1),opacity 240ms ease; } .ds-instagram img { width:100%; height:100%; object-fit:contain; } .ds-instagram a:hover,.ds-instagram a:focus-visible { filter:none; opacity:1; }"
     },
@@ -130,7 +130,7 @@
       "The supplied SVG wordmark anchors the navigation.",
       "The 178dvh KV uses the supplied video and a clean loading poster.",
       "Studio synchronizes three generated abstract images with three scrolling chapters.",
-      "Three asymmetric work planes sample twelve full 4:5 canvases and use bounded scale, parallax, and optical blur for depth; a shuffled twenty-image low-chroma rail restores color on approach and accepts bounded wheel-to-horizontal input.",
+      "Three asymmetric work planes sample ten full 4:5 canvases in a 4/3/3 distribution and use generous spacing, plane-specific shadows, parallax, and optical blur for depth; a shuffled twenty-image low-chroma rail accepts section-wide bounded wheel-to-horizontal input.",
       "Mobile and reduced-motion modes remove nonessential transforms and video playback.",
       "Project inquiry moves from a dark editorial pricing ledger to an inverted warm-white proposal sheet inside a full-viewport native dialog.",
       "The live interface demonstrates current web skill without exposing internal strategy; legacy work is supporting provenance."

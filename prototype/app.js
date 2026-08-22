@@ -397,10 +397,11 @@ function setupWorkLightbox() {
 }
 
 function setupInstagramWheel() {
+  const section = document.querySelector('.b-instagram-rail');
   const viewport = document.querySelector('.instagram-rail-viewport');
-  if (!viewport) return;
+  if (!section || !viewport) return;
 
-  viewport.addEventListener('wheel', (event) => {
+  section.addEventListener('wheel', (event) => {
     if (window.innerWidth <= 720 || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
     const maxScroll = viewport.scrollWidth - viewport.clientWidth;
     const movingForward = event.deltaY > 0;
