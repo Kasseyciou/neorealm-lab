@@ -1,0 +1,141 @@
+---
+name: "NeoRealm LAB Graphite Cinema"
+description: "Selected Direction B: cinematic scroll, liquid-silk navigation, layered work streams, and restrained Acid Signal controls."
+colors:
+  b-ink: "#f2f1eb"
+  b-muted: "#b0aea5"
+  b-black: "#11110f"
+  b-surface: "#1b1b18"
+  b-accent: "#d9f45f"
+  b-line: "rgba(242, 241, 235, 0.2)"
+  kv-black: "#080908"
+typography:
+  display:
+    fontFamily: '"Marcellus", "Zen Old Mincho", serif'
+    fontSize: "clamp(58px, 7vw, 96px)"
+    fontWeight: 400
+    lineHeight: 0.92
+    letterSpacing: "-0.035em"
+  headline:
+    fontFamily: '"Marcellus", "Zen Old Mincho", serif'
+    fontSize: "clamp(48px, 6vw, 88px)"
+    fontWeight: 400
+    lineHeight: 0.96
+    letterSpacing: "-0.03em"
+  body:
+    fontFamily: '"Zen Old Mincho", "Noto Serif TC", serif'
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 1.7
+    letterSpacing: "normal"
+rounded:
+  sharp: "0px"
+spacing:
+  section-inline: "clamp(22px, 6vw, 96px)"
+  section-block: "clamp(92px, 12vw, 176px)"
+components:
+  button-primary:
+    backgroundColor: "{colors.b-accent}"
+    textColor: "{colors.b-black}"
+    rounded: "{rounded.sharp}"
+    height: "48px"
+  silk-navigation:
+    backgroundColor: "rgba(12, 13, 12, 0.22)"
+    textColor: "{colors.b-ink}"
+    rounded: "{rounded.sharp}"
+    height: "72px"
+  waterfall-card:
+    backgroundColor: "{colors.b-black}"
+    textColor: "{colors.b-ink}"
+    rounded: "{rounded.sharp}"
+---
+
+# Design System: NeoRealm LAB Graphite Cinema
+
+## Creative direction
+
+**North Star: The Realm Becomes Real.** Direction B is authoritative and loads by default. Direction A remains only as a concealed prototype comparison, opened from the small “Compare modes” control at the lower-right.
+
+The public narrative does not explain internal strategy or present the new site as a case-study diagram. The site itself demonstrates current web craft through typography, responsive composition, authored scroll, layered media and precise interaction. Historical websites are supporting provenance.
+
+Customer-facing sequence:
+
+1. Supplied moving-image KV and primary promise.
+2. Sticky Studio introduction with three generated abstract scenes.
+3. `Worlds in motion` — twelve selected visual works in two long streams.
+4. AI visual, motion and web service sequence.
+5. `Selected web archive` — four real cases plus two detail crops in a flowing evidence wall.
+6. Generated cinematic studio contact scene and project CTA.
+
+## Identity
+
+- Use `prototype/assets/logo.svg` as the master wordmark.
+- Marcellus carries English display, navigation, captions and controls.
+- Zen Old Mincho carries Chinese and sustained reading.
+- Production geometry is sharp. Prototype controls may differ but must stay visually recessive.
+- Graphite neutrals carry the world; Acid Signal is reserved for action, sequence and links.
+
+## Navigation — Silk Veil
+
+The B navigation is fixed throughout the page. Its translucent field combines 18px backdrop blur, 128% saturation, a restrained turbulence/displacement filter (`baseFrequency 0.006 0.009`, two octaves, seed 92, scale 12), a fine bottom rule and an inset highlight.
+
+Scale is deliberately lower than the 45px Aether CSS demonstration because navigation typography must remain stable. Mobile, reduced-motion and browsers without the SVG/backdrop combination keep a standard blurred translucent fallback. Do not reproduce the effect as a glossy rounded card.
+
+## Layout and motion
+
+### Sticky KV
+
+- Desktop: 178dvh; mobile: 158dvh.
+- The supplied `hero-kv.mp4` plays only while B is active, visible and motion is allowed.
+- `hero-poster.png` remains until playback passes 6.2 seconds and is the reduced-motion fallback.
+- The main promise exits before the secondary `Design × AI × Motion × Web` statement enters.
+
+### Studio story
+
+- Desktop uses a 50/50 grid: sticky visual left, three viewport-height text chapters right.
+- The active generated scene crossfades and updates the `01 / 03` index.
+- Mobile holds the visual at 49dvh while chapters pass beneath it.
+
+### Visual work waterfall
+
+- Sticky narrative occupies the left field; two media columns continue upward on the right.
+- Twelve cards mix landscape, portrait, square and tall ratios.
+- Columns use different scroll speeds and cards use bounded depth offsets (maximum 46px).
+- Fine-pointer hover shifts the media slightly and displaces two clipped image bands up to about 42px, creating a visible dragged-image trail.
+- This is perceptual drag, not draggable/reorderable UI.
+
+### Web archive waterfall
+
+- Sticky narrative stays secondary to a two-column masonry evidence stream.
+- Four true archived cases are accompanied by two deliberate detail crops; detail crops must not be named as extra projects.
+- The same bounded depth and image-trail vocabulary connects old web craft to the current interface without turning it into a lengthy case study.
+
+### Mobile and reduced motion
+
+- At 720px and below, work and archive remain two compact media columns while the narrative becomes a sticky top veil.
+- Scroll-speed transforms, depth shifts and image trails are disabled on mobile.
+- Reduced motion pauses video and removes parallax, displacement animation, depth and trail layers while keeping all information available.
+
+## Imagery
+
+- Studio scenes are abstract, material and anonymous: optical glass, translucent film, metal, projected light.
+- The contact scene uses `prototype/assets/contact-studio.png`: a quiet dark left third for copy, with the anonymous creative figure and projected material activity to the right.
+- Generated imagery must include its prompt provenance in the shipping raster.
+- Avoid stock-office imagery, visible AI clichés, neon HUDs, purple gradients and readable fake interfaces.
+
+## Interaction and accessibility
+
+- Project actions are at least 44px high and have visible focus treatment.
+- The comparison selector exposes `aria-expanded` / `aria-hidden`, closes on outside click or Escape, and returns focus on Escape.
+- Cards are visual media, not fake controls; use a crosshair cursor only where the fine-pointer trail is available.
+- Headings and sticky copy retain adequate contrast over the media fields.
+- The page must not introduce horizontal overflow at 390px.
+
+## Named rules
+
+- **The Site-Is-The-Proof Rule:** demonstrate current web skill through the current experience; never narrate internal strategy to clients.
+- **The Sticky Evidence Rule:** copy holds position while enough media passes to establish range and depth.
+- **The Bounded Trail Rule:** hover may smear clipped image bands, but never destabilize reading or imply free dragging.
+- **The One-Signal Rule:** Acid Signal directs attention; it does not become ambient decoration.
+- **The Sharp System Rule:** production geometry remains rectangular.
+- **The Motion-Off Rule:** mobile and reduced-motion users receive the same content without nonessential transforms.

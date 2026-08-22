@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-22T15:04:00Z",
+  "title": "Design System: NeoRealm LAB Graphite Cinema",
+  "extensions": {
+    "colorMeta": {
+      "b-ink": { "role": "neutral", "displayName": "Projection White", "canonical": "#f2f1eb", "tonalRamp": ["#181817", "#353532", "#555550", "#777770", "#9b9a92", "#bebdb5", "#deddd6", "#f2f1eb"] },
+      "b-muted": { "role": "neutral", "displayName": "Cinema Muted", "canonical": "#b0aea5", "tonalRamp": ["#1a1a18", "#33322f", "#4c4b47", "#66645f", "#807e77", "#99978f", "#b0aea5", "#e7e5dd"] },
+      "b-black": { "role": "neutral", "displayName": "Cinema Black", "canonical": "#11110f", "tonalRamp": ["#11110f", "#292925", "#42423c", "#5f5e57", "#7e7d74", "#a09f95", "#c8c7be", "#f2f1eb"] },
+      "b-surface": { "role": "neutral", "displayName": "Graphite Surface", "canonical": "#1b1b18", "tonalRamp": ["#121210", "#292925", "#41413b", "#5d5c55", "#7c7b72", "#9e9d93", "#c5c4bb", "#efeee7"] },
+      "b-accent": { "role": "primary", "displayName": "Acid Signal", "canonical": "#d9f45f", "tonalRamp": ["#202600", "#3a4604", "#586a0b", "#789113", "#9abb20", "#bce33a", "#d9f45f", "#efffbd"] },
+      "b-line": { "role": "neutral", "displayName": "Projection Hairline", "canonical": "rgba(242, 241, 235, 0.2)", "tonalRamp": ["rgba(242,241,235,0.08)", "rgba(242,241,235,0.12)", "rgba(242,241,235,0.16)", "rgba(242,241,235,0.2)", "rgba(242,241,235,0.3)", "rgba(242,241,235,0.45)", "rgba(242,241,235,0.65)", "rgba(242,241,235,0.85)"] },
+      "kv-black": { "role": "neutral", "displayName": "KV Black", "canonical": "#080908", "tonalRamp": ["#080908", "#20211f", "#393a36", "#55564f", "#73736b", "#94948b", "#bcbcb4", "#eeeeea"] },
+      "studio-surface": { "role": "neutral", "displayName": "Studio Charcoal", "canonical": "#20211e", "tonalRamp": ["#11120f", "#292a26", "#42433e", "#5d5e57", "#797a72", "#999a91", "#bdbeb6", "#eeeeea"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Marcellus Display", "purpose": "English hero and major cinematic statements." },
+      "headline": { "displayName": "Marcellus Headline", "purpose": "Section claims and release framing." },
+      "body": { "displayName": "Zen Old Mincho Body", "purpose": "Chinese and sustained explanatory reading." },
+      "navigation": { "displayName": "Marcellus Navigation", "purpose": "English navigation and project actions." },
+      "label": { "displayName": "Marcellus Label", "purpose": "Captions, indices, evidence labels, and metadata." }
+    },
+    "shadows": [
+      { "name": "release-float", "value": "0 26px 90px rgba(0, 0, 0, 0.22)", "purpose": "Separates the flowing media cards from Graphite Surface." },
+      { "name": "studio-vignette", "value": "inset 0 0 90px rgba(0, 0, 0, 0.16)", "purpose": "Contains the active abstract Studio image." }
+    ],
+    "motion": [
+      { "name": "material-reveal", "value": "520ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Settles Studio transitions and clipped pointer trails without delaying feedback." },
+      { "name": "state-fade", "value": "420ms ease", "purpose": "Studio step and KV message visibility changes." },
+      { "name": "poster-fade", "value": "480ms ease", "purpose": "Crossfades the KV poster only after video passes 6.2 seconds." },
+      { "name": "reduced-motion", "value": "0.01ms", "purpose": "Collapses transitions and removes video, parallax, drift, and ghost transforms." }
+    ],
+    "breakpoints": [
+      { "name": "navigation-collapse", "value": "980px" },
+      { "name": "mobile-art-direction", "value": "720px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Project Action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Acid Signal action for selected work and project inquiry.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Explore selected work</a>",
+      "css": ".ds-btn-primary { display:inline-flex; min-height:48px; align-items:center; justify-content:center; padding:12px 20px; border:1px solid #d9f45f; border-radius:0; background:#d9f45f; color:#11110f; font-family:Marcellus,serif; font-size:13px; text-decoration:none; transition:background 180ms ease,color 180ms ease,transform 180ms ease; } .ds-btn-primary:hover { background:#f2f1eb; border-color:#f2f1eb; } .ds-btn-primary:focus-visible { outline:2px solid currentColor; outline-offset:4px; } .ds-btn-primary:active { transform:translateY(1px); }"
+    },
+    {
+      "name": "Secondary Project Action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Projection White outline action used over cinematic media.",
+      "html": "<a class=\"ds-btn-secondary\" href=\"#\">Start a Project</a>",
+      "css": ".ds-btn-secondary { display:inline-flex; min-height:48px; align-items:center; justify-content:center; padding:12px 20px; border:1px solid #f2f1eb; border-radius:0; background:transparent; color:#f2f1eb; font-family:Marcellus,serif; font-size:13px; text-decoration:none; transition:background 180ms ease,color 180ms ease,transform 180ms ease; } .ds-btn-secondary:hover { background:#f2f1eb; color:#11110f; } .ds-btn-secondary:focus-visible { outline:2px solid currentColor; outline-offset:4px; } .ds-btn-secondary:active { transform:translateY(1px); }"
+    },
+    {
+      "name": "Cinematic Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Fixed Silk Veil navigation with the white SVG wordmark, Marcellus routes, and Acid Signal action.",
+      "html": "<nav class=\"ds-nav\"><strong>NeoRealm LAB</strong><div><a href=\"#\">Work</a><a href=\"#\">Services</a><a href=\"#\">Studio</a></div><a class=\"ds-nav-action\" href=\"#\">Start a Project</a></nav>",
+      "css": ".ds-nav { position:fixed; inset:0 0 auto; z-index:18; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; min-height:72px; padding:10px 4vw; border-bottom:1px solid rgba(255,255,255,.16); background:rgba(12,13,12,.22); backdrop-filter:blur(18px) saturate(128%); color:#f2f1eb; font-family:Marcellus,serif; } .ds-nav div { display:flex; gap:32px; } .ds-nav a { color:inherit; font-size:12px; text-decoration:none; } .ds-nav a:focus-visible { outline:2px solid currentColor; outline-offset:4px; } .ds-nav-action { justify-self:end; padding:10px 14px; border:1px solid #d9f45f; color:#d9f45f!important; }"
+    },
+    {
+      "name": "Sticky KV Sequence",
+      "kind": "custom",
+      "refersTo": "kv-stage",
+      "description": "A 178dvh video and poster stage with a two-message scroll sequence.",
+      "html": "<section class=\"ds-kv\"><p>I DESIGN<br>NEW REALMS.</p><span>Design × AI × Motion × Web</span></section>",
+      "css": ".ds-kv { position:relative; display:flex; min-height:560px; align-items:center; padding:6vw; overflow:hidden; background:linear-gradient(90deg,rgba(8,9,8,.9),rgba(8,9,8,.2)),#080908; color:#f2f1eb; font-family:Marcellus,serif; } .ds-kv p { margin:0; font-size:clamp(58px,7vw,96px); line-height:.92; } .ds-kv span { position:absolute; right:6vw; bottom:8vh; color:#d9f45f; font-size:12px; letter-spacing:.08em; }"
+    },
+    {
+      "name": "Studio Story",
+      "kind": "custom",
+      "refersTo": "studio-story",
+      "description": "Half-width sticky abstract image paired with a scrolling editorial chapter.",
+      "html": "<section class=\"ds-studio\"><div class=\"ds-studio-image\"><span>01 / 03</span></div><article><h2>I design new realms.</h2><p>品牌、網站、AI 影像與動態敘事交會的獨立創意工作室。</p></article></section>",
+      "css": ".ds-studio { display:grid; grid-template-columns:1fr 1fr; gap:8vw; padding:6vw; background:#11110f; color:#f2f1eb; } .ds-studio-image { position:relative; min-height:520px; border:1px solid rgba(242,241,235,.12); background:#20211e; } .ds-studio-image span { position:absolute; right:16px; bottom:16px; padding:7px 9px; background:#d9f45f; color:#11110f; font-family:Marcellus,serif; } .ds-studio article { align-self:center; } .ds-studio h2 { font:400 clamp(48px,6vw,88px)/.95 Marcellus,serif; } .ds-studio p { max-width:34ch; color:#b0aea5; font:400 17px/1.9 'Zen Old Mincho',serif; }"
+    },
+    {
+      "name": "Flowing Work Waterfall",
+      "kind": "custom",
+      "refersTo": "web-case-stage",
+      "description": "Sticky narrative beside two long media streams with varied aspect ratios and bounded depth.",
+      "html": "<section class=\"ds-waterfall\"><header><h2>Worlds in motion.</h2></header><div class=\"ds-streams\"><div></div><div></div></div></section>",
+      "css": ".ds-waterfall { display:grid; grid-template-columns:.72fr 1.28fr; background:#1b1b18; color:#f2f1eb; } .ds-waterfall header { position:sticky; top:20vh; align-self:start; padding:15vh 6vw; } .ds-streams { display:grid; grid-template-columns:1fr 1fr; gap:2.2vw; padding:18vh 5vw 20vh 0; } .ds-streams div { min-height:1200px; background:#11110f; }"
+    },
+    {
+      "name": "Image Trail Card",
+      "kind": "card",
+      "refersTo": "release-wall-card",
+      "description": "Flowing media card with bounded scroll depth and clipped fine-pointer image trails.",
+      "html": "<article class=\"ds-release\"><div></div><h3>Cinematic Worldbuilding</h3><p>World, character, sequence</p></article>",
+      "css": ".ds-release { position:relative; min-height:420px; overflow:hidden; border-radius:0; background:#11110f; color:#f2f1eb; box-shadow:0 24px 80px rgba(0,0,0,.24); } .ds-release div { position:absolute; inset:0; background:#20211e; } .ds-release h3,.ds-release p { position:absolute; left:28px; z-index:1; } .ds-release h3 { bottom:52px; margin:0; font:400 34px/1 Marcellus,serif; } .ds-release p { bottom:24px; margin:0; color:#b0aea5; font:400 13px/1.5 'Zen Old Mincho',serif; } .ds-release:focus-within { outline:2px solid #f2f1eb; outline-offset:4px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Realm Becomes Real",
+    "overview": "NeoRealm LAB treats the selected site as an authored cinematic field. Graphite surfaces, Projection White type, one Acid Signal, sticky storytelling, long media streams, and clipped pointer trails prove current web, AI visual, and motion capability before a supporting legacy archive appears.",
+    "keyCharacteristics": [
+      "Direction B is selected; Direction A remains comparison apparatus only.",
+      "Marcellus carries English display, navigation, and labels; Zen Old Mincho carries Chinese and body reading.",
+      "The supplied SVG wordmark anchors the navigation.",
+      "The 178dvh KV uses the supplied video and a clean loading poster.",
+      "Studio synchronizes three generated abstract images with three scrolling chapters.",
+      "Two long work streams and the supporting web archive receive bounded desktop depth and clipped pointer trails.",
+      "Mobile and reduced-motion modes remove nonessential transforms and video playback.",
+      "The live interface demonstrates current web skill without exposing internal strategy; legacy work is supporting provenance."
+    ],
+    "rules": [
+      { "name": "The One-Signal Rule", "body": "Projection White and graphite neutrals carry most screens so Acid Signal remains rare enough to direct attention.", "section": "colors" },
+      { "name": "The Marcellus Frame Rule", "body": "Use Marcellus for English, display, navigation, labels, and release naming.", "section": "typography" },
+      { "name": "The Zen Reading Rule", "body": "Use Zen Old Mincho for Chinese and body reading.", "section": "typography" },
+      { "name": "The Two-Message KV Rule", "body": "The primary copy exits before the reveal copy enters during ordinary motion.", "section": "layout" },
+      { "name": "The Sticky Counterpoint Rule", "body": "Studio holds one visual field while three text chapters advance.", "section": "layout" },
+      { "name": "The Bounded Trail Rule", "body": "Fine-pointer media response uses clipped displacement bands and never becomes free dragging or reordering.", "section": "elevation" },
+      { "name": "The Motion-Off Rule", "body": "Reduced motion pauses video and removes parallax, card drift, and ghost layers.", "section": "elevation" },
+      { "name": "The Sharp System Rule", "body": "Production geometry stays rectangular; prototype pills do not enter the product identity.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do use Marcellus for English, display, navigation, labels, and release titles.",
+      "Do use Zen Old Mincho for Chinese and body reading.",
+      "Do preserve the supplied SVG wordmark and white-on-black navigation treatment.",
+      "Do preserve the two-message 178dvh KV and its user-provided video/poster relationship.",
+      "Do keep Studio as a 50/50 sticky-image narrative with three scrolling steps.",
+      "Do let the current interface prove web capability without narrating internal strategy.",
+      "Do keep waterfall interaction bounded to fine-pointer desktop.",
+      "Do fully remove video playback and transforms for reduced motion."
+    ],
+    "donts": [
+      "Don't use DIN Condensed, Avenir Next, or a generic sans-serif as the selected identity.",
+      "Don't expose the QR intro from the supplied video as the KV first frame.",
+      "Don't make both KV messages compete during ordinary motion.",
+      "Don't turn Studio into a carousel or uniform card grid.",
+      "Don't allow release cards to reorder or move without bounds.",
+      "Don't enable pointer effects on mobile.",
+      "Don't let legacy cases outrank the current experience.",
+      "Don't add glow, glossy glass cards, dashboard styling, or cursor tricks outside the media trails."
+    ]
+  }
+}

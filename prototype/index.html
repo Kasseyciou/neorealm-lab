@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="NeoRealm LAB 新版接案網站 B 版發展原型"
+    />
+    <title>NeoRealm LAB | Selected Direction B</title>
+    <link rel="icon" href="data:," />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Zen+Old+Mincho:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body data-direction="b">
+    <!--
+      THESIS: The new website is NeoRealm LAB's first and strongest case. It refuses a legacy case archive as the homepage.
+      OWN-WORLD: Direction A uses an off-white editorial field with vermilion signals. Direction B uses graphite cinema framing with acid yellow controls.
+      STORY: Visitors meet the new practice, see three featured visual candidates, scan the live Instagram wall, understand AI video services, then start a project.
+      FIRST VIEWPORT: A switches between an asymmetric editorial specimen and a full-bleed cinematic sequence. The project action remains visible in both.
+      FORM: User-pinned dual direction comparison. Seed key: pinned-a-b.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+    -->
+    <a class="skip-link" href="#panel-b">跳到主要內容</a>
+
+    <button class="prototype-switcher-toggle" type="button" aria-expanded="false" aria-controls="prototype-switcher">
+      Compare modes
+    </button>
+    <header id="prototype-switcher" class="prototype-switcher" aria-label="設計方向切換" aria-hidden="true">
+      <div class="switcher-context">
+        <strong>NeoRealm LAB</strong>
+        <span>Selected direction prototype</span>
+      </div>
+      <div class="direction-tabs" role="tablist" aria-label="比較兩組風格">
+        <button
+          id="tab-a"
+          class="direction-tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-a"
+          data-target="a"
+          tabindex="-1"
+        >
+          A 可變標準
+        </button>
+        <button
+          id="tab-b"
+          class="direction-tab"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-b"
+          data-target="b"
+        >
+          B 新境放映室・已選定
+        </button>
+      </div>
+      <p class="switcher-note">B 版發展中，A 版保留比較</p>
+    </header>
+
+    <svg class="silk-filter" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="silk-veil-distortion" x="-10%" y="-20%" width="120%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="2" seed="92" result="silk-noise" />
+          <feGaussianBlur in="silk-noise" stdDeviation="2" result="silk-blur" />
+          <feDisplacementMap in="SourceGraphic" in2="silk-blur" scale="12" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
+    <main id="panel-a" class="direction direction-a" role="tabpanel" aria-labelledby="tab-a" hidden>
+      <nav class="site-nav a-nav" aria-label="Direction A 主要導覽">
+        <a href="#a-top" class="brand-lockup" aria-label="NeoRealm LAB 首頁">
+          <img src="./assets/logo.svg" alt="NeoRealm LAB" width="288" height="113" />
+        </a>
+        <div class="site-links">
+          <a href="#a-work">Work</a>
+          <a href="#a-services">Services</a>
+          <a href="#a-about">About</a>
+        </div>
+        <a class="nav-action" href="https://www.instagram.com/neorealmlab/">Start a Project</a>
+      </nav>
+
+      <section id="a-top" class="a-hero">
+        <div class="a-hero-copy">
+          <h1><span>I DESIGN</span><span>NEW REALMS.</span></h1>
+          <p class="hero-intro">設計主導 AI 影像、動態與網頁，為品牌建立可辨識的新境界。</p>
+          <div class="hero-actions">
+            <a class="a-primary" href="#a-work">查看精選</a>
+            <a class="a-secondary" href="https://www.instagram.com/neorealmlab/">Start a Project</a>
+          </div>
+        </div>
+
+        <div class="a-hero-art" aria-label="NeoRealm LAB 作品拼貼">
+          <div class="a-specimen specimen-main ig-crop crop-dragon" role="img" aria-label="龍與黑暗世界觀作品"></div>
+          <div class="a-specimen specimen-top ig-crop crop-editorial" role="img" aria-label="NeoRealm LAB 人物視覺作品"></div>
+          <div class="a-specimen specimen-bottom ig-crop crop-cyber" role="img" aria-label="藍色仿生角色作品"></div>
+          <div class="a-art-caption">
+            <span>Visual systems</span>
+            <span>AI motion</span>
+            <span>Web craft</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="a-site-proof" aria-labelledby="a-proof-title">
+        <div class="proof-statement">
+          <h2 id="a-proof-title">新版網站，就是第一個案例。</h2>
+          <p>介面、內容架構與前端實作共同證明現在的能力。舊案只保留脈絡，不佔據主舞台。</p>
+        </div>
+        <div class="proof-map" aria-label="新版網站案例內容架構">
+          <article class="proof-lead">
+            <span>Creative Direction</span>
+            <h3>從品牌定位到互動語法</h3>
+            <p>把網站當成可持續演進的品牌系統，不是一次性的作品櫃。</p>
+          </article>
+          <article>
+            <span>Visual</span>
+            <h3>影像策展</h3>
+          </article>
+          <article>
+            <span>Motion</span>
+            <h3>節奏設計</h3>
+          </article>
+          <article>
+            <span>Web</span>
+            <h3>前端體驗</h3>
+          </article>
+        </div>
+      </section>
+
+      <section id="a-work" class="a-featured" aria-labelledby="a-featured-title">
+        <h2 id="a-featured-title">Selected now.</h2>
+        <p class="section-intro">先以三組候選作品示意。正式版依 IG 互動數據與內容完整度選出主作品。</p>
+        <div class="a-project-grid">
+          <article class="a-project project-wide">
+            <div class="project-image ig-crop crop-fantasy" role="img" aria-label="奇幻角色與電影感世界觀作品"></div>
+            <div class="project-copy">
+              <h3>Cinematic Worldbuilding</h3>
+              <p>AI Visual, Motion Direction, Narrative Frames</p>
+              <span>Featured candidate</span>
+            </div>
+          </article>
+          <article class="a-project project-tall">
+            <div class="project-image ig-crop crop-shadow" role="img" aria-label="光影人物編輯視覺作品"></div>
+            <div class="project-copy">
+              <h3>Editorial Realms</h3>
+              <p>Art Direction, Styling, Image System</p>
+              <span>Featured candidate</span>
+            </div>
+          </article>
+          <article class="a-project project-compact">
+            <div class="project-image ig-crop crop-perfume" role="img" aria-label="香氛產品敘事作品"></div>
+            <div class="project-copy">
+              <h3>Product Narrative</h3>
+              <p>Campaign Concept, AI Image, Short-form Motion</p>
+              <span>Featured candidate</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="a-wall" aria-labelledby="a-wall-title">
+        <div class="wall-copy">
+          <h2 id="a-wall-title">The visual feed keeps growing.</h2>
+          <p>IG 作品以影像牆快速瀏覽。未來每次發布都透過內容來源層同步到網站，不需要重做頁面。</p>
+          <a href="https://www.instagram.com/neorealmlab/">View Instagram</a>
+        </div>
+        <div class="ig-wall-frame">
+          <img src="./assets/ig-wall.jpg" alt="NeoRealm LAB Instagram 作品牆" width="1315" height="4430" loading="lazy" decoding="async" />
+        </div>
+      </section>
+
+      <section id="a-services" class="a-services" aria-labelledby="a-services-title">
+        <h2 id="a-services-title">AI 影音，是目前的核心服務。</h2>
+        <div class="service-composition">
+          <article class="service-major">
+            <div class="service-visual ig-crop crop-scifi" role="img" aria-label="科幻敘事視覺作品"></div>
+            <div>
+              <h3>AI Visual & Motion</h3>
+              <p>概念開發、影像生成、角色與場景系統、短影音、Campaign Visual、動態敘事。</p>
+            </div>
+          </article>
+          <article class="service-minor">
+            <h3>Creative Direction</h3>
+            <p>把零散想法整理成可執行的視覺方向與內容系統。</p>
+          </article>
+          <article class="service-minor">
+            <h3>Web Experience</h3>
+            <p>品牌網站、活動頁與互動前端，以新版 NeoRealm LAB 作為即時證據。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="a-about" class="a-legacy" aria-labelledby="a-legacy-title">
+        <div>
+          <h2 id="a-legacy-title">Ten years of web craft, condensed.</h2>
+          <p>Web Standardizer 的舊案例保留為能力沿革與 Selected Archive。它們解釋從哪裡來，但不定義現在。</p>
+        </div>
+        <span class="archive-status">Archive page after selection</span>
+      </section>
+
+      <footer id="a-contact" class="a-contact">
+        <p>有品牌、影像、短片或網站計畫？</p>
+        <h2>Let's design a new realm.</h2>
+        <a href="https://www.instagram.com/neorealmlab/">Start a Project</a>
+        <small>NeoRealm LAB 新境研所</small>
+      </footer>
+    </main>
+
+    <main id="panel-b" class="direction direction-b" role="tabpanel" aria-labelledby="tab-b">
+      <nav class="site-nav b-nav" aria-label="Direction B 主要導覽">
+        <a href="#b-top" class="brand-lockup" aria-label="NeoRealm LAB 首頁">
+          <img src="./assets/logo.svg" alt="NeoRealm LAB" width="288" height="113" />
+        </a>
+        <div class="site-links">
+          <a href="#b-work">Work</a>
+          <a href="#b-services">Services</a>
+          <a href="#b-studio">Studio</a>
+        </div>
+        <a class="nav-action" href="https://www.instagram.com/neorealmlab/">Start a Project</a>
+      </nav>
+
+      <section id="b-top" class="b-hero b-kv" data-kv>
+        <div class="kv-sticky">
+          <video class="kv-video" muted autoplay loop playsinline preload="metadata" aria-label="NeoRealm LAB 遞迴的畫布動態作品片段">
+            <source src="./assets/hero-kv.mp4" type="video/mp4" />
+          </video>
+          <div class="kv-poster" aria-hidden="true"></div>
+          <div class="b-hero-scrim"></div>
+          <div class="b-hero-copy" data-kv-main>
+            <h1><span>I DESIGN</span><span>NEW REALMS.</span></h1>
+            <p class="hero-intro">以網站設計建立品牌場域，再用 AI 影像與動態把故事推向更遠。</p>
+            <div class="hero-actions">
+              <a class="b-primary" href="#b-work">Explore selected work</a>
+              <a class="b-secondary" href="https://www.instagram.com/neorealmlab/">Start a Project</a>
+            </div>
+          </div>
+          <div class="kv-reveal" data-kv-reveal>
+            <p>Design × AI × Motion × Web</p>
+            <strong>讓每一個媒介，都進入同一個世界。</strong>
+          </div>
+          <span class="kv-scroll-cue">Scroll to enter</span>
+        </div>
+      </section>
+
+      <section id="b-studio" class="b-studio" aria-labelledby="b-studio-title">
+        <div class="studio-visual" aria-live="polite">
+          <figure class="studio-image is-active" data-studio-image="0">
+            <img src="./assets/about-threshold.png" alt="透明材質、光束與金屬構成的抽象工作室情境" width="1122" height="1402" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="studio-image" data-studio-image="1">
+            <img src="./assets/about-iteration.png" alt="光學玻璃、透明薄膜與紙材構成的實驗情境" width="1122" height="1402" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="studio-image" data-studio-image="2">
+            <img src="./assets/about-motion.png" alt="薄紗、反射金屬與移動光影構成的動態情境" width="1122" height="1402" loading="lazy" decoding="async" />
+          </figure>
+          <span class="studio-image-index" aria-hidden="true">01 / 03</span>
+        </div>
+        <div class="studio-story">
+          <article class="studio-step" data-studio-step="0">
+            <h2 id="b-studio-title">I design new realms.</h2>
+            <p>NeoRealm LAB 是一個獨立的數位創意工作室，工作交會於品牌、網站、AI 影像與動態敘事。</p>
+          </article>
+          <article class="studio-step" data-studio-step="1">
+            <h2>Design comes first.</h2>
+            <p>AI 是創意媒材與製作工具，不是品牌身份。每個專案都從受眾、訊息與視覺方向開始，再選擇最適合的技術。</p>
+          </article>
+          <article class="studio-step" data-studio-step="2">
+            <h2>From standards to new realms.</h2>
+            <p>十年的網頁設計與前端實務，現在延伸成跨越靜態、動態與互動的品牌體驗。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="b-work" class="b-releases b-waterfall" aria-labelledby="b-work-title" data-waterfall-section>
+        <div class="waterfall-copy">
+          <div class="waterfall-copy-sticky">
+            <h2 id="b-work-title">Worlds in motion.</h2>
+            <p>從角色、時尚、產品到動態敘事，每一件作品都是進入不同世界的入口。</p>
+            <a href="https://www.instagram.com/neorealmlab/">Enter @neorealmlab</a>
+          </div>
+        </div>
+        <div class="waterfall-flow" data-waterfall aria-label="NeoRealm LAB 精選作品瀑布牆">
+          <div class="waterfall-column" data-waterfall-column data-speed="0.72">
+            <figure class="waterfall-card card-landscape" data-trail-card data-depth="0.7">
+              <div class="waterfall-image ig-crop crop-fantasy" role="img" aria-label="奇幻角色世界觀作品"></div>
+              <figcaption><strong>Cinematic Worldbuilding</strong><span>World, character, sequence</span></figcaption>
+            </figure>
+            <figure class="waterfall-card card-portrait" data-trail-card data-depth="1">
+              <div class="waterfall-image ig-crop crop-shadow" role="img" aria-label="光影人物視覺作品"></div>
+            </figure>
+            <figure class="waterfall-card card-square" data-trail-card data-depth="0.55">
+              <div class="waterfall-image ig-crop crop-cyber" role="img" aria-label="藍色仿生角色作品"></div>
+              <figcaption><strong>Synthetic Portraits</strong><span>Identity, surface, light</span></figcaption>
+            </figure>
+            <figure class="waterfall-card card-tall" data-trail-card data-depth="0.85">
+              <div class="waterfall-image ig-crop crop-editorial" role="img" aria-label="編輯式人物肖像作品"></div>
+            </figure>
+            <figure class="waterfall-card card-landscape" data-trail-card data-depth="0.62">
+              <div class="waterfall-image ig-crop crop-dragon" role="img" aria-label="黑暗龍族世界觀作品"></div>
+            </figure>
+            <figure class="waterfall-card card-square" data-trail-card data-depth="0.92">
+              <div class="waterfall-image ig-crop crop-identity" role="img" aria-label="NeoRealm LAB 識別實驗作品"></div>
+            </figure>
+          </div>
+          <div class="waterfall-column waterfall-column-offset" data-waterfall-column data-speed="1.08">
+            <figure class="waterfall-card card-tall" data-trail-card data-depth="0.95">
+              <div class="waterfall-image ig-crop crop-motor" role="img" aria-label="人物時尚與機車作品"></div>
+              <figcaption><strong>Editorial Realms</strong><span>Fashion, styling, image system</span></figcaption>
+            </figure>
+            <figure class="waterfall-card card-square" data-trail-card data-depth="0.58">
+              <div class="waterfall-image ig-crop crop-perfume" role="img" aria-label="香氛產品情境作品"></div>
+              <figcaption><strong>Product Narrative</strong><span>Concept, campaign, short-form</span></figcaption>
+            </figure>
+            <figure class="waterfall-card card-landscape" data-trail-card data-depth="0.78">
+              <div class="waterfall-image ig-crop crop-scifi" role="img" aria-label="科幻工作場景作品"></div>
+            </figure>
+            <figure class="waterfall-card card-portrait" data-trail-card data-depth="1">
+              <div class="waterfall-image ig-crop crop-editorial" role="img" aria-label="人物造型視覺作品"></div>
+            </figure>
+            <figure class="waterfall-card card-wide" data-trail-card data-depth="0.52">
+              <div class="waterfall-image ig-crop crop-fantasy" role="img" aria-label="電影式角色視覺作品"></div>
+            </figure>
+            <figure class="waterfall-card card-square" data-trail-card data-depth="0.82">
+              <div class="waterfall-image ig-crop crop-shadow" role="img" aria-label="實驗人像作品"></div>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="b-services" class="b-services" aria-labelledby="b-services-title">
+        <div class="b-service-title">
+          <h2 id="b-services-title">AI visual stories, built to move.</h2>
+          <p>以品牌問題為起點，從概念影像延伸到短影音、Campaign 與數位體驗。</p>
+        </div>
+        <div class="service-sequence">
+          <article>
+            <span>Direction</span>
+            <h3>定義世界</h3>
+            <p>主題、受眾、角色、造型與情緒節奏。</p>
+          </article>
+          <article>
+            <span>Visual</span>
+            <h3>建立畫面</h3>
+            <p>Key Visual、系列影像與一致的視覺系統。</p>
+          </article>
+          <article>
+            <span>Motion</span>
+            <h3>讓故事發生</h3>
+            <p>短影音、動態剪輯、聲音與平台版本。</p>
+          </article>
+          <article>
+            <span>Web</span>
+            <h3>讓品牌有一個真正的場域</h3>
+            <p>品牌網站、活動頁與互動敘事，從資訊架構、響應式美術指導到前端實作。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="b-archive" class="b-archive archive-waterfall" aria-labelledby="b-archive-title" data-waterfall-section>
+        <div class="archive-copy">
+          <div class="archive-copy-sticky">
+            <h2 id="b-archive-title">Selected web archive.</h2>
+            <p>過往網站濃縮成一組持續流動的證據，交代十年的設計與前端實務。</p>
+          </div>
+        </div>
+        <div class="archive-flow" data-waterfall aria-label="Web Standardizer 過往網頁案例瀑布牆">
+          <figure class="archive-case archive-tall" data-trail-card data-depth="0.72">
+            <img src="./assets/archive-duopel.jpg" alt="Duopel 響應式產品網站畫面" width="650" height="600" loading="lazy" decoding="async" />
+            <figcaption><strong>Duopel</strong><span>Responsive website</span></figcaption>
+          </figure>
+          <figure class="archive-case archive-medium" data-trail-card data-depth="1">
+            <img src="./assets/archive-echarm.jpg" alt="醫創網服務平台網站畫面" width="650" height="600" loading="lazy" decoding="async" />
+            <figcaption><strong>醫創網</strong><span>Web design + responsive</span></figcaption>
+          </figure>
+          <figure class="archive-case archive-wide" data-trail-card data-depth="0.58">
+            <img src="./assets/archive-marryu.jpg" alt="MarryU 與 Peggy Yu 婚禮服務網站畫面" width="650" height="541" loading="lazy" decoding="async" />
+            <figcaption><strong>MarryU × Peggy Yu</strong><span>Content website + responsive</span></figcaption>
+          </figure>
+          <figure class="archive-case archive-tall" data-trail-card data-depth="0.88">
+            <img src="./assets/archive-gama-bears.jpg" alt="GAMA BEARS 橘子熊網站畫面" width="650" height="765" loading="lazy" decoding="async" />
+            <figcaption><strong>GAMA BEARS 橘子熊</strong><span>Legacy website</span></figcaption>
+          </figure>
+          <figure class="archive-case archive-detail" data-trail-card data-depth="0.64" aria-label="Duopel 網站局部細節">
+            <img src="./assets/archive-duopel.jpg" alt="Duopel 網站局部裁切" width="650" height="600" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="archive-case archive-detail archive-detail-lower" data-trail-card data-depth="0.94" aria-label="MarryU 網站局部細節">
+            <img src="./assets/archive-marryu.jpg" alt="MarryU 網站局部裁切" width="650" height="541" loading="lazy" decoding="async" />
+          </figure>
+        </div>
+      </section>
+
+      <footer id="b-contact" class="b-contact">
+        <div class="contact-image contact-studio-image" aria-hidden="true"></div>
+        <div class="contact-scrim"></div>
+        <div class="contact-copy">
+          <p>Available for selected collaborations</p>
+          <h2>Bring the next realm into motion.</h2>
+          <a href="https://www.instagram.com/neorealmlab/">Start a Project</a>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>

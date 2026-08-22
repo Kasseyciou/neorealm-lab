@@ -1,0 +1,14 @@
+.DS_Store
+.playwright-cli/
+output/
+.impeccable/review/
+node_modules/
+npm-debug.log*
+
+# Local editor and environment files
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+

@@ -1,0 +1,252 @@
+const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+const panels = {
+  a: document.querySelector('#panel-a'),
+  b: document.querySelector('#panel-b'),
+};
+const switcher = document.querySelector('#prototype-switcher');
+const switcherToggle = document.querySelector('.prototype-switcher-toggle');
+
+function setSwitcher(open) {
+  if (!switcher || !switcherToggle) return;
+  switcher.classList.toggle('is-open', open);
+  switcher.setAttribute('aria-hidden', String(!open));
+  switcherToggle.setAttribute('aria-expanded', String(open));
+}
+
+function activateDirection(direction, moveFocus = false) {
+  const target = direction === 'b' ? 'b' : 'a';
+  document.body.dataset.direction = target;
+
+  tabs.forEach((tab) => {
+    const selected = tab.dataset.target === target;
+    tab.setAttribute('aria-selected', String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    if (selected && moveFocus) tab.focus();
+  });
+
+  Object.entries(panels).forEach(([key, panel]) => {
+    panel.hidden = key !== target;
+  });
+
+  const mainId = target === 'a' ? 'panel-a' : 'panel-b';
+  document.querySelector('.skip-link').setAttribute('href', `#${mainId}`);
+  window.history.replaceState(null, '', `#direction-${target}`);
+  window.scrollTo({ top: 0, behavior: 'auto' });
+  window.dispatchEvent(new CustomEvent('directionchange', { detail: target }));
+  setSwitcher(false);
+}
+
+switcherToggle?.addEventListener('click', () => {
+  setSwitcher(switcherToggle.getAttribute('aria-expanded') !== 'true');
+});
+
+document.addEventListener('pointerdown', (event) => {
+  if (!switcher?.classList.contains('is-open')) return;
+  if (switcher.contains(event.target) || switcherToggle?.contains(event.target)) return;
+  setSwitcher(false);
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape' || !switcher?.classList.contains('is-open')) return;
+  setSwitcher(false);
+  switcherToggle?.focus();
+});
+
+tabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => activateDirection(tab.dataset.target));
+  tab.addEventListener('keydown', (event) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+
+    let nextIndex = index;
+    if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+    if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+    if (event.key === 'Home') nextIndex = 0;
+    if (event.key === 'End') nextIndex = tabs.length - 1;
+    activateDirection(tabs[nextIndex].dataset.target, true);
+  });
+});
+
+const initialDirection = window.location.hash === '#direction-a' ? 'a' : 'b';
+activateDirection(initialDirection);
+
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+
+function setupKv() {
+  const section = document.querySelector('[data-kv]');
+  const video = section?.querySelector('.kv-video');
+  const scrollCue = section?.querySelector('.kv-scroll-cue');
+  if (!section || !video) return;
+
+  const playbackStart = 6.2;
+  let inView = true;
+  let frame = 0;
+
+  const syncPlayback = () => {
+    const shouldPlay = inView && !document.hidden && document.body.dataset.direction === 'b' && !reducedMotion.matches;
+    if (shouldPlay) video.play().catch(() => {});
+    else video.pause();
+    if (!shouldPlay) section.classList.remove('is-video-live');
+  };
+
+  const updateKv = () => {
+    frame = 0;
+    if (reducedMotion.matches) return;
+    const travel = Math.max(1, section.offsetHeight - window.innerHeight);
+    const start = section.getBoundingClientRect().top + window.scrollY;
+    const progress = clamp((window.scrollY - start) / travel);
+    const mainExit = clamp((progress - 0.08) / 0.38);
+    const revealEnter = clamp((progress - 0.42) / 0.3);
+
+    section.style.setProperty('--kv-scale', String(1.04 + progress * 0.07));
+    section.style.setProperty('--kv-y', `${progress * -26}px`);
+    section.style.setProperty('--kv-main-opacity', String(1 - mainExit));
+    section.style.setProperty('--kv-main-y', `${mainExit * -76}px`);
+    section.style.setProperty('--kv-reveal-opacity', String(revealEnter));
+    section.style.setProperty('--kv-reveal-y', `${(1 - revealEnter) * 40}px`);
+    if (scrollCue) scrollCue.style.opacity = String(1 - clamp(progress / 0.18));
+  };
+
+  const requestKvUpdate = () => {
+    if (!frame) frame = window.requestAnimationFrame(updateKv);
+  };
+
+  video.addEventListener('timeupdate', () => {
+    section.classList.toggle('is-video-live', !reducedMotion.matches && video.currentTime >= playbackStart);
+  });
+
+  new IntersectionObserver(([entry]) => {
+    inView = entry.isIntersecting;
+    syncPlayback();
+  }, { threshold: 0.02 }).observe(section);
+
+  document.addEventListener('visibilitychange', syncPlayback);
+  window.addEventListener('directionchange', syncPlayback);
+  reducedMotion.addEventListener('change', () => {
+    syncPlayback();
+    updateKv();
+  });
+  window.addEventListener('scroll', requestKvUpdate, { passive: true });
+  window.addEventListener('resize', requestKvUpdate);
+  updateKv();
+  syncPlayback();
+}
+
+function setupStudioStory() {
+  const steps = Array.from(document.querySelectorAll('[data-studio-step]'));
+  const images = Array.from(document.querySelectorAll('[data-studio-image]'));
+  const index = document.querySelector('.studio-image-index');
+  if (!steps.length || !images.length) return;
+
+  const activate = (activeIndex) => {
+    steps.forEach((step, itemIndex) => step.classList.toggle('is-active', itemIndex === activeIndex));
+    images.forEach((image, itemIndex) => {
+      const selected = itemIndex === activeIndex;
+      image.classList.toggle('is-active', selected);
+      image.setAttribute('aria-hidden', String(!selected));
+    });
+    if (index) index.textContent = `${String(activeIndex + 1).padStart(2, '0')} / ${String(images.length).padStart(2, '0')}`;
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (visible) activate(Number(visible.target.dataset.studioStep));
+  }, { rootMargin: '-28% 0px -34% 0px', threshold: [0.05, 0.35, 0.7] });
+
+  steps.forEach((step) => observer.observe(step));
+  activate(0);
+}
+
+function setupWaterfallMotion() {
+  const sections = Array.from(document.querySelectorAll('[data-waterfall-section]'));
+  if (!sections.length) return;
+  let frame = 0;
+
+  const render = () => {
+    frame = 0;
+    if (reducedMotion.matches || window.innerWidth <= 720) {
+      document.querySelectorAll('[data-waterfall-column]').forEach((column) => {
+        column.style.setProperty('--column-shift', '0px');
+      });
+      document.querySelectorAll('[data-trail-card]').forEach((card) => {
+        card.style.setProperty('--depth-shift', '0px');
+      });
+      return;
+    }
+
+    sections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+      const progress = clamp((window.innerHeight - rect.top) / (rect.height + window.innerHeight));
+
+      section.querySelectorAll('[data-waterfall-column]').forEach((column) => {
+        const speed = Number(column.dataset.speed || 1);
+        const shift = (progress - 0.5) * (speed - 0.9) * 420;
+        column.style.setProperty('--column-shift', `${shift.toFixed(2)}px`);
+      });
+
+      section.querySelectorAll('[data-trail-card]').forEach((card) => {
+        const cardRect = card.getBoundingClientRect();
+        const depth = Number(card.dataset.depth || 0.6);
+        const centerDelta = window.innerHeight / 2 - (cardRect.top + cardRect.height / 2);
+        const shift = clamp(centerDelta * 0.045 * depth, -46, 46);
+        card.style.setProperty('--depth-shift', `${shift.toFixed(2)}px`);
+      });
+    });
+  };
+
+  const requestRender = () => {
+    if (!frame) frame = window.requestAnimationFrame(render);
+  };
+
+  window.addEventListener('scroll', requestRender, { passive: true });
+  window.addEventListener('resize', requestRender);
+  reducedMotion.addEventListener('change', requestRender);
+  render();
+}
+
+function setupImageTrails() {
+  const cards = Array.from(document.querySelectorAll('[data-trail-card]'));
+
+  cards.forEach((card) => {
+    const image = card.querySelector(':scope > img');
+    if (image && !card.querySelector('.trail-clone')) {
+      const clone = image.cloneNode();
+      clone.className = 'trail-clone';
+      clone.alt = '';
+      clone.setAttribute('aria-hidden', 'true');
+      card.append(clone);
+    }
+
+    const reset = () => {
+      card.style.setProperty('--media-x', '0px');
+      card.style.setProperty('--media-y', '0px');
+      card.style.setProperty('--trail-x', '0px');
+      card.style.setProperty('--trail-y', '0px');
+      card.style.setProperty('--trail-opacity', '0');
+    };
+
+    card.addEventListener('pointermove', (event) => {
+      if (!finePointer.matches || reducedMotion.matches || window.innerWidth <= 720) return;
+      const rect = card.getBoundingClientRect();
+      const x = clamp((event.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = clamp((event.clientY - rect.top) / rect.height) * 2 - 1;
+      const depth = Number(card.dataset.depth || 0.7);
+      card.style.setProperty('--media-x', `${(x * 8 * depth).toFixed(2)}px`);
+      card.style.setProperty('--media-y', `${(y * 5 * depth).toFixed(2)}px`);
+      card.style.setProperty('--trail-x', `${(-x * 42 * depth).toFixed(2)}px`);
+      card.style.setProperty('--trail-y', `${(-y * 26 * depth).toFixed(2)}px`);
+      card.style.setProperty('--trail-opacity', '0.56');
+    });
+    card.addEventListener('pointerleave', reset);
+    reset();
+  });
+}
+
+setupKv();
+setupStudioStory();
+setupWaterfallMotion();
+setupImageTrails();
