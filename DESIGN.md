@@ -89,7 +89,7 @@ Customer-facing sequence:
 
 ## Navigation — Silk Veil
 
-The B navigation is fixed throughout the page. Its translucent field combines 18px backdrop blur, 128% saturation, a restrained turbulence/displacement filter (`baseFrequency 0.006 0.009`, two octaves, seed 92, scale 12), a fine bottom rule and an inset highlight.
+The B navigation is fixed throughout the page. Its translucent field combines 18px backdrop blur, 128% saturation, a restrained turbulence/displacement filter (`baseFrequency 0.006 0.009`, two octaves, seed 92, scale 12) and one fine bottom rule. It carries no inner glow or decorative highlight.
 
 Scale is deliberately lower than the 45px Aether CSS demonstration because navigation typography must remain stable. Mobile, reduced-motion and browsers without the SVG/backdrop combination keep a standard blurred translucent fallback. Do not reproduce the effect as a glossy rounded card.
 
@@ -106,6 +106,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 
 - Desktop uses a 50/50 grid: sticky visual left, three viewport-height text chapters right.
 - The active generated scene crossfades and updates the `01 / 03` index.
+- Active copy enters through a bottom-up typographic crop; completed copy exits upward through the inverse crop. Body text follows the heading by 90ms.
 - Mobile holds the visual at 49dvh while chapters pass beneath it.
 
 ### Visual work waterfall
@@ -127,6 +128,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - At 720px and below, work and archive remain two compact media columns while the narrative becomes a sticky top veil.
 - Scroll-speed transforms, depth shifts and image trails are disabled on mobile.
 - Reduced motion pauses video and removes parallax, displacement animation, depth and trail layers while keeping all information available.
+- Reduced motion also removes typographic crops, blur and spatial travel; copy remains immediately visible.
 
 ## Imagery
 

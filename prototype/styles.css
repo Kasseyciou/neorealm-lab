@@ -1877,8 +1877,8 @@ html {
 .b-nav::after {
   z-index: -1;
   border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: inset 0 0 6px -3px rgba(255, 255, 255, 0.72);
-  background: linear-gradient(105deg, rgba(255, 255, 255, 0.055), transparent 34%, rgba(217, 244, 95, 0.025) 76%, transparent);
+  box-shadow: none;
+  background: transparent;
 }
 
 .b-nav > * {
@@ -2587,6 +2587,70 @@ html {
 
 .studio-step.is-active {
   opacity: 1;
+}
+
+.studio-step h2,
+.studio-step p {
+  transform: translate3d(0, 0, 0);
+  clip-path: inset(-0.08em -0.08em -0.12em -0.08em);
+  filter: blur(0);
+  transition:
+    opacity 420ms ease,
+    transform 680ms cubic-bezier(0.16, 1, 0.3, 1),
+    clip-path 680ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 420ms ease;
+}
+
+.studio-step p {
+  transition-delay: 90ms;
+}
+
+.text-motion-ready .studio-step.is-before h2,
+.text-motion-ready .studio-step.is-before p {
+  opacity: 0;
+  transform: translate3d(0, 0.72em, 0);
+  clip-path: inset(0 0 100% 0);
+  filter: blur(7px);
+  transition-delay: 0ms;
+}
+
+.text-motion-ready .studio-step.is-past h2,
+.text-motion-ready .studio-step.is-past p {
+  opacity: 0;
+  transform: translate3d(0, -0.48em, 0);
+  clip-path: inset(100% 0 0 0);
+  filter: blur(4px);
+  transition-duration: 300ms;
+  transition-delay: 0ms;
+}
+
+[data-text-motion] {
+  transform: translate3d(0, 0, 0);
+  clip-path: inset(-0.08em -0.08em -0.12em -0.08em);
+  filter: blur(0);
+  transition:
+    opacity 420ms ease,
+    transform 640ms cubic-bezier(0.16, 1, 0.3, 1),
+    clip-path 640ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 420ms ease;
+  transition-delay: calc(var(--text-motion-order, 0) * 70ms);
+}
+
+.text-motion-ready [data-text-motion-group].is-before [data-text-motion] {
+  opacity: 0;
+  transform: translate3d(0, 1em, 0);
+  clip-path: inset(0 0 100% 0);
+  filter: blur(6px);
+  transition-delay: 0ms;
+}
+
+.text-motion-ready [data-text-motion-group].is-past [data-text-motion] {
+  opacity: 0;
+  transform: translate3d(0, -0.64em, 0);
+  clip-path: inset(100% 0 0 0);
+  filter: blur(3px);
+  transition-duration: 280ms;
+  transition-delay: 0ms;
 }
 
 .studio-step h2 {
@@ -3411,6 +3475,20 @@ body.project-dialog-open {
   .direction-b .b-nav {
     position: fixed;
   }
+
+  .text-motion-ready .studio-step.is-before h2,
+  .text-motion-ready .studio-step.is-before p,
+  .text-motion-ready [data-text-motion-group].is-before [data-text-motion] {
+    transform: translate3d(0, 0.58em, 0);
+    filter: blur(4px);
+  }
+
+  .text-motion-ready .studio-step.is-past h2,
+  .text-motion-ready .studio-step.is-past p,
+  .text-motion-ready [data-text-motion-group].is-past [data-text-motion] {
+    transform: translate3d(0, -0.36em, 0);
+    filter: blur(2px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3434,6 +3512,16 @@ body.project-dialog-open {
 
   .studio-step {
     opacity: 1;
+  }
+
+  .studio-step h2,
+  .studio-step p,
+  [data-text-motion] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    filter: none !important;
+    transition: opacity 160ms ease !important;
   }
 
   .release-image::after {

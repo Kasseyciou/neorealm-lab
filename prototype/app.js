@@ -141,7 +141,11 @@ function setupStudioStory() {
   if (!steps.length || !images.length) return;
 
   const activate = (activeIndex) => {
-    steps.forEach((step, itemIndex) => step.classList.toggle('is-active', itemIndex === activeIndex));
+    steps.forEach((step, itemIndex) => {
+      step.classList.toggle('is-active', itemIndex === activeIndex);
+      step.classList.toggle('is-before', itemIndex > activeIndex);
+      step.classList.toggle('is-past', itemIndex < activeIndex);
+    });
     images.forEach((image, itemIndex) => {
       const selected = itemIndex === activeIndex;
       image.classList.toggle('is-active', selected);
@@ -159,6 +163,59 @@ function setupStudioStory() {
 
   steps.forEach((step) => observer.observe(step));
   activate(0);
+}
+
+function setupTextMotion() {
+  const groups = [
+    document.querySelector('.waterfall-copy-sticky'),
+    document.querySelector('.b-service-title'),
+    ...document.querySelectorAll('.service-sequence article'),
+    document.querySelector('.archive-copy-sticky'),
+    document.querySelector('.contact-copy'),
+  ].filter(Boolean);
+
+  if (!groups.length) return;
+
+  const setState = (group, state) => {
+    group.classList.toggle('is-in-view', state === 'active');
+    group.classList.toggle('is-before', state === 'before');
+    group.classList.toggle('is-past', state === 'past');
+  };
+
+  groups.forEach((group) => {
+    group.dataset.textMotionGroup = '';
+    Array.from(group.children).forEach((item, index) => {
+      item.dataset.textMotion = '';
+      item.style.setProperty('--text-motion-order', String(Math.min(index, 3)));
+    });
+
+    const rect = group.getBoundingClientRect();
+    if (rect.bottom < window.innerHeight * 0.12) setState(group, 'past');
+    else if (rect.top > window.innerHeight * 0.88) setState(group, 'before');
+    else setState(group, 'active');
+  });
+
+  let frame = 0;
+  const refresh = () => {
+    frame = 0;
+    const enterTop = window.innerHeight * 0.12;
+    const enterBottom = window.innerHeight * 0.88;
+    groups.forEach((group) => {
+      const rect = group.getBoundingClientRect();
+      if (rect.bottom < enterTop) setState(group, 'past');
+      else if (rect.top > enterBottom) setState(group, 'before');
+      else setState(group, 'active');
+    });
+  };
+
+  const requestRefresh = () => {
+    if (!frame) frame = window.requestAnimationFrame(refresh);
+  };
+
+  window.addEventListener('scroll', requestRefresh, { passive: true });
+  window.addEventListener('resize', requestRefresh);
+  refresh();
+  document.documentElement.classList.add('text-motion-ready');
 }
 
 function setupWaterfallMotion() {
@@ -348,6 +405,7 @@ function setupProjectDialog() {
 
 setupKv();
 setupStudioStory();
+setupTextMotion();
 setupWaterfallMotion();
 setupImageTrails();
 setupProjectDialog();

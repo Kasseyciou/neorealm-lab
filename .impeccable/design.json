@@ -29,6 +29,7 @@
     "motion": [
       { "name": "material-reveal", "value": "520ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Settles Studio transitions and clipped pointer trails without delaying feedback." },
       { "name": "state-fade", "value": "420ms ease", "purpose": "Studio step and KV message visibility changes." },
+      { "name": "text-crop", "value": "640ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Moves customer-facing copy through directional clip-path entrances and faster inverse exits; body copy may follow its heading by no more than 90ms." },
       { "name": "poster-fade", "value": "480ms ease", "purpose": "Crossfades the KV poster only after video passes 6.2 seconds." },
       { "name": "inquiry-reveal", "value": "760ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Reveals the full-viewport inquiry shell with an upward clip-path and restrained settlement." },
       { "name": "reduced-motion", "value": "0.01ms", "purpose": "Collapses transitions and removes video, parallax, drift, and ghost transforms." }
