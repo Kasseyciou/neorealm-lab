@@ -1956,6 +1956,7 @@ html {
 .waterfall-flow {
   display: grid;
   grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.12fr) minmax(0, 0.78fr);
+  grid-template-areas: "far near mid";
   gap: clamp(14px, 1.8vw, 30px);
   padding: clamp(120px, 18vh, 210px) clamp(22px, 3vw, 54px) clamp(140px, 20vh, 240px) 0;
   overflow: hidden;
@@ -1971,16 +1972,19 @@ html {
 }
 
 .waterfall-column-far {
+  grid-area: far;
   z-index: 1;
   padding-top: clamp(210px, 30vh, 360px);
 }
 
 .waterfall-column-near {
+  grid-area: near;
   z-index: 3;
   padding-top: clamp(28px, 5vh, 74px);
 }
 
 .waterfall-column-mid {
+  grid-area: mid;
   z-index: 2;
   padding-top: clamp(130px, 19vh, 240px);
 }
@@ -2043,6 +2047,11 @@ html {
   height: clamp(580px, 60vw, 820px);
 }
 
+.waterfall-card.card-post {
+  height: auto;
+  aspect-ratio: 4 / 5;
+}
+
 .waterfall-image {
   position: absolute;
   inset: -2%;
@@ -2051,6 +2060,29 @@ html {
   transform: translate3d(var(--media-x, 0px), var(--media-y, 0px), 0) scale(1.04);
   transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1), filter 220ms ease;
   will-change: transform;
+}
+
+.waterfall-image.ig-post {
+  inset: 0;
+  background: var(--b-black);
+  transform: none;
+}
+
+.waterfall-image.ig-post > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.waterfall-image.ig-post::before,
+.waterfall-image.ig-post::after {
+  inset: 0;
+  background-color: var(--b-black);
+  background-image: var(--ig-image);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .waterfall-image::before,
@@ -2148,6 +2180,7 @@ html {
 .instagram-rail-viewport {
   overflow-x: auto;
   overscroll-behavior-inline: contain;
+  scroll-snap-type: x proximity;
   scrollbar-color: rgba(242, 241, 235, 0.34) transparent;
   scrollbar-width: thin;
 }
@@ -2171,14 +2204,14 @@ html {
   opacity: 0.7;
   transform: translateZ(0) scale(1);
   transition: filter 360ms cubic-bezier(0.16, 1, 0.3, 1), opacity 240ms ease, transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+  scroll-snap-align: start;
 }
 
-.instagram-tile:nth-child(3n + 2) {
-  margin-top: 32px;
-}
-
-.instagram-tile:nth-child(4n) {
-  margin-top: 64px;
+.instagram-tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .instagram-tile:focus-visible {
@@ -2316,6 +2349,15 @@ html {
   .archive-flow {
     padding-right: 28px;
   }
+
+  .waterfall-flow {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    grid-template-areas: "near mid";
+  }
+
+  .waterfall-column-far {
+    display: none;
+  }
 }
 
 @media (max-width: 720px) {
@@ -2389,6 +2431,7 @@ html {
 
   .waterfall-flow {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas: none;
     gap: 10px;
     padding: 28px 10px 92px;
   }
@@ -2396,6 +2439,10 @@ html {
   .waterfall-column {
     display: contents;
     transform: none !important;
+  }
+
+  .waterfall-column-far {
+    display: contents;
   }
 
   .waterfall-card,
@@ -2413,6 +2460,11 @@ html {
   .waterfall-card.card-portrait,
   .waterfall-card.card-tall {
     height: 360px;
+  }
+
+  .waterfall-card.card-post {
+    height: auto;
+    aspect-ratio: 4 / 5;
   }
 
   .waterfall-card figcaption {

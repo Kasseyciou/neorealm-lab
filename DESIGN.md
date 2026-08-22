@@ -74,8 +74,8 @@ Customer-facing sequence:
 
 1. Supplied moving-image KV and primary promise.
 2. Sticky Studio introduction with three generated abstract scenes.
-3. `Worlds in motion` — twelve selected visual works in a three-depth gallery.
-4. A horizontal low-chroma Instagram field that restores color on hover or focus.
+3. `Worlds in motion` — twelve selected 4:5 visual works in a three-depth gallery.
+4. A horizontal low-chroma field containing all twenty supplied Instagram works; it restores color on hover or focus.
 5. AI visual, motion and web service sequence.
 6. `Selected web archive` — four real cases plus two detail crops in a flowing evidence wall.
 7. Generated cinematic studio contact scene and project CTA.
@@ -113,16 +113,17 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 ### Visual work waterfall
 
 - Sticky narrative occupies the left field; three asymmetric media lanes pass it like exhibits in a salon wall.
-- Twelve cards mix landscape, portrait, square and tall ratios across far, middle and near planes.
+- Twelve curated cards preserve the supplied 4:5 post canvas across far, middle and near planes; `object-fit: contain` prevents subject or typography crop.
 - Far work is smaller, quieter and slower; the near lane is larger and faster. The selected gallery uses bounded vertical depth up to 84px and lateral drift up to 38px.
+- Perspective comes from lane width, scale, speed and position—not from changing or cropping the artwork ratio.
 - Fine-pointer hover shifts the media slightly and displaces two clipped image bands up to about 42px, creating a visible dragged-image trail.
 - This is perceptual drag, not draggable/reorderable UI.
 
 ### Instagram field
 
-- The gallery resolves into one horizontally scrollable row of nine Instagram crops before Services.
+- The gallery resolves into one horizontally scrollable row containing all twenty supplied Instagram works before Services.
 - Tiles are grayscale and low-chroma by default; hover and keyboard focus restore the original color and full opacity.
-- The rail never auto-marquees. Horizontal scrolling is explicit on touch devices so it does not compete with the authored gallery motion.
+- Every tile keeps a 4:5 frame, uses `object-fit: contain`, lazy-loads its image and shares one baseline. The rail never auto-marquees; horizontal scrolling and gentle snap are explicit on touch devices so it does not compete with the authored gallery motion.
 
 ### Web archive waterfall
 
@@ -132,8 +133,9 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 
 ### Mobile and reduced motion
 
+- Between 721px and 980px, the selected gallery reduces to the near and middle lanes so every plate retains useful scale.
 - At 720px and below, work and archive remain two compact media columns while the narrative becomes a sticky top veil.
-- The three desktop lanes collapse through `display: contents` into two compact mobile columns; scroll-speed transforms, depth shifts and image trails are disabled.
+- The three desktop lanes collapse through `display: contents` into two compact mobile columns in near → middle → far DOM priority; scroll-speed transforms, depth shifts and image trails are disabled.
 - Reduced motion pauses video and removes parallax, displacement animation, depth and trail layers while keeping all information available.
 - Reduced motion also removes typographic crops, blur and spatial travel; copy remains immediately visible.
 
@@ -169,6 +171,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - **The Site-Is-The-Proof Rule:** demonstrate current web skill through the current experience; never narrate internal strategy to clients.
 - **The Sticky Evidence Rule:** copy holds position while enough media passes to establish range and depth.
 - **The Perspective Salon Rule:** work changes scale, speed and lateral position by plane; it must never return to equal card columns.
+- **The Full-Frame Plate Rule:** preserve the supplied 4:5 post canvas; never crop artwork to manufacture depth.
 - **The Color-on-Approach Rule:** the Instagram field stays quiet until pointer hover or keyboard focus restores color.
 - **The Bounded Trail Rule:** hover may smear clipped image bands, but never destabilize reading or imply free dragging.
 - **The One-Signal Rule:** Acid Signal directs attention; it does not become ambient decoration.
