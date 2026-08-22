@@ -267,7 +267,7 @@ function setupProjectDialog() {
       status.className = 'project-form-status form-field-wide';
       status.textContent = '';
       submit.disabled = false;
-      submitLabel.textContent = 'Send project brief';
+      submitLabel.textContent = '送出專案需求';
     }
     dialog.showModal();
     document.body.classList.add('project-dialog-open');
@@ -314,7 +314,7 @@ function setupProjectDialog() {
     if (!form.reportValidity() || !submit || !submitLabel || !status) return;
 
     submit.disabled = true;
-    submitLabel.textContent = 'Sending…';
+    submitLabel.textContent = '傳送中…';
     status.className = 'project-form-status form-field-wide is-sending';
     status.textContent = '正在安全傳送需求資料…';
 
@@ -335,13 +335,13 @@ function setupProjectDialog() {
 
       form.reset();
       status.className = 'project-form-status form-field-wide is-success';
-      status.textContent = '需求已送出。NeoRealm LAB 會依序閱讀並回覆；首次啟用時，收件信箱需先完成一次確認。';
-      submitLabel.textContent = 'Brief sent';
+      status.textContent = '需求已送出。我會閱讀內容，並回覆到你填寫的 Email。';
+      submitLabel.textContent = '已送出';
     } catch (error) {
       status.className = 'project-form-status form-field-wide is-error';
       status.textContent = '目前無法送出。請稍後再試，或直接寄信至 kasseyworks@gmail.com。';
       submit.disabled = false;
-      submitLabel.textContent = 'Try again';
+      submitLabel.textContent = '重新送出';
     }
   });
 }

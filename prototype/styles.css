@@ -3064,6 +3064,12 @@ body.project-dialog-open {
   line-height: 0.9;
 }
 
+.pricing-value-custom strong {
+  font-family: "Zen Old Mincho", serif;
+  font-size: clamp(42px, 4.2vw, 64px);
+  letter-spacing: -0.03em;
+}
+
 .pricing-value small {
   margin-left: 8px;
   font-size: 14px;
