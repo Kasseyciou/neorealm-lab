@@ -74,6 +74,38 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
 
+const galleryMetadata = {
+  'ig-01': ['Cinematic Worldbuilding', 'Dark fantasy, character direction, and a cinematic world built as one frame.'],
+  'ig-02': ['Identity in Progress', 'Early lettering studies and visual notes from the evolving NeoRealm LAB identity.'],
+  'ig-03': ['AI Art Direction', 'A digital-making scene that connects image generation with a directed visual system.'],
+  'ig-04': ['Seasonal Narrative', 'A Mid-Autumn scene shaped through character, prop, and campaign storytelling.'],
+  'ig-05': ['Sport Editorial', 'Youth culture and sports styling translated into a social-first portrait.'],
+  'ig-06': ['Synthetic Portraits', 'A cool-toned character study exploring identity, surface, and artificial light.'],
+  'ig-07': ['Character Play', 'An expressive cat portrait built for immediate, playful recognition.'],
+  'ig-08': ['Fashion System', 'A restrained lookbook study of silhouette, styling, and repeatable art direction.'],
+  'ig-09': ['Illustrated Characters', 'A vivid hand-painted cat study with a graphic campaign presence.'],
+  'ig-10': ['Lunar Story', 'A moonlit festival image combining character direction and narrative atmosphere.'],
+  'ig-11': ['Material Portraits', 'Gold fracture and translucent surface treatments reshape a human portrait.'],
+  'ig-12': ['Natural Light Editorial', 'A quiet portrait study led by daylight, texture, and understated styling.'],
+  'ig-13': ['Denim Study', 'A fashion portrait organized around proportion, attitude, and denim texture.'],
+  'ig-14': ['Everyday Editorial', 'Food, gesture, and portraiture turned into a direct editorial moment.'],
+  'ig-15': ['Street Fashion Realm', 'Black styling and motorcycles create a sharper urban character world.'],
+  'ig-16': ['Surreal Editorial', 'Color, bubbles, and goldfish build a soft but uncanny visual atmosphere.'],
+  'ig-17': ['Pop Persona', 'A pink-haired music character developed through styling and expressive detail.'],
+  'ig-18': ['Chromatic Portrait', 'Colored light transforms a simple portrait into a cinematic identity study.'],
+  'ig-19': ['Product Narrative', 'Portrait and perfume are directed as one coherent beauty campaign image.'],
+  'ig-20': ['Food & Color', 'A bright food editorial balancing personality, product, and graphic color.'],
+};
+
+function shuffle(items) {
+  const result = [...items];
+  for (let index = result.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+  }
+  return result;
+}
+
 function setupKv() {
   const section = document.querySelector('[data-kv]');
   const video = section?.querySelector('.kv-video');
@@ -216,6 +248,168 @@ function setupTextMotion() {
   window.addEventListener('resize', requestRefresh);
   refresh();
   document.documentElement.classList.add('text-motion-ready');
+}
+
+function setupActiveNavigation() {
+  const links = Array.from(document.querySelectorAll('.b-nav .site-links a[href^="#"]'));
+  const sections = links
+    .map((link) => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean)
+    .sort((a, b) => a.offsetTop - b.offsetTop);
+  if (!links.length || !sections.length) return;
+
+  let frame = 0;
+  const refresh = () => {
+    frame = 0;
+    let activeId = '';
+    if (window.scrollY > 180) {
+      const marker = window.innerHeight * 0.34;
+      sections.forEach((section) => {
+        if (section.getBoundingClientRect().top <= marker) activeId = section.id;
+      });
+    }
+
+    links.forEach((link) => {
+      const active = link.getAttribute('href') === `#${activeId}`;
+      link.classList.toggle('is-active', active);
+      if (active) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  };
+
+  const requestRefresh = () => {
+    if (!frame) frame = window.requestAnimationFrame(refresh);
+  };
+
+  window.addEventListener('scroll', requestRefresh, { passive: true });
+  window.addEventListener('resize', requestRefresh);
+  window.addEventListener('directionchange', requestRefresh);
+  refresh();
+}
+
+function setupRandomizedGallery() {
+  const railTrack = document.querySelector('.instagram-rail-track');
+  const tiles = Array.from(railTrack?.querySelectorAll('.instagram-tile') || []);
+  const cards = Array.from(document.querySelectorAll('.b-waterfall .waterfall-card'));
+  if (!railTrack || !tiles.length || !cards.length) return;
+
+  const catalog = tiles.map((tile) => {
+    const image = tile.querySelector('img');
+    const src = image?.getAttribute('src') || '';
+    const key = src.match(/ig-\d+/)?.[0] || '';
+    const [title, description] = galleryMetadata[key] || ['NeoRealm LAB Visual', 'An ongoing visual experiment from NeoRealm LAB.'];
+    const item = {
+      src,
+      width: image?.getAttribute('width') || '864',
+      height: image?.getAttribute('height') || '1080',
+      alt: image?.alt || title,
+      title,
+      description,
+    };
+    Object.assign(tile.dataset, item);
+    tile.setAttribute('aria-label', `放大查看 ${title}`);
+    return { ...item, tile };
+  });
+
+  const selection = shuffle(catalog).slice(0, cards.length);
+  cards.forEach((card, index) => {
+    const item = selection[index];
+    const imageWrap = card.querySelector('.waterfall-image');
+    const image = imageWrap?.querySelector('img');
+    if (!item || !imageWrap || !image) return;
+
+    image.src = item.src;
+    image.width = Number(item.width);
+    image.height = Number(item.height);
+    image.alt = item.alt;
+    imageWrap.style.setProperty('--ig-image', `url("${item.src}")`);
+    Object.assign(card.dataset, item);
+
+    let trigger = card.querySelector('.work-lightbox-trigger');
+    if (!trigger) {
+      trigger = document.createElement('button');
+      trigger.type = 'button';
+      trigger.className = 'work-lightbox-trigger';
+      trigger.setAttribute('aria-haspopup', 'dialog');
+      trigger.setAttribute('aria-controls', 'work-lightbox');
+      card.append(trigger);
+    }
+    trigger.setAttribute('aria-label', `放大查看 ${item.title}`);
+  });
+
+  shuffle(catalog).forEach(({ tile }) => railTrack.append(tile));
+}
+
+function setupWorkLightbox() {
+  const dialog = document.querySelector('#work-lightbox');
+  const closeButton = dialog?.querySelector('[data-lightbox-close]');
+  const image = dialog?.querySelector('[data-lightbox-image]');
+  const title = dialog?.querySelector('[data-lightbox-title]');
+  const description = dialog?.querySelector('[data-lightbox-description]');
+  const sources = [
+    ...document.querySelectorAll('.work-lightbox-trigger'),
+    ...document.querySelectorAll('.instagram-tile'),
+  ];
+  let trigger = null;
+  if (!dialog || !closeButton || !image || !title || !description || !sources.length) return;
+
+  const open = (source) => {
+    const item = source.classList.contains('instagram-tile') ? source.dataset : source.closest('.waterfall-card')?.dataset;
+    if (!item?.src) return;
+    trigger = source;
+    image.src = item.src;
+    image.alt = item.alt || item.title;
+    title.textContent = item.title;
+    description.textContent = item.description;
+    dialog.showModal();
+    document.body.classList.add('work-lightbox-open');
+    window.requestAnimationFrame(() => {
+      dialog.classList.add('is-visible');
+      closeButton.focus({ preventScroll: true });
+    });
+  };
+
+  const close = () => {
+    dialog.classList.remove('is-visible');
+    document.body.classList.remove('work-lightbox-open');
+    const finish = () => {
+      if (dialog.open) dialog.close();
+      trigger?.focus({ preventScroll: true });
+    };
+    if (reducedMotion.matches) finish();
+    else window.setTimeout(finish, 260);
+  };
+
+  sources.forEach((source) => {
+    source.addEventListener('click', (event) => {
+      event.preventDefault();
+      open(source);
+    });
+  });
+  closeButton.addEventListener('click', close);
+  dialog.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    close();
+  });
+  dialog.addEventListener('pointerdown', (event) => {
+    if (event.target === dialog) close();
+  });
+}
+
+function setupInstagramWheel() {
+  const viewport = document.querySelector('.instagram-rail-viewport');
+  if (!viewport) return;
+
+  viewport.addEventListener('wheel', (event) => {
+    if (window.innerWidth <= 720 || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+    const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+    const movingForward = event.deltaY > 0;
+    const canMove = movingForward ? viewport.scrollLeft < maxScroll - 1 : viewport.scrollLeft > 1;
+    if (!canMove) return;
+
+    event.preventDefault();
+    viewport.scrollLeft += event.deltaY;
+  }, { passive: false });
 }
 
 function setupWaterfallMotion() {
@@ -412,6 +606,10 @@ function setupProjectDialog() {
 setupKv();
 setupStudioStory();
 setupTextMotion();
+setupActiveNavigation();
+setupRandomizedGallery();
 setupWaterfallMotion();
 setupImageTrails();
+setupWorkLightbox();
+setupInstagramWheel();
 setupProjectDialog();

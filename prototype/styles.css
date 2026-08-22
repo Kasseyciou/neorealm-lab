@@ -3124,6 +3124,338 @@ html {
   }
 }
 
+/* Gallery focus system: centered identity, active anchors, optical depth, and full-frame lightbox. */
+
+.direction-b .b-nav {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+.b-nav .site-links {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+}
+
+.b-nav .brand-lockup {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+}
+
+.b-nav .nav-action {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  appearance: none;
+  background: transparent;
+  color: var(--b-accent);
+  font-family: "Marcellus", serif;
+  cursor: pointer;
+}
+
+.b-nav .site-links a {
+  position: relative;
+  color: var(--b-muted);
+  transition: color 180ms ease;
+}
+
+.b-nav .site-links a::after {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  left: 0;
+  height: 1px;
+  background: var(--b-accent);
+  content: "";
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: opacity 160ms ease, transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.b-nav .site-links a:hover,
+.b-nav .site-links a.is-active,
+.b-nav .site-links a[aria-current="location"] {
+  color: var(--b-ink);
+  text-decoration: none;
+}
+
+.b-nav .site-links a.is-active::after,
+.b-nav .site-links a[aria-current="location"]::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.waterfall-column-far .waterfall-image {
+  filter: blur(3px) saturate(0.68) contrast(1.02);
+}
+
+.waterfall-column-mid .waterfall-image {
+  filter: blur(1.25px) saturate(0.78) contrast(1.04);
+}
+
+.waterfall-column-near .waterfall-image {
+  filter: blur(0) saturate(0.88) contrast(1.06);
+}
+
+.waterfall-card:hover .waterfall-image,
+.waterfall-card:focus-within .waterfall-image {
+  filter: blur(0) saturate(1) contrast(1.03);
+}
+
+.work-lightbox-trigger {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.work-lightbox-trigger:focus-visible {
+  outline: 2px solid var(--b-accent);
+  outline-offset: -5px;
+}
+
+.instagram-rail-viewport {
+  scrollbar-width: none;
+}
+
+.instagram-rail-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+body.work-lightbox-open {
+  overflow: hidden;
+}
+
+.work-lightbox {
+  inset: 0;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--b-ink);
+}
+
+.work-lightbox::backdrop {
+  background: rgba(5, 6, 5, 0.9);
+  backdrop-filter: blur(18px) saturate(70%);
+  -webkit-backdrop-filter: blur(18px) saturate(70%);
+}
+
+.work-lightbox-shell {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  padding: clamp(74px, 8vh, 96px) clamp(18px, 6vw, 96px) clamp(28px, 5vh, 64px);
+  background: rgba(17, 17, 15, 0.72);
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+.work-lightbox.is-visible .work-lightbox-shell {
+  opacity: 1;
+}
+
+.work-lightbox-close {
+  position: absolute;
+  top: 18px;
+  right: clamp(18px, 4vw, 64px);
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(242, 241, 235, 0.34);
+  border-radius: 0;
+  background: rgba(17, 17, 15, 0.62);
+  color: var(--b-ink);
+  cursor: pointer;
+  transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.work-lightbox-close::before,
+.work-lightbox-close::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 1px;
+  background: currentColor;
+  content: "";
+}
+
+.work-lightbox-close::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.work-lightbox-close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.work-lightbox-close:hover,
+.work-lightbox-close:focus-visible {
+  border-color: var(--b-accent);
+  outline: 0;
+  background: var(--b-accent);
+  color: var(--b-black);
+}
+
+.work-lightbox-figure {
+  display: grid;
+  width: min(100%, 880px);
+  max-height: 100%;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: clamp(18px, 3vh, 30px);
+  margin: 0;
+}
+
+.work-lightbox-media {
+  display: grid;
+  min-height: 0;
+  place-items: center;
+}
+
+.work-lightbox-media img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: min(68dvh, 760px);
+  object-fit: contain;
+  filter: blur(10px) saturate(0.7);
+  opacity: 0;
+  transform: scale(0.965);
+  transition: filter 520ms cubic-bezier(0.16, 1, 0.3, 1), opacity 360ms ease, transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.work-lightbox.is-visible .work-lightbox-media img {
+  filter: blur(0) saturate(1);
+  opacity: 1;
+  transform: scale(1);
+}
+
+.work-lightbox figcaption {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(260px, 1.2fr);
+  gap: clamp(22px, 5vw, 72px);
+  align-items: start;
+  padding-top: 18px;
+  border-top: 1px solid var(--b-line);
+}
+
+.work-lightbox h2 {
+  margin: 0;
+  font-family: "Marcellus", "Zen Old Mincho", serif;
+  font-size: clamp(26px, 3vw, 42px);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+}
+
+.work-lightbox p {
+  max-width: 58ch;
+  margin: 0;
+  color: var(--b-muted);
+  font: 400 15px/1.7 "Zen Old Mincho", serif;
+}
+
+@media (max-width: 980px) {
+  .direction-b .b-nav .site-links {
+    display: flex;
+  }
+}
+
+@media (max-width: 720px) {
+  .direction-b .b-nav {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 8px;
+    padding-inline: 12px;
+  }
+
+  .b-nav .site-links {
+    gap: 9px;
+  }
+
+  .b-nav .site-links a {
+    min-height: 42px;
+    font-size: 9px;
+  }
+
+  .b-nav .brand-lockup {
+    width: 82px;
+  }
+
+  .b-nav .nav-action {
+    min-height: 42px;
+    padding: 8px 9px;
+    font-size: 9px;
+    white-space: nowrap;
+  }
+
+  .waterfall-column-far .waterfall-image,
+  .waterfall-column-mid .waterfall-image,
+  .waterfall-column-near .waterfall-image {
+    filter: saturate(0.88) contrast(1.04);
+  }
+
+  .work-lightbox-shell {
+    padding: 74px 16px 24px;
+  }
+
+  .work-lightbox-close {
+    top: 12px;
+    right: 12px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .work-lightbox-figure {
+    gap: 16px;
+  }
+
+  .work-lightbox-media img {
+    max-height: 60dvh;
+  }
+
+  .work-lightbox figcaption {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding-top: 14px;
+  }
+
+  .work-lightbox h2 {
+    font-size: 28px;
+  }
+
+  .work-lightbox p {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-lightbox-shell,
+  .work-lightbox-media img {
+    transform: none;
+    transition-duration: 120ms;
+  }
+
+  .waterfall-column-far .waterfall-image,
+  .waterfall-column-mid .waterfall-image,
+  .waterfall-column-near .waterfall-image {
+    filter: saturate(0.88) contrast(1.04);
+  }
+}
+
 /* Project inquiry — an editorial overlay that moves from pricing ledger to proposal sheet. */
 
 body.project-dialog-open {

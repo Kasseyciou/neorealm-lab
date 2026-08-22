@@ -214,15 +214,15 @@
 
     <main id="panel-b" class="direction direction-b" role="tabpanel" aria-labelledby="tab-b">
       <nav class="site-nav b-nav" aria-label="Direction B 主要導覽">
-        <a href="#b-top" class="brand-lockup" aria-label="NeoRealm LAB 首頁">
-          <img src="./assets/logo.svg" alt="NeoRealm LAB" width="288" height="113" />
-        </a>
         <div class="site-links">
           <a href="#b-work">Work</a>
           <a href="#b-services">Services</a>
           <a href="#b-studio">Studio</a>
         </div>
-        <a class="nav-action" href="https://www.instagram.com/neorealmlab/">Start a Project</a>
+        <a href="#b-top" class="brand-lockup" aria-label="NeoRealm LAB 首頁">
+          <img src="./assets/logo.svg" alt="NeoRealm LAB" width="288" height="113" />
+        </a>
+        <button class="nav-action" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog">Start a Project</button>
       </nav>
 
       <section id="b-top" class="b-hero b-kv" data-kv>
@@ -291,25 +291,21 @@
               <div class="waterfall-image ig-post" style="--ig-image: url('./assets/ig-demo/ig-01.jpg')">
                 <img src="./assets/ig-demo/ig-01.jpg" width="864" height="1080" loading="lazy" decoding="async" alt="王座與銀髮女王構成的黑暗奇幻世界觀作品">
               </div>
-              <figcaption><strong>Cinematic Worldbuilding</strong><span>World, character, sequence</span></figcaption>
             </figure>
             <figure class="waterfall-card card-post piece-right" data-trail-card data-depth="1.08" data-drift-x="-0.028">
               <div class="waterfall-image ig-post" style="--ig-image: url('./assets/ig-demo/ig-11.jpg')">
                 <img src="./assets/ig-demo/ig-11.jpg" width="864" height="1080" loading="lazy" decoding="async" alt="金色裂紋材質覆蓋人物的實驗肖像作品">
               </div>
-              <figcaption><strong>Material Portraits</strong><span>Surface, light, transformation</span></figcaption>
             </figure>
             <figure class="waterfall-card card-post piece-left" data-trail-card data-depth="1.22" data-drift-x="0.03">
               <div class="waterfall-image ig-post" style="--ig-image: url('./assets/ig-demo/ig-03.jpg')">
                 <img src="./assets/ig-demo/ig-03.jpg" width="864" height="1080" loading="lazy" decoding="async" alt="人物在數位畫布前創作的 NeoRealm LAB 視覺作品">
               </div>
-              <figcaption><strong>AI Art Direction</strong><span>Concept, image, visual system</span></figcaption>
             </figure>
             <figure class="waterfall-card card-post piece-right" data-trail-card data-depth="1.12" data-drift-x="-0.032">
               <div class="waterfall-image ig-post" style="--ig-image: url('./assets/ig-demo/ig-15.jpg')">
                 <img src="./assets/ig-demo/ig-15.jpg" width="864" height="1080" loading="lazy" decoding="async" alt="黑色造型人物與街頭機車構成的時尚視覺作品">
               </div>
-              <figcaption><strong>Editorial Realms</strong><span>Fashion, styling, image system</span></figcaption>
             </figure>
           </div>
           <div class="waterfall-column waterfall-column-mid" data-waterfall-column data-speed="0.92">
@@ -317,25 +313,21 @@
               <div class="waterfall-image ig-post" style="--ig-image: url('./assets/ig-demo/ig-19.jpg')">
                 <img src="./assets/ig-demo/ig-19.jpg" width="864" height="1080" loading="lazy" decoding="async" alt="粉髮人物與香水產品構成的情境作品">
               </div>
-              <figcaption><strong>Product Narrative</strong><span>Concept, campaign, short-form</span></figcaption>
             </figure>
             <figure class="waterfall-card card-post piece-right" data-trail-card data-depth="0.72" data-drift-x="-0.018">
               <div class="waterfall-image ig-post" style="--ig-image: url('./assets/ig-demo/ig-06.jpg')">
                 <img src="./assets/ig-demo/ig-06.jpg" width="864" height="1080" loading="lazy" decoding="async" alt="藍色頭髮與透明眼鏡構成的仿生角色肖像">
               </div>
-              <figcaption><strong>Synthetic Portraits</strong><span>Identity, surface, light</span></figcaption>
             </figure>
             <figure class="waterfall-card card-post piece-left" data-trail-card data-depth="0.82" data-drift-x="0.02">
               <div class="waterfall-image ig-post" style="--ig-image: url('./assets/ig-demo/ig-16.jpg')">
                 <img src="./assets/ig-demo/ig-16.jpg" width="864" height="1080" loading="lazy" decoding="async" alt="粉色光影、氣泡與金魚構成的超現實人物作品">
               </div>
-              <figcaption><strong>Surreal Editorial</strong><span>Color, character, atmosphere</span></figcaption>
             </figure>
             <figure class="waterfall-card card-post piece-right" data-trail-card data-depth="0.7" data-drift-x="-0.022">
               <div class="waterfall-image ig-post" style="--ig-image: url('./assets/ig-demo/ig-04.jpg')">
                 <img src="./assets/ig-demo/ig-04.jpg" width="864" height="1080" loading="lazy" decoding="async" alt="人物、白兔與月餅構成的中秋節慶視覺作品">
               </div>
-              <figcaption><strong>Seasonal Campaign</strong><span>Story, styling, social visual</span></figcaption>
             </figure>
           </div>
           <div class="waterfall-column waterfall-column-far" data-waterfall-column data-speed="0.56">
@@ -366,7 +358,7 @@
       <section class="b-instagram-rail" aria-labelledby="b-instagram-title">
         <div class="instagram-rail-copy">
           <h2 id="b-instagram-title">More from @neorealmlab.</h2>
-          <p>更多持續更新的 AI 影像、角色與視覺實驗；滑過作品即可看見原始色彩。</p>
+          <p>更多持續更新的 AI 影像、角色與視覺實驗；滑動或使用滾輪瀏覽，滑過作品即可看見原始色彩。</p>
           <a href="https://www.instagram.com/neorealmlab/" target="_blank" rel="noreferrer">View Instagram</a>
         </div>
         <div class="instagram-rail-viewport" aria-label="NeoRealm LAB Instagram 作品牆">
@@ -469,6 +461,21 @@
         </div>
       </footer>
     </main>
+
+    <dialog id="work-lightbox" class="work-lightbox" aria-labelledby="work-lightbox-title" aria-describedby="work-lightbox-description">
+      <div class="work-lightbox-shell">
+        <button class="work-lightbox-close" type="button" data-lightbox-close aria-label="關閉作品燈箱"></button>
+        <figure class="work-lightbox-figure">
+          <div class="work-lightbox-media">
+            <img data-lightbox-image src="./assets/ig-demo/ig-01.jpg" alt="" width="864" height="1080" />
+          </div>
+          <figcaption>
+            <h2 id="work-lightbox-title" data-lightbox-title></h2>
+            <p id="work-lightbox-description" data-lightbox-description></p>
+          </figcaption>
+        </figure>
+      </div>
+    </dialog>
 
     <dialog id="project-dialog" class="project-dialog" aria-labelledby="project-dialog-title">
       <div class="project-dialog-shell">

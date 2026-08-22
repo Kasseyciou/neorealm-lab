@@ -92,6 +92,8 @@ Customer-facing sequence:
 
 The B navigation is fixed throughout the page. Its translucent field combines 18px backdrop blur, 128% saturation, a restrained turbulence/displacement filter (`baseFrequency 0.006 0.009`, two octaves, seed 92, scale 12) and one fine bottom rule. It carries no inner glow or decorative highlight.
 
+The wordmark is centered on the viewport, section anchors occupy the left field, and `Start a Project` occupies the right. The anchor matching the current scroll section receives Projection White text and one Acid Signal underline; the project action opens the same pricing-and-inquiry dialog used by the footer CTA.
+
 Scale is deliberately lower than the 45px Aether CSS demonstration because navigation typography must remain stable. Mobile, reduced-motion and browsers without the SVG/backdrop combination keep a standard blurred translucent fallback. Do not reproduce the effect as a glossy rounded card.
 
 ## Layout and motion
@@ -113,17 +115,18 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 ### Visual work waterfall
 
 - Sticky narrative occupies the left field; three asymmetric media lanes pass it like exhibits in a salon wall.
-- Twelve curated cards preserve the supplied 4:5 post canvas across far, middle and near planes; `object-fit: contain` prevents subject or typography crop.
+- On every page load, twelve works are sampled and shuffled from the twenty-image pool while preserving the supplied 4:5 post canvas; `object-fit: contain` prevents subject or typography crop.
 - Far work is smaller, quieter and slower; the near lane is larger and faster. The selected gallery uses bounded vertical depth up to 84px and lateral drift up to 38px.
 - Perspective comes from lane width, scale, speed and position—not from changing or cropping the artwork ratio.
+- Middle and far lanes receive bounded optical blur that clears on hover or keyboard focus. Card titles and descriptions stay out of the composition and appear below the full image only after opening the native lightbox.
 - Fine-pointer hover shifts the media slightly and displaces two clipped image bands up to about 42px, creating a visible dragged-image trail.
 - This is perceptual drag, not draggable/reorderable UI.
 
 ### Instagram field
 
-- The gallery resolves into one horizontally scrollable row containing all twenty supplied Instagram works before Services.
+- The gallery resolves into one horizontally scrollable, load-shuffled row containing all twenty supplied Instagram works before Services.
 - Tiles are grayscale and low-chroma by default; hover and keyboard focus restore the original color and full opacity.
-- Every tile keeps a 4:5 frame, uses `object-fit: contain`, lazy-loads its image and shares one baseline. The rail never auto-marquees; horizontal scrolling and gentle snap are explicit on touch devices so it does not compete with the authored gallery motion.
+- Every tile keeps a 4:5 frame, uses `object-fit: contain`, lazy-loads its image and shares one baseline. On fine-pointer devices, vertical wheel input becomes horizontal rail movement only while more content remains in that direction; at either edge, normal page scrolling resumes. Touch keeps direct horizontal scrolling and gentle snap, and the browser scrollbar remains visually concealed.
 
 ### Web archive waterfall
 
@@ -151,6 +154,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - Project actions are at least 44px high and have visible focus treatment.
 - The comparison selector exposes `aria-expanded` / `aria-hidden`, closes on outside click or Escape, and returns focus on Escape.
 - The Project Inquiry uses the native `<dialog>` top layer. Escape, the close control and a direct backdrop press close it; focus enters at the close control and returns to the exact opener.
+- The work lightbox follows the same native-dialog focus contract and reveals the selected full-frame image before its title and description.
 - Cards are visual media, not fake controls; use a crosshair cursor only where the fine-pointer trail is available.
 - Headings and sticky copy retain adequate contrast over the media fields.
 - The page must not introduce horizontal overflow at 390px.
@@ -172,6 +176,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - **The Sticky Evidence Rule:** copy holds position while enough media passes to establish range and depth.
 - **The Perspective Salon Rule:** work changes scale, speed and lateral position by plane; it must never return to equal card columns.
 - **The Full-Frame Plate Rule:** preserve the supplied 4:5 post canvas; never crop artwork to manufacture depth.
+- **The Optical Depth Rule:** only middle and far planes blur, and direct attention restores full clarity.
 - **The Color-on-Approach Rule:** the Instagram field stays quiet until pointer hover or keyboard focus restores color.
 - **The Bounded Trail Rule:** hover may smear clipped image bands, but never destabilize reading or imply free dragging.
 - **The One-Signal Rule:** Acid Signal directs attention; it does not become ambient decoration.
