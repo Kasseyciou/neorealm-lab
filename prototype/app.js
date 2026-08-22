@@ -246,7 +246,108 @@ function setupImageTrails() {
   });
 }
 
+function setupProjectDialog() {
+  const dialog = document.querySelector('#project-dialog');
+  const openers = Array.from(document.querySelectorAll('[data-project-open]'));
+  const closeButton = dialog?.querySelector('[data-project-close]');
+  const form = dialog?.querySelector('[data-project-form]');
+  const scroller = dialog?.querySelector('.project-dialog-scroll');
+  const status = dialog?.querySelector('[data-form-status]');
+  const submit = form?.querySelector('.project-submit');
+  const submitLabel = submit?.querySelector('span');
+  const serviceSelect = form?.querySelector('#project-service');
+  const nameInput = form?.querySelector('#project-name');
+  let trigger = null;
+
+  if (!dialog || !form || !openers.length) return;
+
+  const openDialog = (opener) => {
+    trigger = opener;
+    if (status && submit && submitLabel && !status.classList.contains('is-sending')) {
+      status.className = 'project-form-status form-field-wide';
+      status.textContent = '';
+      submit.disabled = false;
+      submitLabel.textContent = 'Send project brief';
+    }
+    dialog.showModal();
+    document.body.classList.add('project-dialog-open');
+    if (scroller) scroller.scrollTop = 0;
+    window.requestAnimationFrame(() => {
+      dialog.classList.add('is-visible');
+      closeButton?.focus({ preventScroll: true });
+    });
+  };
+
+  const closeDialog = () => {
+    dialog.classList.remove('is-visible');
+    document.body.classList.remove('project-dialog-open');
+    const finish = () => {
+      if (dialog.open) dialog.close();
+      trigger?.focus();
+    };
+    if (reducedMotion.matches) finish();
+    else window.setTimeout(finish, 280);
+  };
+
+  openers.forEach((opener) => opener.addEventListener('click', () => openDialog(opener)));
+  closeButton?.addEventListener('click', closeDialog);
+
+  dialog.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    closeDialog();
+  });
+
+  dialog.addEventListener('pointerdown', (event) => {
+    if (event.target === dialog) closeDialog();
+  });
+
+  dialog.querySelectorAll('[data-plan-select]').forEach((button) => {
+    button.addEventListener('click', () => {
+      if (serviceSelect) serviceSelect.value = button.dataset.planSelect;
+      form.closest('.project-inquiry')?.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
+      window.setTimeout(() => nameInput?.focus({ preventScroll: true }), reducedMotion.matches ? 0 : 420);
+    });
+  });
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity() || !submit || !submitLabel || !status) return;
+
+    submit.disabled = true;
+    submitLabel.textContent = 'Sending…';
+    status.className = 'project-form-status form-field-wide is-sending';
+    status.textContent = '正在安全傳送需求資料…';
+
+    const payload = Object.fromEntries(new FormData(form).entries());
+    payload._url = window.location.href;
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.success === false) throw new Error('Submission failed');
+
+      form.reset();
+      status.className = 'project-form-status form-field-wide is-success';
+      status.textContent = '需求已送出。NeoRealm LAB 會依序閱讀並回覆；首次啟用時，收件信箱需先完成一次確認。';
+      submitLabel.textContent = 'Brief sent';
+    } catch (error) {
+      status.className = 'project-form-status form-field-wide is-error';
+      status.textContent = '目前無法送出。請稍後再試，或直接寄信至 kasseyworks@gmail.com。';
+      submit.disabled = false;
+      submitLabel.textContent = 'Try again';
+    }
+  });
+}
+
 setupKv();
 setupStudioStory();
 setupWaterfallMotion();
 setupImageTrails();
+setupProjectDialog();

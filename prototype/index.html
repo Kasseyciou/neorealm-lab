@@ -401,9 +401,138 @@
         <div class="contact-copy">
           <p>Available for selected collaborations</p>
           <h2>Bring the next realm into motion.</h2>
-          <a href="https://www.instagram.com/neorealmlab/">Start a Project</a>
+          <button class="contact-project-open" type="button" data-project-open aria-haspopup="dialog" aria-controls="project-dialog">
+            Start a Project
+          </button>
         </div>
       </footer>
     </main>
+
+    <dialog id="project-dialog" class="project-dialog" aria-labelledby="project-dialog-title">
+      <div class="project-dialog-shell">
+        <header class="project-dialog-header">
+          <a class="project-dialog-brand" href="#b-top" tabindex="-1" aria-hidden="true">
+            <img src="./assets/logo.svg" alt="" width="288" height="113" />
+          </a>
+          <button class="project-dialog-close" type="button" data-project-close aria-label="關閉專案需求表單">
+            <span aria-hidden="true"></span>
+          </button>
+        </header>
+
+        <div class="project-dialog-scroll">
+          <section class="project-pricing" aria-labelledby="project-dialog-title">
+            <div class="project-pricing-intro">
+              <h2 id="project-dialog-title">Choose a way into the realm.</h2>
+              <p>以下為常見網站合作的參考起價。正式費用會依頁數、內容、互動與交付時程確認。</p>
+            </div>
+
+            <div class="pricing-ledger" aria-label="網站服務參考價格">
+              <article class="pricing-entry">
+                <h3>網頁標準化</h3>
+                <p class="pricing-value"><span>NT$</span><strong>20,000</strong><small>起</small></p>
+                <ul>
+                  <li>響應式前端實作</li>
+                  <li>語意化 HTML 與基礎 SEO</li>
+                  <li>基礎互動與跨裝置測試</li>
+                </ul>
+                <button type="button" data-plan-select="網頁標準化｜NT$20,000 起">Choose implementation</button>
+              </article>
+
+              <article class="pricing-entry pricing-entry-featured">
+                <h3>網頁設計＋標準化</h3>
+                <p class="pricing-value"><span>NT$</span><strong>30,000</strong><small>起</small></p>
+                <ul>
+                  <li>資訊架構與響應式 UI</li>
+                  <li>視覺系統與設計稿</li>
+                  <li>前端實作、互動與測試</li>
+                </ul>
+                <button type="button" data-plan-select="網頁設計＋標準化｜NT$30,000 起">Choose full experience</button>
+              </article>
+
+              <article class="pricing-entry">
+                <h3>網頁設計</h3>
+                <p class="pricing-value"><span>NT$</span><strong>20,000</strong><small>起</small></p>
+                <ul>
+                  <li>資訊架構與內容層級</li>
+                  <li>桌機與手機 UI 設計</li>
+                  <li>設計系統與交付規格</li>
+                </ul>
+                <button type="button" data-plan-select="網頁設計｜NT$20,000 起">Choose design</button>
+              </article>
+            </div>
+          </section>
+
+          <section class="project-inquiry" aria-labelledby="project-inquiry-title">
+            <div class="project-inquiry-copy">
+              <h2 id="project-inquiry-title">Tell me what should exist next.</h2>
+              <p>不需要先準備完整企劃。告訴我目標、預算與目前最需要解決的問題即可。</p>
+            </div>
+
+            <form
+              class="project-form"
+              action="https://formsubmit.co/ajax/kasseyworks@gmail.com"
+              method="POST"
+              data-project-form
+            >
+              <input type="hidden" name="_subject" value="NeoRealm LAB｜新的專案需求" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input class="project-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" hidden />
+
+              <div class="form-field">
+                <label for="project-name">姓名</label>
+                <input id="project-name" name="name" type="text" autocomplete="name" required />
+              </div>
+              <div class="form-field">
+                <label for="project-email">Email</label>
+                <input id="project-email" name="email" type="email" autocomplete="email" required />
+              </div>
+              <div class="form-field form-field-wide">
+                <label for="project-subject">合作主旨</label>
+                <input id="project-subject" name="subject" type="text" required />
+              </div>
+              <div class="form-field">
+                <label for="project-service">希望合作項目</label>
+                <select id="project-service" name="service" required>
+                  <option value="">請選擇</option>
+                  <option>網頁設計＋標準化｜NT$30,000 起</option>
+                  <option>網頁標準化｜NT$20,000 起</option>
+                  <option>網頁設計｜NT$20,000 起</option>
+                  <option>AI 視覺／短影音</option>
+                  <option>品牌視覺與整合專案</option>
+                  <option>其他合作</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="project-budget">預算區間</label>
+                <select id="project-budget" name="budget" required>
+                  <option value="">請選擇</option>
+                  <option>NT$20,000–30,000</option>
+                  <option>NT$30,000–60,000</option>
+                  <option>NT$60,000–100,000</option>
+                  <option>NT$100,000 以上</option>
+                  <option>尚未確定，希望討論</option>
+                </select>
+              </div>
+              <div class="form-field form-field-wide">
+                <label for="project-message">合作提案</label>
+                <textarea id="project-message" name="message" rows="7" required placeholder="專案目標、預計時程、目前素材與你希望解決的問題"></textarea>
+              </div>
+
+              <div class="project-form-footer form-field-wide">
+                <p>送出後，資料將由 FormSubmit 代為轉寄至 NeoRealm LAB。請勿填寫密碼或其他高度敏感資訊。</p>
+                <button class="project-submit" type="submit">
+                  <span>Send project brief</span>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+                    <path d="M7 17 17 7M8 7h9v9" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="1.5" />
+                  </svg>
+                </button>
+              </div>
+              <p class="project-form-status form-field-wide" data-form-status role="status" aria-live="polite"></p>
+            </form>
+          </section>
+        </div>
+      </div>
+    </dialog>
   </body>
 </html>

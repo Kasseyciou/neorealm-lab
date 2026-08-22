@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-22T15:04:00Z",
+  "generatedAt": "2026-08-22T16:46:01Z",
   "title": "Design System: NeoRealm LAB Graphite Cinema",
   "extensions": {
     "colorMeta": {
@@ -11,7 +11,9 @@
       "b-accent": { "role": "primary", "displayName": "Acid Signal", "canonical": "#d9f45f", "tonalRamp": ["#202600", "#3a4604", "#586a0b", "#789113", "#9abb20", "#bce33a", "#d9f45f", "#efffbd"] },
       "b-line": { "role": "neutral", "displayName": "Projection Hairline", "canonical": "rgba(242, 241, 235, 0.2)", "tonalRamp": ["rgba(242,241,235,0.08)", "rgba(242,241,235,0.12)", "rgba(242,241,235,0.16)", "rgba(242,241,235,0.2)", "rgba(242,241,235,0.3)", "rgba(242,241,235,0.45)", "rgba(242,241,235,0.65)", "rgba(242,241,235,0.85)"] },
       "kv-black": { "role": "neutral", "displayName": "KV Black", "canonical": "#080908", "tonalRamp": ["#080908", "#20211f", "#393a36", "#55564f", "#73736b", "#94948b", "#bcbcb4", "#eeeeea"] },
-      "studio-surface": { "role": "neutral", "displayName": "Studio Charcoal", "canonical": "#20211e", "tonalRamp": ["#11120f", "#292a26", "#42433e", "#5d5e57", "#797a72", "#999a91", "#bdbeb6", "#eeeeea"] }
+      "studio-surface": { "role": "neutral", "displayName": "Studio Charcoal", "canonical": "#20211e", "tonalRamp": ["#11120f", "#292a26", "#42433e", "#5d5e57", "#797a72", "#999a91", "#bdbeb6", "#eeeeea"] },
+      "status-success": { "role": "semantic", "displayName": "Restrained Success", "canonical": "#315c16", "tonalRamp": ["#14250a", "#203b0e", "#315c16", "#4a7a2a", "#6a9a49", "#91ba72", "#bad8a5", "#e5f2dc"] },
+      "status-error": { "role": "semantic", "displayName": "Restrained Error", "canonical": "#8d211a", "tonalRamp": ["#310906", "#58110d", "#8d211a", "#ae3a31", "#ca5c53", "#de8881", "#edb8b3", "#f8e5e3"] }
     },
     "typographyMeta": {
       "display": { "displayName": "Marcellus Display", "purpose": "English hero and major cinematic statements." },
@@ -28,6 +30,7 @@
       { "name": "material-reveal", "value": "520ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Settles Studio transitions and clipped pointer trails without delaying feedback." },
       { "name": "state-fade", "value": "420ms ease", "purpose": "Studio step and KV message visibility changes." },
       { "name": "poster-fade", "value": "480ms ease", "purpose": "Crossfades the KV poster only after video passes 6.2 seconds." },
+      { "name": "inquiry-reveal", "value": "760ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Reveals the full-viewport inquiry shell with an upward clip-path and restrained settlement." },
       { "name": "reduced-motion", "value": "0.01ms", "purpose": "Collapses transitions and removes video, parallax, drift, and ghost transforms." }
     ],
     "breakpoints": [
@@ -91,6 +94,22 @@
       "description": "Flowing media card with bounded scroll depth and clipped fine-pointer image trails.",
       "html": "<article class=\"ds-release\"><div></div><h3>Cinematic Worldbuilding</h3><p>World, character, sequence</p></article>",
       "css": ".ds-release { position:relative; min-height:420px; overflow:hidden; border-radius:0; background:#11110f; color:#f2f1eb; box-shadow:0 24px 80px rgba(0,0,0,.24); } .ds-release div { position:absolute; inset:0; background:#20211e; } .ds-release h3,.ds-release p { position:absolute; left:28px; z-index:1; } .ds-release h3 { bottom:52px; margin:0; font:400 34px/1 Marcellus,serif; } .ds-release p { bottom:24px; margin:0; color:#b0aea5; font:400 13px/1.5 'Zen Old Mincho',serif; } .ds-release:focus-within { outline:2px solid #f2f1eb; outline-offset:4px; }"
+    },
+    {
+      "name": "Project Inquiry Dialog",
+      "kind": "dialog",
+      "refersTo": "project-inquiry-dialog",
+      "description": "Full-viewport native dialog with a fixed dark header and a reduced-motion-safe clip-path reveal; Escape, close and backdrop interactions return focus to the opener.",
+      "html": "<dialog class=\"ds-inquiry\"><div class=\"ds-inquiry-shell\"><header><strong>NeoRealm LAB</strong><button type=\"button\" aria-label=\"Close project inquiry\">×</button></header><div class=\"ds-inquiry-scroll\"></div></div></dialog>",
+      "css": ".ds-inquiry { inset:0; width:100vw; max-width:none; height:100dvh; max-height:none; margin:0; padding:0; overflow:hidden; border:0; background:transparent; color:#f2f1eb; } .ds-inquiry::backdrop { background:rgba(5,6,5,.86); backdrop-filter:blur(16px) saturate(78%); } .ds-inquiry-shell { width:100%; height:100%; overflow:hidden; background:#11110f; clip-path:inset(100% 0 0); transform:translate3d(0,36px,0); transition:clip-path 760ms cubic-bezier(.16,1,.3,1),transform 760ms cubic-bezier(.16,1,.3,1); } .ds-inquiry[open] .ds-inquiry-shell { clip-path:inset(0); transform:none; } .ds-inquiry header { position:absolute; inset:0 0 auto; z-index:6; display:flex; min-height:72px; align-items:center; justify-content:space-between; padding:10px clamp(18px,4vw,64px); border-bottom:1px solid rgba(242,241,235,.18); background:rgba(12,13,12,.9); } @media(prefers-reduced-motion:reduce){.ds-inquiry-shell{clip-path:none;transform:none;transition:none;}}"
+    },
+    {
+      "name": "Inquiry Pricing and Proposal",
+      "kind": "form",
+      "refersTo": "project-proposal-sheet",
+      "description": "Two-act inquiry: a dark three-column pricing ledger with only the recommended center plan in Acid Signal, followed by a warm-white underline-field proposal sheet.",
+      "html": "<div class=\"ds-pricing\"><article>Implementation</article><article class=\"is-recommended\">Full experience</article><article>Design</article></div><section class=\"ds-proposal\"><form><label>Name<input name=\"name\"></label><label>Email<input name=\"email\"></label><p role=\"status\" aria-live=\"polite\"></p></form></section>",
+      "css": ".ds-pricing { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-block:1px solid rgba(242,241,235,.2); background:#11110f; color:#f2f1eb; } .ds-pricing article { min-height:520px; padding:clamp(30px,4vw,58px) clamp(22px,3vw,44px); border-right:1px solid rgba(242,241,235,.2); } .ds-pricing .is-recommended { background:#d9f45f; color:#11110f; } .ds-proposal { display:grid; grid-template-columns:.72fr 1.28fr; min-height:100dvh; padding:clamp(120px,16vh,180px) clamp(22px,6vw,96px); background:#f2f1eb; color:#11110f; } .ds-proposal input,.ds-proposal select,.ds-proposal textarea { width:100%; min-height:54px; padding:10px 0; border:0; border-bottom:1px solid rgba(17,17,15,.38); border-radius:0; background:transparent; color:#11110f; } @media(max-width:720px){.ds-pricing,.ds-proposal form{grid-template-columns:1fr}.ds-pricing article{min-height:0;border-right:0;border-bottom:1px solid rgba(242,241,235,.2)}.ds-proposal{display:block;}}"
     }
   ],
   "narrative": {
@@ -104,6 +123,7 @@
       "Studio synchronizes three generated abstract images with three scrolling chapters.",
       "Two long work streams and the supporting web archive receive bounded desktop depth and clipped pointer trails.",
       "Mobile and reduced-motion modes remove nonessential transforms and video playback.",
+      "Project inquiry moves from a dark editorial pricing ledger to an inverted warm-white proposal sheet inside a full-viewport native dialog.",
       "The live interface demonstrates current web skill without exposing internal strategy; legacy work is supporting provenance."
     ],
     "rules": [
@@ -114,7 +134,9 @@
       { "name": "The Sticky Counterpoint Rule", "body": "Studio holds one visual field while three text chapters advance.", "section": "layout" },
       { "name": "The Bounded Trail Rule", "body": "Fine-pointer media response uses clipped displacement bands and never becomes free dragging or reordering.", "section": "elevation" },
       { "name": "The Motion-Off Rule", "body": "Reduced motion pauses video and removes parallax, card drift, and ghost layers.", "section": "elevation" },
-      { "name": "The Sharp System Rule", "body": "Production geometry stays rectangular; prototype pills do not enter the product identity.", "section": "shapes" }
+      { "name": "The Sharp System Rule", "body": "Production geometry stays rectangular; prototype pills do not enter the product identity.", "section": "shapes" },
+      { "name": "The Two-Act Inquiry Rule", "body": "Qualify with a dark pricing ledger, then invert to a warm-white proposal sheet; do not collapse the sequence into rounded cards.", "section": "components" },
+      { "name": "The Recommended-Only Signal Rule", "body": "Within pricing, Acid Signal belongs only to the recommended center plan.", "section": "colors" }
     ],
     "dos": [
       "Do use Marcellus for English, display, navigation, labels, and release titles.",
@@ -124,6 +146,9 @@
       "Do keep Studio as a 50/50 sticky-image narrative with three scrolling steps.",
       "Do let the current interface prove web capability without narrating internal strategy.",
       "Do keep waterfall interaction bounded to fine-pointer desktop.",
+      "Do use the native dialog top layer and restore focus to the exact inquiry opener after every close path.",
+      "Do stack pricing and collapse the proposal form to one column at 720px and below.",
+      "Do report form loading, success, and recoverable error copy through a restrained polite live region.",
       "Do fully remove video playback and transforms for reduced motion."
     ],
     "donts": [
@@ -133,6 +158,8 @@
       "Don't turn Studio into a carousel or uniform card grid.",
       "Don't allow release cards to reorder or move without bounds.",
       "Don't enable pointer effects on mobile.",
+      "Don't present every pricing plan in Acid Signal or turn the ledger into floating rounded cards.",
+      "Don't wrap proposal fields in cards; keep the warm-white sheet and underline-only controls.",
       "Don't let legacy cases outrank the current experience.",
       "Don't add glow, glossy glass cards, dashboard styling, or cursor tricks outside the media trails."
     ]

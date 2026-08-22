@@ -9,6 +9,8 @@ colors:
   b-accent: "#d9f45f"
   b-line: "rgba(242, 241, 235, 0.2)"
   kv-black: "#080908"
+  status-success: "#315c16"
+  status-error: "#8d211a"
 typography:
   display:
     fontFamily: '"Marcellus", "Zen Old Mincho", serif'
@@ -47,6 +49,16 @@ components:
   waterfall-card:
     backgroundColor: "{colors.b-black}"
     textColor: "{colors.b-ink}"
+    rounded: "{rounded.sharp}"
+  project-inquiry-dialog:
+    backgroundColor: "{colors.b-black}"
+    textColor: "{colors.b-ink}"
+    rounded: "{rounded.sharp}"
+    width: "100vw"
+    height: "100dvh"
+  project-proposal-sheet:
+    backgroundColor: "{colors.b-ink}"
+    textColor: "{colors.b-black}"
     rounded: "{rounded.sharp}"
 ---
 
@@ -127,9 +139,21 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 
 - Project actions are at least 44px high and have visible focus treatment.
 - The comparison selector exposes `aria-expanded` / `aria-hidden`, closes on outside click or Escape, and returns focus on Escape.
+- The Project Inquiry uses the native `<dialog>` top layer. Escape, the close control and a direct backdrop press close it; focus enters at the close control and returns to the exact opener.
 - Cards are visual media, not fake controls; use a crosshair cursor only where the fine-pointer trail is available.
 - Headings and sticky copy retain adequate contrast over the media fields.
 - The page must not introduce horizontal overflow at 390px.
+
+## Components
+
+### Project Inquiry
+
+- **Shell:** A full-viewport native dialog (`100vw × 100dvh`) with a fixed 72px dark header, master wordmark, square 48px close control and independently scrolling body. Opening reveals the sharp shell upward with `clip-path` and restrained vertical settlement; reduced motion removes the reveal and transform entirely.
+- **Pricing ledger:** The first act is a dark, three-column editorial ledger separated by hairlines. Plans are not rounded cards. Only the recommended center plan receives a solid Acid Signal field; the other plans stay graphite with outlined actions so the accent keeps its directional role.
+- **Proposal sheet:** The second act inverts to Projection White with Cinema Black text. Its copy-and-form split is spacious rather than carded; fields remain transparent with underline-only boundaries, square corners and a strengthened underline on focus.
+- **Responsive behavior:** At 720px and below, the ledger stacks into one column with horizontal dividers, the sticky proposal copy becomes static and the form collapses to one column. The dialog header reduces to 64px without losing a minimum 44px close target.
+- **Submission states:** The submit action disables and uses restrained `Sending…` copy while in flight. A polite live region reports loading, success and recoverable error states; success uses muted green (`#315c16`), error uses muted red (`#8d211a`) and neither state introduces animation, cards or decorative alerts.
+- **Plan handoff:** Choosing a plan preselects the matching service, moves to the proposal sheet and focuses the first field. Smooth scrolling is optional motion and must collapse to an immediate move under reduced-motion preferences.
 
 ## Named rules
 
@@ -139,3 +163,5 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - **The One-Signal Rule:** Acid Signal directs attention; it does not become ambient decoration.
 - **The Sharp System Rule:** production geometry remains rectangular.
 - **The Motion-Off Rule:** mobile and reduced-motion users receive the same content without nonessential transforms.
+- **The Two-Act Inquiry Rule:** qualify with a dark pricing ledger, then invert to a warm-white proposal sheet; never blend both acts into a generic card grid.
+- **The Recommended-Only Signal Rule:** within pricing, Acid Signal belongs to the recommended center plan only.
