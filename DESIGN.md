@@ -100,7 +100,7 @@ components:
 
 ## Creative direction
 
-**North Star: The Realm Becomes Real.** Direction B is authoritative and loads by default. Direction A remains only as a concealed prototype comparison, opened from the small “Compare modes” control at the lower-right.
+**North Star: The Realm Becomes Real.** Direction B is the public prototype and loads by default. The lower-right fixed control is an icon-only, keyboard-accessible return-to-top action; no comparison UI is exposed to visitors.
 
 The public narrative does not explain internal strategy or present the new site as a case-study diagram. The site itself demonstrates current web craft through typography, responsive composition, authored scroll, layered media and precise interaction. Historical websites are supporting provenance.
 
@@ -110,8 +110,8 @@ Customer-facing sequence:
 2. Sticky Studio introduction with three generated abstract scenes.
 3. `Worlds in motion` — ten selected 4:5 visual works in a three-depth gallery.
 4. A horizontal low-chroma field containing all twenty supplied Instagram works; it restores color on hover or focus, and compacts into a two-row rail on mobile.
-5. AI visual, motion and web service sequence.
-6. `Selected web archive` — four real cases plus two detail crops in a flowing evidence wall.
+5. A commercially legible service sequence: UI/UX, brand websites, AI Creative image/short-form video production, and focused front-end development.
+6. `Selected web archive` — filterable fixed-ratio case covers that open complete long-form website views.
 7. Generated cinematic studio contact scene and project CTA.
 
 ## Identity
@@ -154,8 +154,10 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - Far work is smaller, quieter and slower; the near lane is larger and faster. The selected gallery uses bounded vertical depth up to 84px and lateral drift up to 38px.
 - Deliberately generous vertical intervals and plane-specific soft shadows separate the ten plates: near is strongest, middle is moderate, and far is faint.
 - Perspective comes from lane width, scale, speed and position—not from changing or cropping the artwork ratio.
-- Middle and far lanes receive bounded optical blur that clears on hover or keyboard focus. Card titles and descriptions stay out of the composition and appear below the full image only after opening the native lightbox.
-- Fine-pointer hover replaces the image with a bounded, per-image WebGL `colorful` pass: pointer speed controls local RGB channel separation around the cursor, then the canvas fades away and disposes. It is inspired by the MIT-licensed Codrops colorful hover treatment, but does not use a global renderer or perpetual render loop.
+- Middle and far lanes stay quieter through scale, opacity, speed and shadow without image blur. Card titles and descriptions stay out of the composition and appear below the full image only after opening the native lightbox.
+- Fine-pointer hover replaces the image with a bounded, per-image WebGL `colorful` pass: pointer speed controls local RGB channel separation around the cursor, then the canvas fades away and disposes. Its first frame is rendered before opacity changes, preventing a black flash. It is inspired by the MIT-licensed Codrops colorful hover treatment, but does not use a global renderer or perpetual render loop.
+- The shader's out-of-image field matches Graphite Black (`#11110f`), so full-frame 4:5 containment never introduces a second black surface around an artwork.
+- Gallery card order, left/right stance and slight rotation re-seed on each load. The final near-lane plate is intentionally reduced to a quieter scale, preventing the waterfall from resolving as two consecutive large images.
 - This is perceptual drag, not draggable/reorderable UI.
 
 ### Instagram field
@@ -168,12 +170,13 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 
 - Sticky narrative stays secondary to a two-column masonry evidence stream.
 - `All Projects` plus `Brand Website` and `Campaign` filters reflow the masonry evidence stream; the active category uses the single Acid Signal rule and reports its project count through a polite live region.
-- Four true archived cases are accompanied by two deliberate detail crops; detail crops follow their source project's category and must not be named as extra projects.
+- Every archived case uses a fixed 600 × 650 cover plate in the gallery. Its lightbox uses a fixed left context plane and an independently bounded right viewport for the full-page image, constrained to 1400px maximum upload width and allowed to extend vertically through a persistent custom scrollbar with pointer and keyboard control. The left context carries its category, description and an optional external `Launch` action.
 - The same bounded depth and colorful chromatic-hover vocabulary connects old web craft to the current interface without turning it into a lengthy case study.
+- Archive previews and their WebGL canvases share the same exact cover frame, preventing hover scaling jumps. Clicking a project opens a full-site-image lightbox with fixed context copy and an independently scrollable long image.
 
 ### Web archive editor
 
-- `admin.html` is a restrained Operate-mode editor for adding, editing, deleting, categorizing, uploading and reordering archive projects.
+- `admin.html` is a restrained Operate-mode editor for adding, editing, deleting, categorizing, uploading and reordering archive projects. Each project requires a cropped 600 × 650 gallery cover and a separate full-length lightbox image; an optional HTTP(S) project URL reveals the lightbox `Launch` action. Every project row exposes a labelled delete icon in addition to the editor-level delete action.
 - `web-projects.js` is the replaceable content adapter shared by the editor and public archive. The prototype stores normalized records and compressed image data in `localStorage`; an open front-end tab reloads when that storage changes.
 - The local adapter is explicitly labelled as a prototype. Production still requires authentication, durable database records and external object storage; local browser state must never be presented as a deployed CMS.
 
@@ -195,9 +198,10 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 ## Interaction and accessibility
 
 - Project actions are at least 44px high and have visible focus treatment.
-- The comparison selector exposes `aria-expanded` / `aria-hidden`, closes on outside click or Escape, and returns focus on Escape.
+- The return-to-top control is an icon-only `<button>` with an explicit accessible name and respects reduced-motion preference.
 - The Project Inquiry uses the native `<dialog>` top layer. Escape, the close control and a direct backdrop press close it; focus enters at the close control and returns to the exact opener.
-- The work lightbox follows the same native-dialog focus contract and reveals the selected full-frame image before its title and description.
+- The final site footer restates the founding manifesto and presents phone, email, Instagram and Threads in a 2 × 2 contact grid through compact SVG icons.
+- The work lightbox follows the same native-dialog focus contract. Visual posts reveal the selected full-frame image with title and description; archive projects use a two-column desktop composition with an independently scrollable complete webpage image, collapsing to a stacked mobile layout.
 - Cards are visual media, not fake controls; use a crosshair cursor only where the fine-pointer chromatic hover is available.
 - Headings and sticky copy retain adequate contrast over the media fields.
 - The page must not introduce horizontal overflow at 390px.
@@ -219,7 +223,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - **The Sticky Evidence Rule:** copy holds position while enough media passes to establish range and depth.
 - **The Perspective Salon Rule:** work changes scale, speed and lateral position by plane; it must never return to equal card columns.
 - **The Full-Frame Plate Rule:** preserve the supplied 4:5 post canvas; never crop artwork to manufacture depth.
-- **The Optical Depth Rule:** only middle and far planes blur, and direct attention restores full clarity.
+- **The Optical Depth Rule:** lane hierarchy comes from scale, speed, opacity and shadow; selected artwork remains optically sharp.
 - **The Color-on-Approach Rule:** the Instagram field stays quiet until pointer hover or keyboard focus restores color.
 - **The Bounded Color Rule:** hover uses a local, velocity-shaped RGB separation around the pointer; the WebGL canvas exists only while a fine-pointer interaction is active and never implies free dragging.
 - **The One-Signal Rule:** Acid Signal directs attention; it does not become ambient decoration.

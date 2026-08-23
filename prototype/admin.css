@@ -169,8 +169,7 @@ select:focus-visible {
 
 .secondary-action,
 .primary-action,
-.delete-action,
-.reset-action {
+.delete-action {
   min-height: 42px;
   padding: 10px 16px;
   border: 1px solid var(--line);
@@ -185,8 +184,7 @@ select:focus-visible {
   color: var(--black);
 }
 
-.delete-action,
-.reset-action {
+.delete-action {
   color: var(--danger);
 }
 
@@ -291,10 +289,17 @@ select:focus-visible {
   cursor: not-allowed;
 }
 
-.reset-action {
-  margin-top: 24px;
-  border-color: transparent;
-  padding-left: 0;
+.project-order-actions .project-delete-action {
+  color: var(--danger);
+}
+
+.project-order-actions button:not(:disabled):hover {
+  border-color: currentColor;
+  color: var(--accent);
+}
+
+.project-order-actions .project-delete-action:not(:disabled):hover {
+  color: var(--danger);
 }
 
 .image-uploader {
@@ -305,6 +310,21 @@ select:focus-visible {
   overflow: hidden;
   border: 1px solid var(--line);
   background: #090a09;
+}
+
+.project-image-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 16px;
+}
+
+.image-uploader-cover {
+  aspect-ratio: 600 / 650;
+  min-height: 0;
+}
+
+.image-uploader-long img {
+  object-position: top center;
 }
 
 .image-uploader img {
@@ -368,6 +388,12 @@ select:focus-visible {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .project-image-fields {
+    grid-template-columns: 1fr;
+  }
 }
 
 .editor-grid {

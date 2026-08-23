@@ -9,9 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./admin.css" />
-    <script src="./web-projects.js" defer></script>
-    <script src="./admin.js" defer></script>
+    <link rel="stylesheet" href="./admin.css?v=20260823-4" />
+    <script src="./web-projects.js?v=20260823-4" defer></script>
+    <script src="./admin.js?v=20260823-4" defer></script>
   </head>
   <body>
     <header class="admin-header">
@@ -28,7 +28,7 @@
       <section class="admin-intro" aria-labelledby="admin-title">
         <div>
           <h1 id="admin-title">網站作品管理</h1>
-          <p>新增作品、更新圖片與文案，或拖曳調整前台顯示順序。</p>
+          <p>新增、更新或刪除作品，也可以拖曳調整前台顯示順序。</p>
         </div>
         <div class="admin-local-note">
           <strong>Local prototype</strong>
@@ -46,7 +46,6 @@
             <button class="secondary-action" type="button" data-add-project>新增作品</button>
           </div>
           <div class="admin-project-list" data-admin-project-list></div>
-          <button class="reset-action" type="button" data-reset-projects>恢復預設資料</button>
         </section>
 
         <section class="project-editor-panel" aria-labelledby="project-editor-title">
@@ -59,16 +58,29 @@
 
           <form class="project-editor" data-project-editor novalidate>
             <input type="hidden" name="id" />
-            <div class="image-uploader" data-image-uploader>
-              <img data-image-preview alt="上傳圖片預覽" hidden />
-              <div class="image-uploader-empty" data-image-empty>
-                <strong>Upload project image</strong>
-                <span>JPG、PNG 或 WebP，會自動縮至 1600px 內</span>
+            <div class="project-image-fields">
+              <div class="image-uploader image-uploader-cover">
+                <img data-cover-preview alt="作品列表封面預覽" hidden />
+                <div class="image-uploader-empty" data-cover-empty>
+                  <strong>列表封面｜600 × 650</strong>
+                  <span>前台作品牆使用；上傳後會裁切為固定尺寸</span>
+                </div>
+                <label>
+                  <span>選擇封面</span>
+                  <input type="file" name="coverFile" accept="image/jpeg,image/png,image/webp" />
+                </label>
               </div>
-              <label>
-                <span>選擇圖片</span>
-                <input type="file" name="imageFile" accept="image/jpeg,image/png,image/webp" />
-              </label>
+              <div class="image-uploader image-uploader-long">
+                <img data-lightbox-preview alt="作品完整長圖預覽" hidden />
+                <div class="image-uploader-empty" data-lightbox-empty>
+                  <strong>燈箱長圖｜最寬 1400</strong>
+                  <span>完整網頁截圖；高度不限，燈箱內可上下捲動</span>
+                </div>
+                <label>
+                  <span>選擇長圖</span>
+                  <input type="file" name="lightboxFile" accept="image/jpeg,image/png,image/webp" />
+                </label>
+              </div>
             </div>
 
             <div class="editor-grid">
@@ -88,17 +100,9 @@
                 <span>圖片替代文字</span>
                 <input type="text" name="alt" required maxlength="140" />
               </label>
-              <label>
-                <span>版面比例</span>
-                <select name="layout">
-                  <option value="tall">Tall</option>
-                  <option value="medium">Medium</option>
-                  <option value="wide">Wide</option>
-                </select>
-              </label>
-              <label class="detail-toggle">
-                <input type="checkbox" name="detail" />
-                <span>產生一張局部細節圖</span>
+              <label class="editor-wide">
+                <span>專案網址（選填）</span>
+                <input type="url" name="projectUrl" placeholder="https://example.com" maxlength="500" inputmode="url" />
               </label>
             </div>
 

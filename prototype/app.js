@@ -1,75 +1,3 @@
-const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
-const panels = {
-  a: document.querySelector('#panel-a'),
-  b: document.querySelector('#panel-b'),
-};
-const switcher = document.querySelector('#prototype-switcher');
-const switcherToggle = document.querySelector('.prototype-switcher-toggle');
-
-function setSwitcher(open) {
-  if (!switcher || !switcherToggle) return;
-  switcher.classList.toggle('is-open', open);
-  switcher.setAttribute('aria-hidden', String(!open));
-  switcherToggle.setAttribute('aria-expanded', String(open));
-}
-
-function activateDirection(direction, moveFocus = false) {
-  const target = direction === 'b' ? 'b' : 'a';
-  document.body.dataset.direction = target;
-
-  tabs.forEach((tab) => {
-    const selected = tab.dataset.target === target;
-    tab.setAttribute('aria-selected', String(selected));
-    tab.tabIndex = selected ? 0 : -1;
-    if (selected && moveFocus) tab.focus();
-  });
-
-  Object.entries(panels).forEach(([key, panel]) => {
-    panel.hidden = key !== target;
-  });
-
-  const mainId = target === 'a' ? 'panel-a' : 'panel-b';
-  document.querySelector('.skip-link').setAttribute('href', `#${mainId}`);
-  window.history.replaceState(null, '', `#direction-${target}`);
-  window.scrollTo({ top: 0, behavior: 'auto' });
-  window.dispatchEvent(new CustomEvent('directionchange', { detail: target }));
-  setSwitcher(false);
-}
-
-switcherToggle?.addEventListener('click', () => {
-  setSwitcher(switcherToggle.getAttribute('aria-expanded') !== 'true');
-});
-
-document.addEventListener('pointerdown', (event) => {
-  if (!switcher?.classList.contains('is-open')) return;
-  if (switcher.contains(event.target) || switcherToggle?.contains(event.target)) return;
-  setSwitcher(false);
-});
-
-document.addEventListener('keydown', (event) => {
-  if (event.key !== 'Escape' || !switcher?.classList.contains('is-open')) return;
-  setSwitcher(false);
-  switcherToggle?.focus();
-});
-
-tabs.forEach((tab, index) => {
-  tab.addEventListener('click', () => activateDirection(tab.dataset.target));
-  tab.addEventListener('keydown', (event) => {
-    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-    event.preventDefault();
-
-    let nextIndex = index;
-    if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
-    if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
-    if (event.key === 'Home') nextIndex = 0;
-    if (event.key === 'End') nextIndex = tabs.length - 1;
-    activateDirection(tabs[nextIndex].dataset.target, true);
-  });
-});
-
-const initialDirection = window.location.hash === '#direction-a' ? 'a' : 'b';
-activateDirection(initialDirection);
-
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
@@ -117,7 +45,7 @@ function setupKv() {
   let frame = 0;
 
   const syncPlayback = () => {
-    const shouldPlay = inView && !document.hidden && document.body.dataset.direction === 'b' && !reducedMotion.matches;
+    const shouldPlay = inView && !document.hidden && !reducedMotion.matches;
     if (shouldPlay) video.play().catch(() => {});
     else video.pause();
     if (!shouldPlay) section.classList.remove('is-video-live');
@@ -155,7 +83,6 @@ function setupKv() {
   }, { threshold: 0.02 }).observe(section);
 
   document.addEventListener('visibilitychange', syncPlayback);
-  window.addEventListener('directionchange', syncPlayback);
   reducedMotion.addEventListener('change', () => {
     syncPlayback();
     updateKv();
@@ -283,15 +210,14 @@ function setupActiveNavigation() {
 
   window.addEventListener('scroll', requestRefresh, { passive: true });
   window.addEventListener('resize', requestRefresh);
-  window.addEventListener('directionchange', requestRefresh);
   refresh();
 }
 
 function setupRandomizedGallery() {
   const railTrack = document.querySelector('.instagram-rail-track');
   const tiles = Array.from(railTrack?.querySelectorAll('.instagram-tile') || []);
-  const cards = Array.from(document.querySelectorAll('.b-waterfall .waterfall-card'));
-  if (!railTrack || !tiles.length || !cards.length) return;
+  const columns = Array.from(document.querySelectorAll('.b-waterfall [data-waterfall-column]'));
+  if (!railTrack || !tiles.length || !columns.length) return;
 
   const catalog = tiles.map((tile) => {
     const image = tile.querySelector('img');
@@ -311,6 +237,24 @@ function setupRandomizedGallery() {
     return { ...item, tile };
   });
 
+  columns.forEach((column) => {
+    const laneCards = shuffle(Array.from(column.querySelectorAll('.waterfall-card')));
+    const startsLeft = Math.random() > 0.5;
+
+    laneCards.forEach((card, index) => {
+      card.classList.remove('gallery-tail-quiet');
+      card.classList.toggle('piece-left', (index % 2 === 0) === startsLeft);
+      card.classList.toggle('piece-right', (index % 2 === 0) !== startsLeft);
+      card.style.setProperty('--gallery-rotation', `${(Math.random() * 1.1 - 0.55).toFixed(2)}deg`);
+      column.append(card);
+    });
+
+    if (column.classList.contains('waterfall-column-near') && laneCards.length) {
+      laneCards[laneCards.length - 1].classList.add('gallery-tail-quiet');
+    }
+  });
+
+  const cards = columns.flatMap((column) => Array.from(column.querySelectorAll('.waterfall-card')));
   const selection = shuffle(catalog).slice(0, cards.length);
   cards.forEach((card, index) => {
     const item = selection[index];
@@ -340,32 +284,123 @@ function setupRandomizedGallery() {
   shuffle(catalog).forEach(({ tile }) => railTrack.append(tile));
 }
 
+function setupScrollTop() {
+  const control = document.querySelector('[data-scroll-top]');
+  if (!control) return;
+
+  const updateState = () => {
+    control.classList.toggle('is-active', window.scrollY > 320);
+  };
+
+  control.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+  });
+  window.addEventListener('scroll', updateState, { passive: true });
+  updateState();
+}
+
 function setupWorkLightbox() {
   const dialog = document.querySelector('#work-lightbox');
   const closeButton = dialog?.querySelector('[data-lightbox-close]');
   const image = dialog?.querySelector('[data-lightbox-image]');
   const title = dialog?.querySelector('[data-lightbox-title]');
   const description = dialog?.querySelector('[data-lightbox-description]');
+  const category = dialog?.querySelector('[data-lightbox-category]');
+  const launch = dialog?.querySelector('[data-lightbox-launch]');
+  const media = dialog?.querySelector('.work-lightbox-media');
+  const scrollbar = dialog?.querySelector('[data-lightbox-scrollbar]');
+  const scrollbarThumb = dialog?.querySelector('[data-lightbox-scrollbar-thumb]');
   const sources = [
     ...document.querySelectorAll('.work-lightbox-trigger'),
     ...document.querySelectorAll('.instagram-tile'),
   ];
   let trigger = null;
-  if (!dialog || !closeButton || !image || !title || !description || !sources.length) return;
+  if (!dialog || !closeButton || !image || !title || !description || !category || !launch || !media || !scrollbar || !scrollbarThumb || !sources.length) return;
+
+  const syncScrollbar = () => {
+    const scrollable = dialog.classList.contains('is-archive-work') && media.scrollHeight > media.clientHeight + 1;
+    scrollbar.hidden = !scrollable;
+    if (!scrollable) return;
+    const maximum = media.scrollHeight - media.clientHeight;
+    const thumbSize = Math.max(48, (media.clientHeight / media.scrollHeight) * scrollbar.clientHeight);
+    const thumbTravel = Math.max(0, scrollbar.clientHeight - thumbSize);
+    const progress = maximum ? media.scrollTop / maximum : 0;
+    scrollbarThumb.style.height = `${thumbSize}px`;
+    scrollbarThumb.style.transform = `translateY(${thumbTravel * progress}px)`;
+    scrollbar.setAttribute('aria-valuemin', '0');
+    scrollbar.setAttribute('aria-valuemax', String(Math.round(maximum)));
+    scrollbar.setAttribute('aria-valuenow', String(Math.round(media.scrollTop)));
+  };
+
+  const scrollFromPointer = (clientY) => {
+    const rect = scrollbar.getBoundingClientRect();
+    const progress = clamp((clientY - rect.top) / rect.height, 0, 1);
+    media.scrollTop = progress * (media.scrollHeight - media.clientHeight);
+  };
+
+  let draggingScrollbar = false;
+  scrollbar.addEventListener('pointerdown', (event) => {
+    if (scrollbar.hidden) return;
+    draggingScrollbar = true;
+    scrollbar.setPointerCapture(event.pointerId);
+    scrollFromPointer(event.clientY);
+    event.preventDefault();
+  });
+  scrollbar.addEventListener('pointermove', (event) => {
+    if (draggingScrollbar) scrollFromPointer(event.clientY);
+  });
+  scrollbar.addEventListener('pointerup', () => { draggingScrollbar = false; });
+  scrollbar.addEventListener('pointercancel', () => { draggingScrollbar = false; });
+  scrollbar.addEventListener('keydown', (event) => {
+    if (scrollbar.hidden) return;
+    const page = Math.max(80, media.clientHeight * 0.82);
+    if (event.key === 'ArrowDown' || event.key === 'PageDown') media.scrollTop += page;
+    else if (event.key === 'ArrowUp' || event.key === 'PageUp') media.scrollTop -= page;
+    else if (event.key === 'Home') media.scrollTop = 0;
+    else if (event.key === 'End') media.scrollTop = media.scrollHeight;
+    else return;
+    event.preventDefault();
+  });
+  dialog.addEventListener('keydown', (event) => {
+    if (!dialog.classList.contains('is-archive-work') || event.target.closest('a, button, input, textarea, select')) return;
+    const step = Math.max(80, media.clientHeight * 0.82);
+    if (event.key === 'ArrowDown' || event.key === 'PageDown') media.scrollTop += step;
+    else if (event.key === 'ArrowUp' || event.key === 'PageUp') media.scrollTop -= step;
+    else if (event.key === 'Home') media.scrollTop = 0;
+    else if (event.key === 'End') media.scrollTop = media.scrollHeight;
+    else return;
+    event.preventDefault();
+  });
+  media.addEventListener('scroll', syncScrollbar, { passive: true });
+  image.addEventListener('load', () => window.requestAnimationFrame(syncScrollbar));
+  window.addEventListener('resize', syncScrollbar);
 
   const open = (source) => {
-    const item = source.classList.contains('instagram-tile') ? source.dataset : source.closest('.waterfall-card')?.dataset;
+    const owner = source.closest('.waterfall-card, .archive-case');
+    const item = source.classList.contains('instagram-tile') ? source.dataset : owner?.dataset;
     if (!item?.src) return;
     trigger = source;
+    dialog.classList.toggle('is-archive-work', item.lightboxKind === 'archive');
+    media.scrollTop = 0;
     image.src = item.src;
     image.alt = item.alt || item.title;
     title.textContent = item.title;
     description.textContent = item.description;
+    const isArchive = item.lightboxKind === 'archive';
+    const categoryLabel = window.NeoRealmWebProjects?.categories
+      .find((entry) => entry.value === item.category)?.label;
+    category.hidden = !isArchive || !categoryLabel;
+    category.textContent = categoryLabel || '';
+    launch.hidden = !isArchive || !item.projectUrl;
+    if (item.projectUrl) launch.href = item.projectUrl;
+    else launch.removeAttribute('href');
     dialog.showModal();
     document.body.classList.add('work-lightbox-open');
     window.requestAnimationFrame(() => {
       dialog.classList.add('is-visible');
-      closeButton.focus({ preventScroll: true });
+      syncScrollbar();
+      if (isArchive) media.focus({ preventScroll: true });
+      else closeButton.focus({ preventScroll: true });
     });
   };
 
@@ -374,6 +409,8 @@ function setupWorkLightbox() {
     document.body.classList.remove('work-lightbox-open');
     const finish = () => {
       if (dialog.open) dialog.close();
+      dialog.classList.remove('is-archive-work');
+      scrollbar.hidden = true;
       trigger?.focus({ preventScroll: true });
     };
     if (reducedMotion.matches) finish();
@@ -461,21 +498,40 @@ function setupWebArchive() {
   const projects = store.get();
   const depthPattern = [0.72, 1, 0.58, 0.88, 0.66, 0.94];
 
-  const createImage = (project, detail = false) => {
+  const createImage = (project) => {
     const image = document.createElement('img');
-    image.src = project.image;
-    image.alt = detail ? `${project.title} 網站局部裁切` : project.alt;
-    image.width = 650;
-    image.height = detail ? 600 : 720;
+    image.src = project.coverImage;
+    image.alt = project.alt;
+    image.width = 600;
+    image.height = 650;
     image.loading = 'lazy';
     image.decoding = 'async';
-    if (detail) image.style.objectPosition = project.detailPosition;
     return image;
+  };
+
+  const prepareLightbox = (figure, project) => {
+    Object.assign(figure.dataset, {
+      src: project.lightboxImage,
+      alt: project.alt,
+      title: project.title,
+      description: project.description,
+      category: project.category,
+      projectUrl: project.projectUrl,
+      lightboxKind: 'archive',
+    });
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'work-lightbox-trigger archive-lightbox-trigger';
+    trigger.setAttribute('aria-haspopup', 'dialog');
+    trigger.setAttribute('aria-controls', 'work-lightbox');
+    trigger.setAttribute('aria-label', `完整查看 ${project.title} 網站作品`);
+    figure.append(trigger);
   };
 
   projects.forEach((project, index) => {
     const figure = document.createElement('figure');
-    figure.className = `archive-case archive-${project.layout}`;
+    figure.className = 'archive-case';
     figure.dataset.trailCard = '';
     figure.dataset.depth = String(depthPattern[index % depthPattern.length]);
     figure.dataset.archiveCategory = project.category;
@@ -489,20 +545,9 @@ function setupWebArchive() {
     description.textContent = project.description;
     caption.append(title, description);
     figure.append(caption);
+    prepareLightbox(figure, project);
     flow.append(figure);
 
-    if (project.detail) {
-      const detail = document.createElement('figure');
-      detail.className = 'archive-case archive-detail';
-      detail.dataset.trailCard = '';
-      detail.dataset.depth = String(depthPattern[(index + 3) % depthPattern.length]);
-      detail.dataset.archiveCategory = project.category;
-      detail.dataset.projectId = project.id;
-      detail.dataset.archiveDetail = '';
-      detail.setAttribute('aria-label', `${project.title} 網站局部細節`);
-      detail.append(createImage(project, true));
-      flow.append(detail);
-    }
   });
 
   const cards = Array.from(flow.querySelectorAll('[data-archive-category]'));
@@ -723,3 +768,4 @@ window.NeoRealmColorfulHover?.setup();
 setupWorkLightbox();
 setupInstagramWheel();
 setupProjectDialog();
+setupScrollTop();

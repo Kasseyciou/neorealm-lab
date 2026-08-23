@@ -2269,7 +2269,8 @@ html {
   position: relative;
   display: inline-block;
   width: 100%;
-  height: 460px;
+  height: auto;
+  aspect-ratio: 600 / 650;
   margin: 0 0 clamp(22px, 3vw, 46px);
   break-inside: avoid;
   grid-column: auto;
@@ -2279,44 +2280,21 @@ html {
   will-change: transform;
 }
 
-.archive-flow .archive-tall {
-  height: clamp(560px, 55vw, 760px);
-}
-
-.archive-flow .archive-medium {
-  height: clamp(380px, 37vw, 520px);
-}
-
-.archive-flow .archive-wide {
-  height: clamp(330px, 32vw, 460px);
-}
-
-.archive-flow .archive-detail {
-  height: clamp(420px, 40vw, 560px);
-}
-
-.archive-flow .archive-detail img {
-  object-position: 70% 30%;
-  transform: scale(1.45);
-}
-
-.archive-flow .archive-detail-lower img {
-  object-position: 30% 80%;
-  transform: scale(1.4);
-}
-
 .archive-flow .archive-case > img {
   position: absolute;
-  inset: -2%;
-  width: 104%;
-  height: 104%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   filter: saturate(0.74) contrast(1.05);
-  transform: translate3d(var(--media-x, 0px), var(--media-y, 0px), 0) scale(1.04);
-  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1), filter 220ms ease;
+  transform: none;
+  transition: filter 220ms ease;
 }
 
-.archive-flow .archive-detail > img {
-  transform: translate3d(var(--media-x, 0px), var(--media-y, 0px), 0) scale(1.42);
+.archive-flow .archive-case figcaption {
+  z-index: 3;
+  pointer-events: none;
 }
 
 .colorful-hover-canvas {
@@ -2325,6 +2303,7 @@ html {
   z-index: 2;
   width: 100%;
   height: 100%;
+  background: var(--b-black);
   opacity: 0;
   pointer-events: none;
   transition: opacity 150ms ease;
@@ -2332,12 +2311,12 @@ html {
 }
 
 .colorful-hover-canvas-archive {
-  inset: -2%;
-  width: 104%;
-  height: 104%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.colorful-hover-canvas.is-active {
+.colorful-hover-canvas.is-active.is-ready {
   opacity: 1;
 }
 
@@ -2605,18 +2584,11 @@ html {
     padding: 28px 10px 92px;
   }
 
-  .archive-flow .archive-case,
-  .archive-flow .archive-tall,
-  .archive-flow .archive-medium,
-  .archive-flow .archive-wide,
-  .archive-flow .archive-detail {
-    height: 280px;
+  .archive-flow .archive-case {
+    height: auto;
+    aspect-ratio: 600 / 650;
     margin-bottom: 10px;
     transform: none !important;
-  }
-
-  .archive-flow .archive-tall {
-    height: 390px;
   }
 
   .colorful-hover-canvas {
@@ -3222,6 +3194,175 @@ html {
   }
 }
 
+/* Persistent utilities and the final brand ledger. */
+.scroll-top-control {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 42;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid rgba(242, 241, 235, 0.28);
+  border-radius: 0;
+  background: rgba(17, 17, 15, 0.94);
+  color: var(--b-muted);
+  cursor: pointer;
+  opacity: 0.58;
+  transition: border-color 180ms ease, color 180ms ease, opacity 180ms ease, transform 180ms ease;
+}
+
+.scroll-top-control:hover,
+.scroll-top-control:focus-visible,
+.scroll-top-control.is-active {
+  border-color: var(--b-accent);
+  color: var(--b-accent);
+  opacity: 1;
+}
+
+.scroll-top-control:active {
+  transform: translateY(1px);
+}
+
+.waterfall-card {
+  rotate: var(--gallery-rotation, 0deg);
+  transition: rotate 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.waterfall-column-near .waterfall-card.gallery-tail-quiet {
+  --piece-scale: 0.9;
+  align-self: flex-end;
+  width: 92%;
+  box-shadow: 0 28px 84px rgba(0, 0, 0, 0.28);
+}
+
+.site-footer {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.46fr) minmax(400px, 1.22fr) minmax(380px, 1fr);
+  gap: clamp(42px, 5vw, 84px);
+  align-items: center;
+  padding: clamp(56px, 7vw, 108px) clamp(22px, 6vw, 96px) clamp(42px, 5vw, 72px);
+  border-top: 1px solid var(--b-line);
+  background: var(--b-black);
+  color: var(--b-ink);
+}
+
+.site-footer-brand {
+  display: block;
+  width: min(168px, 100%);
+}
+
+.site-footer-brand img {
+  width: 100%;
+  height: auto;
+}
+
+.site-footer-manifesto {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--b-ink);
+  font: 400 clamp(17px, 1.48vw, 22px) / 1.42 "Marcellus", "Zen Old Mincho", serif;
+  letter-spacing: -0.018em;
+}
+
+.site-footer-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px clamp(22px, 2.5vw, 42px);
+  align-content: center;
+}
+
+.site-footer-links a {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 10px;
+  color: var(--b-muted);
+  font: 400 12px / 1.35 "Marcellus", "Zen Old Mincho", serif;
+  letter-spacing: 0.025em;
+  text-decoration: none;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.site-footer-links a:hover,
+.site-footer-links a:focus-visible {
+  color: var(--b-accent);
+}
+
+.site-footer-links a:active {
+  transform: translateY(1px);
+}
+
+.site-footer-links svg {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1180px) {
+  .site-footer {
+    grid-template-columns: minmax(150px, 0.55fr) minmax(0, 1.25fr);
+  }
+
+  .site-footer-links {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site-footer-links a {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 720px) {
+  .scroll-top-control {
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .waterfall-card {
+    rotate: 0deg;
+  }
+
+  .waterfall-column-near .waterfall-card.gallery-tail-quiet {
+    --piece-scale: 1;
+    width: 100%;
+  }
+
+  .site-footer {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 52px 18px 42px;
+  }
+
+  .site-footer-brand {
+    width: 142px;
+  }
+
+  .site-footer-manifesto {
+    max-width: 30ch;
+    font-size: 18px;
+  }
+
+  .site-footer-links {
+    grid-column: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 18px;
+  }
+
+  .site-footer-links a {
+    min-width: 0;
+    font-size: 11px;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waterfall-card {
+    rotate: 0deg !important;
+  }
+}
+
 /* Gallery focus system: centered identity, active anchors, optical depth, and full-frame lightbox. */
 
 .direction-b .b-nav {
@@ -3285,11 +3426,11 @@ html {
 }
 
 .waterfall-column-far .waterfall-image {
-  filter: blur(3px) saturate(0.68) contrast(1.02);
+  filter: saturate(0.68) contrast(1.02);
 }
 
 .waterfall-column-mid .waterfall-image {
-  filter: blur(1.25px) saturate(0.78) contrast(1.04);
+  filter: saturate(0.78) contrast(1.04);
 }
 
 .waterfall-column-near .waterfall-image {
@@ -3467,6 +3608,132 @@ body.work-lightbox-open {
   font: 400 15px/1.7 "Zen Old Mincho", serif;
 }
 
+.archive-lightbox-trigger {
+  cursor: zoom-in;
+}
+
+.work-lightbox.is-archive-work .work-lightbox-figure {
+  position: relative;
+  display: block;
+  width: min(100%, 1320px);
+  height: 100%;
+  max-height: 100%;
+}
+
+.work-lightbox.is-archive-work .work-lightbox-media {
+  position: absolute;
+  inset: 0 0 0 clamp(280px, 31%, 390px);
+  display: block;
+  width: auto;
+  height: auto;
+  max-height: none;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background: var(--b-black);
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.work-lightbox.is-archive-work .work-lightbox-media::-webkit-scrollbar {
+  display: none;
+}
+
+.work-lightbox-scrollbar {
+  position: absolute;
+  z-index: 3;
+  top: 14px;
+  right: 12px;
+  bottom: 14px;
+  width: 12px;
+  border: 1px solid rgba(242, 241, 235, 0.22);
+  background: rgba(17, 17, 15, 0.7);
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.work-lightbox-scrollbar[hidden] {
+  display: none;
+}
+
+.work-lightbox-scrollbar span {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  background: var(--b-accent);
+  transition: background-color 160ms ease;
+}
+
+.work-lightbox-scrollbar:hover span,
+.work-lightbox-scrollbar:focus-visible span {
+  background: var(--b-ink);
+}
+
+.work-lightbox-scrollbar:focus-visible {
+  outline: 2px solid var(--b-accent);
+  outline-offset: 4px;
+}
+
+.work-lightbox.is-archive-work .work-lightbox-media img {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+}
+
+.work-lightbox.is-archive-work figcaption {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  width: min(26%, 320px);
+  padding-top: 18px;
+}
+
+.work-lightbox.is-archive-work figcaption h2 {
+  margin-bottom: 18px;
+}
+
+.work-lightbox-category {
+  margin: 0 0 20px;
+  color: var(--b-accent);
+  font: 400 11px/1.2 "Marcellus", serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.work-lightbox-launch {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  width: min(100%, 240px);
+  margin-top: 36px;
+  padding: 11px 14px;
+  border: 1px solid var(--b-accent);
+  color: var(--b-accent);
+  font: 400 13px/1 "Marcellus", serif;
+  text-decoration: none;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.work-lightbox-launch[hidden] {
+  display: none;
+}
+
+.work-lightbox-launch svg {
+  width: 16px;
+  height: 16px;
+}
+
+.work-lightbox-launch:hover,
+.work-lightbox-launch:focus-visible {
+  background: var(--b-accent);
+  color: var(--b-black);
+  outline: 0;
+}
+
 @media (max-width: 980px) {
   .direction-b .b-nav .site-links {
     display: flex;
@@ -3537,6 +3804,34 @@ body.work-lightbox-open {
 
   .work-lightbox p {
     font-size: 13px;
+  }
+
+  .work-lightbox.is-archive-work .work-lightbox-figure {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .work-lightbox.is-archive-work figcaption {
+    position: static;
+    inset: auto;
+    width: auto;
+    order: -1;
+    flex: 0 0 auto;
+    padding-top: 12px;
+  }
+
+  .work-lightbox.is-archive-work figcaption h2 {
+    margin-bottom: 8px;
+  }
+
+  .work-lightbox.is-archive-work .work-lightbox-media {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    flex: 1 1 auto;
   }
 }
 

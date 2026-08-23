@@ -76,7 +76,7 @@
       "name": "Perspective Salon Gallery",
       "kind": "custom",
       "refersTo": "waterfall-card",
-      "description": "Sticky narrative beside three asymmetric exhibit lanes; ten works are sampled from a twenty-image pool in a 4/3/3 distribution, preserve their full 4:5 canvas, and use generous spacing, plane-specific shadows, parallax, focus-clearing blur, and a velocity-shaped colorful WebGL RGB separation for depth.",
+      "description": "Sticky narrative beside three asymmetric exhibit lanes; ten works are re-seeded from a twenty-image pool in a 4/3/3 distribution, preserve their full 4:5 canvas, and use generous spacing, a quieter final near plate, plane-specific shadows, parallax, sharp imagery, and a velocity-shaped colorful WebGL RGB separation for depth.",
       "html": "<section class=\"ds-waterfall\"><header><h2>Worlds in motion.</h2></header><div class=\"ds-streams\"><div class=\"far\"></div><div class=\"near\"></div><div class=\"mid\"></div></div></section>",
       "css": ".ds-waterfall { display:grid; grid-template-columns:.54fr 1.46fr; background:#1b1b18; color:#f2f1eb; } .ds-waterfall header { position:sticky; top:20vh; align-self:start; padding:15vh 6vw; } .ds-streams { display:grid; grid-template-columns:.72fr 1.12fr .78fr; gap:1.8vw; padding:18vh 3vw 20vh 0; } .ds-streams div { min-height:1200px; background:#11110f; } .ds-streams .far { transform:scale(.82); opacity:.68; } .ds-streams .near { transform:scale(1.08); } .ds-streams .mid { transform:scale(.93); opacity:.9; }"
     },
@@ -100,7 +100,7 @@
       "name": "Local Web Archive Editor",
       "kind": "custom",
       "refersTo": "archive-editor",
-      "description": "Operate-mode local prototype for image upload, project copy, category, layout, deletion, and drag or arrow ordering; browser localStorage is not a production CMS.",
+      "description": "Operate-mode local prototype for paired 600 by 650 cover and full-length lightbox-image upload, project copy, category, row-level and editor-level deletion, and drag or arrow ordering; browser localStorage is not a production CMS.",
       "html": "<section class=\"ds-admin\"><aside><h2>作品排序</h2><button type=\"button\">新增作品</button><div class=\"ds-admin-item\">Project · drag or arrows</div></aside><form><strong>Local prototype</strong><p>正式上線需登入驗證、資料庫與物件儲存。</p><label>作品名稱<input required></label><label>作品分類<select><option>Brand Website</option></select></label><label>圖片<input type=\"file\" accept=\"image/jpeg,image/png,image/webp\"></label><button type=\"submit\">儲存並更新前台</button><p role=\"status\" aria-live=\"polite\"></p></form></section>",
       "css": ".ds-admin { display:grid; grid-template-columns:.72fr 1.28fr; gap:1px; background:rgba(242,241,235,.2); color:#f2f1eb; font-family:'Zen Old Mincho',serif; } .ds-admin aside,.ds-admin form { padding:32px; background:#11110f; } .ds-admin h2,.ds-admin strong,.ds-admin button,.ds-admin select { font-family:Marcellus,serif; } .ds-admin-item { margin-top:24px; padding:18px; border:1px solid rgba(242,241,235,.2); } .ds-admin label { display:grid; gap:8px; margin-top:18px; } .ds-admin input,.ds-admin select { min-height:48px; padding:10px 0; border:0; border-bottom:1px solid rgba(242,241,235,.38); border-radius:0; background:transparent; color:#f2f1eb; } .ds-admin button { min-height:44px; margin-top:18px; border:1px solid #d9f45f; border-radius:0; background:#d9f45f; color:#11110f; } .ds-admin :focus-visible { outline:2px solid #d9f45f; outline-offset:4px; }"
     },
@@ -123,19 +123,21 @@
   ],
   "narrative": {
     "northStar": "The Realm Becomes Real",
-    "overview": "NeoRealm LAB treats the selected site as an authored cinematic field. Graphite surfaces, Projection White type, one Acid Signal, a three-plane salon gallery, a low-chroma Instagram rail, and fluid pointer trails prove current web, AI visual, and motion capability before a filterable supporting archive appears; a separate restrained editor manages that archive through a replaceable local content adapter.",
+    "overview": "NeoRealm LAB treats the selected site as an authored cinematic field. Graphite surfaces, Projection White type, one Acid Signal, a three-plane salon gallery, a low-chroma Instagram rail, and local colorful WebGL hover prove current web, AI visual, and motion capability before a filterable supporting archive appears; a separate restrained editor manages that archive through a replaceable local content adapter.",
     "keyCharacteristics": [
-      "Direction B is selected; Direction A remains comparison apparatus only.",
+      "Direction B is the public surface; no comparison control is exposed.",
       "Marcellus carries English display, navigation, and labels; Zen Old Mincho carries Chinese and body reading.",
       "The supplied SVG wordmark anchors the navigation.",
       "The 178dvh KV uses the supplied video and a clean loading poster.",
       "Studio synchronizes three generated abstract images with three scrolling chapters.",
       "The Studio visual is flush with the viewport's left edge and navigation-to-bottom height on desktop.",
-      "Three asymmetric work planes sample ten full 4:5 canvases in a 4/3/3 distribution and use generous spacing, plane-specific shadows, parallax, and optical blur for depth; a shuffled twenty-image low-chroma rail accepts section-wide bounded wheel-to-horizontal input.",
+      "Three asymmetric work planes re-seed ten sharp full 4:5 canvases in a 4/3/3 distribution and use generous spacing, a quieter final near plate, plane-specific shadows, opacity and parallax for depth; a shuffled twenty-image low-chroma rail accepts section-wide bounded wheel-to-horizontal input.",
       "Mobile and reduced-motion modes remove nonessential transforms and video playback.",
       "Project inquiry moves from a dark editorial pricing ledger to an inverted warm-white proposal sheet inside a full-viewport native dialog.",
-      "The web archive reflows through three customer-legible categories, while a local Operate-mode editor manages image, copy, category, layout, deletion, and order without implying production authentication or durable cloud storage.",
-      "The live interface demonstrates current web skill without exposing internal strategy; legacy work is supporting provenance."
+      "The web archive reflows through three customer-legible categories, while a local Operate-mode editor manages paired cover and long-form images, copy, category, optional external project URLs, deletion, and order without implying production authentication or durable cloud storage.",
+      "The live interface demonstrates current web skill without exposing internal strategy; legacy work is supporting provenance.",
+      "A final footer carries the founding manifesto and presents phone, email, Instagram, and Threads as a 2 by 2 grid through compact SVG icons.",
+      "Archive project previews keep WebGL framing stable and open a complete, independently scrollable website image with persistent project context."
     ],
     "rules": [
       { "name": "The One-Signal Rule", "body": "Projection White and graphite neutrals carry most screens so Acid Signal remains rare enough to direct attention.", "section": "colors" },
@@ -145,7 +147,7 @@
       { "name": "The Sticky Counterpoint Rule", "body": "Studio holds one visual field while three text chapters advance.", "section": "layout" },
       { "name": "The Perspective Salon Rule", "body": "Selected work changes scale, speed, and lateral position by plane and never returns to equal card columns.", "section": "layout" },
       { "name": "The Full-Frame Plate Rule", "body": "Preserve the supplied 4:5 post canvas with contain fitting; never crop artwork to manufacture depth.", "section": "layout" },
-      { "name": "The Optical Depth Rule", "body": "Only middle and far gallery planes blur; pointer hover and keyboard focus restore full clarity before the image opens in a native lightbox.", "section": "elevation" },
+      { "name": "The Optical Depth Rule", "body": "Scale, speed, opacity, and shadow establish gallery depth while every selected artwork remains optically sharp.", "section": "elevation" },
       { "name": "The Color-on-Approach Rule", "body": "The Instagram field stays low-chroma until pointer hover or keyboard focus restores original color.", "section": "colors" },
       { "name": "The Bounded Color Rule", "body": "Fine-pointer media response uses a local, velocity-shaped RGB separation and never becomes free dragging or reordering.", "section": "elevation" },
       { "name": "The Motion-Off Rule", "body": "Reduced motion pauses video and removes parallax, card drift, and ghost layers.", "section": "elevation" },

@@ -40,7 +40,7 @@
 
     vec4 sampleImage(vec2 uv) {
       vec2 fitted = fittedUv(uv);
-      if (fitted.x < 0.0 || fitted.x > 1.0 || fitted.y < 0.0 || fitted.y > 1.0) return vec4(0.0, 0.0, 0.0, 1.0);
+      if (fitted.x < 0.0 || fitted.x > 1.0 || fitted.y < 0.0 || fitted.y > 1.0) return vec4(0.0667, 0.0667, 0.0588, 1.0);
       return texture2D(uTexture, fitted);
     }
 
@@ -91,7 +91,7 @@
     if (!image) return;
     const host = image.closest('.waterfall-image') || card;
     const contain = Boolean(image.closest('.waterfall-image.ig-post'));
-    const zoom = card.classList.contains('archive-detail') ? 1.42 : host === card ? 1.04 : 1;
+    const zoom = 1;
     let canvas;
     let gl;
     let program;
@@ -178,7 +178,7 @@
       canvas.className = `colorful-hover-canvas${host === card ? ' colorful-hover-canvas-archive' : ''}`;
       canvas.setAttribute('aria-hidden', 'true');
       host.append(canvas);
-      gl = canvas.getContext('webgl', { alpha: true, antialias: false, powerPreference: 'low-power' });
+      gl = canvas.getContext('webgl', { alpha: false, antialias: false, powerPreference: 'low-power' });
       if (!gl) {
         canvas.remove();
         canvas = null;
@@ -207,6 +207,8 @@
       resizeObserver.observe(host);
       resize();
       isReady = true;
+      render();
+      canvas.classList.add('is-ready');
     };
 
     card.addEventListener('pointerenter', () => {

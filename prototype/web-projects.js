@@ -12,10 +12,9 @@
       description: 'Responsive product website',
       category: 'brand',
       image: './assets/archive-duopel.jpg',
+      coverImage: './assets/archive-duopel.jpg',
+      lightboxImage: './assets/archive-duopel.jpg',
       alt: 'Duopel 響應式產品網站畫面',
-      layout: 'tall',
-      detail: true,
-      detailPosition: '70% 30%',
     },
     {
       id: 'echarm',
@@ -23,8 +22,9 @@
       description: 'Healthcare service platform',
       category: 'campaign',
       image: './assets/archive-echarm.jpg',
+      coverImage: './assets/archive-echarm.jpg',
+      lightboxImage: './assets/archive-echarm.jpg',
       alt: '醫創網服務平台網站畫面',
-      layout: 'medium',
     },
     {
       id: 'marryu',
@@ -32,10 +32,9 @@
       description: 'Content and service website',
       category: 'campaign',
       image: './assets/archive-marryu.jpg',
+      coverImage: './assets/archive-marryu.jpg',
+      lightboxImage: './assets/archive-marryu.jpg',
       alt: 'MarryU 與 Peggy Yu 婚禮服務網站畫面',
-      layout: 'wide',
-      detail: true,
-      detailPosition: '30% 80%',
     },
     {
       id: 'gama-bears',
@@ -43,16 +42,26 @@
       description: 'Brand website',
       category: 'brand',
       image: './assets/archive-gama-bears.jpg',
+      coverImage: './assets/archive-gama-bears.jpg',
+      lightboxImage: './assets/archive-gama-bears.jpg',
       alt: 'GAMA BEARS 橘子熊網站畫面',
-      layout: 'tall',
     },
   ];
 
   const copy = (value) => JSON.parse(JSON.stringify(value));
+  const normalizeUrl = (value) => {
+    if (!value) return '';
+    try {
+      const url = new URL(String(value));
+      return ['https:', 'http:'].includes(url.protocol) ? url.href : '';
+    } catch {
+      return '';
+    }
+  };
 
   const normalize = (projects) => projects
-    .filter((project) => project && project.id && project.title && project.image)
-    .map((project, index) => ({
+    .filter((project) => project && project.id && project.title && (project.coverImage || project.image))
+    .map((project) => ({
       id: String(project.id),
       title: String(project.title),
       description: String(project.description || ''),
@@ -61,11 +70,11 @@
         : categories.some(({ value }) => value === project.category)
           ? project.category
           : 'brand',
-      image: String(project.image),
+      coverImage: String(project.coverImage || project.image),
+      lightboxImage: String(project.lightboxImage || project.image || project.coverImage),
+      image: String(project.coverImage || project.image),
       alt: String(project.alt || `${project.title} 網站作品畫面`),
-      layout: ['tall', 'medium', 'wide'].includes(project.layout) ? project.layout : ['tall', 'medium', 'wide'][index % 3],
-      detail: Boolean(project.detail),
-      detailPosition: String(project.detailPosition || '50% 50%'),
+      projectUrl: normalizeUrl(project.projectUrl),
     }));
 
   const get = () => {
@@ -88,17 +97,11 @@
     return copy(normalized);
   };
 
-  const reset = () => {
-    global.localStorage.removeItem(STORAGE_KEY);
-    return copy(defaults);
-  };
-
   global.NeoRealmWebProjects = {
     STORAGE_KEY,
     categories: copy(categories),
     defaults: copy(defaults),
     get,
     save,
-    reset,
   };
 }(window));
