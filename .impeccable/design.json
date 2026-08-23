@@ -57,12 +57,12 @@
       "css": ".ds-btn-secondary { display:inline-flex; min-height:48px; align-items:center; justify-content:center; padding:12px 20px; border:1px solid #f2f1eb; border-radius:0; background:transparent; color:#f2f1eb; font-family:Marcellus,serif; font-size:13px; text-decoration:none; transition:background 180ms ease,color 180ms ease,transform 180ms ease; } .ds-btn-secondary:hover { background:#f2f1eb; color:#11110f; } .ds-btn-secondary:focus-visible { outline:2px solid currentColor; outline-offset:4px; } .ds-btn-secondary:active { transform:translateY(1px); }"
     },
     {
-      "name": "Cinematic Navigation",
+      "name": "Ice Ripple Navigation",
       "kind": "nav",
       "refersTo": "navigation",
-      "description": "Fixed Silk Veil navigation with Studio, Work, and Services at left, the white SVG wordmark centered on the viewport, and an Acid Signal project action at right.",
+      "description": "Fixed Ice Ripple navigation with Studio, Work, and Services at left, the white SVG wordmark centered on the viewport, and an Acid Signal project action at right; the high-frequency displacement uses no inner or outer glow.",
       "html": "<nav class=\"ds-nav\"><strong>NeoRealm LAB</strong><div><a href=\"#\">Studio</a><a href=\"#\">Work</a><a href=\"#\">Services</a></div><a class=\"ds-nav-action\" href=\"#\">Start a Project</a></nav>",
-      "css": ".ds-nav { position:fixed; inset:0 0 auto; z-index:18; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; min-height:72px; padding:10px 4vw; border-bottom:1px solid rgba(255,255,255,.16); background:rgba(12,13,12,.22); backdrop-filter:blur(18px) saturate(128%); color:#f2f1eb; font-family:Marcellus,serif; } .ds-nav div { display:flex; gap:32px; } .ds-nav a { color:inherit; font-size:12px; text-decoration:none; } .ds-nav a:focus-visible { outline:2px solid currentColor; outline-offset:4px; } .ds-nav-action { justify-self:end; padding:10px 14px; border:1px solid #d9f45f; color:#d9f45f!important; }"
+      "css": ".ds-nav { position:fixed; inset:0 0 auto; z-index:18; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; min-height:72px; padding:10px 4vw; border-bottom:1px solid rgba(255,255,255,.16); background:rgba(12,13,12,.16); backdrop-filter:blur(6px) saturate(116%) contrast(104%); color:#f2f1eb; font-family:Marcellus,serif; } .ds-nav div { display:flex; gap:32px; } .ds-nav a { color:inherit; font-size:12px; text-decoration:none; } .ds-nav a:focus-visible { outline:2px solid currentColor; outline-offset:4px; } .ds-nav-action { justify-self:end; padding:10px 14px; border:1px solid #d9f45f; color:#d9f45f!important; }"
     },
     {
       "name": "Sticky KV Sequence",

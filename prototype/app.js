@@ -401,16 +401,54 @@ function setupInstagramWheel() {
   const viewport = document.querySelector('.instagram-rail-viewport');
   if (!section || !viewport) return;
 
+  let targetScroll = viewport.scrollLeft;
+  let animationFrame = 0;
+
+  const stopAnimation = () => {
+    if (!animationFrame) return;
+    cancelAnimationFrame(animationFrame);
+    animationFrame = 0;
+  };
+
+  const animateScroll = () => {
+    const distance = targetScroll - viewport.scrollLeft;
+    if (Math.abs(distance) < 0.5) {
+      viewport.scrollLeft = targetScroll;
+      animationFrame = 0;
+      return;
+    }
+
+    viewport.scrollLeft += distance * 0.16;
+    animationFrame = requestAnimationFrame(animateScroll);
+  };
+
   section.addEventListener('wheel', (event) => {
     if (window.innerWidth <= 720 || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
     const maxScroll = viewport.scrollWidth - viewport.clientWidth;
     const movingForward = event.deltaY > 0;
-    const canMove = movingForward ? viewport.scrollLeft < maxScroll - 1 : viewport.scrollLeft > 1;
-    if (!canMove) return;
+    const currentScroll = viewport.scrollLeft;
+    if (!animationFrame) targetScroll = currentScroll;
+    const atStart = targetScroll <= 0.5;
+    const atEnd = targetScroll >= maxScroll - 0.5;
+    const visuallyAtStart = currentScroll <= 0.5;
+    const visuallyAtEnd = currentScroll >= maxScroll - 0.5;
+
+    if ((!movingForward && (atStart || visuallyAtStart)) || (movingForward && (atEnd || visuallyAtEnd))) {
+      stopAnimation();
+      targetScroll = movingForward ? maxScroll : 0;
+      viewport.scrollLeft = targetScroll;
+      return;
+    }
 
     event.preventDefault();
-    viewport.scrollLeft += event.deltaY;
+    const impulse = Math.max(-180, Math.min(180, event.deltaY * 1.15));
+    targetScroll = Math.max(0, Math.min(maxScroll, targetScroll + impulse));
+    if (!animationFrame) animationFrame = requestAnimationFrame(animateScroll);
   }, { passive: false });
+
+  viewport.addEventListener('scroll', () => {
+    if (!animationFrame) targetScroll = viewport.scrollLeft;
+  }, { passive: true });
 }
 
 function setupWaterfallMotion() {

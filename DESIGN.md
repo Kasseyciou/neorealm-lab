@@ -1,6 +1,6 @@
 ---
 name: "NeoRealm LAB Graphite Cinema"
-description: "Selected Direction B: cinematic scroll, liquid-silk navigation, layered work streams, and restrained Acid Signal controls."
+description: "Selected Direction B: cinematic scroll, ice-ripple navigation, layered work streams, and restrained Acid Signal controls."
 colors:
   b-ink: "#f2f1eb"
   b-muted: "#b0aea5"
@@ -41,8 +41,8 @@ components:
     textColor: "{colors.b-black}"
     rounded: "{rounded.sharp}"
     height: "48px"
-  silk-navigation:
-    backgroundColor: "rgba(12, 13, 12, 0.22)"
+  ice-ripple-navigation:
+    backgroundColor: "rgba(12, 13, 12, 0.16)"
     textColor: "{colors.b-ink}"
     rounded: "{rounded.sharp}"
     height: "72px"
@@ -88,9 +88,9 @@ Customer-facing sequence:
 - Production geometry is sharp. Prototype controls may differ but must stay visually recessive.
 - Graphite neutrals carry the world; Acid Signal is reserved for action, sequence and links.
 
-## Navigation — Silk Veil
+## Navigation — Ice Ripple
 
-The B navigation is fixed throughout the page. Its translucent field combines 18px backdrop blur, 128% saturation, a restrained turbulence/displacement filter (`baseFrequency 0.006 0.009`, two octaves, seed 92, scale 12) and one fine bottom rule. It carries no inner glow or decorative highlight.
+The B navigation is fixed throughout the page. Its translucent field follows the Ice Ripple material with 6px backdrop blur, restrained saturation and contrast, and a higher-frequency turbulence/displacement filter (`baseFrequency 0.025`, two octaves, seed 92, scale 65). One fine bottom rule defines the edge; the material carries no inner glow, outer glow or decorative highlight.
 
 The wordmark is centered on the viewport, `Studio → Work → Services` anchors occupy the left field, and `Start a Project` occupies the right. The anchor matching the current scroll section receives Projection White text and one Acid Signal underline; the project action opens the same pricing-and-inquiry dialog used by the footer CTA.
 
@@ -127,7 +127,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 
 - The gallery resolves into one horizontally scrollable, load-shuffled row containing all twenty supplied Instagram works before Services.
 - Tiles are grayscale and low-chroma by default; hover and keyboard focus restore the original color and full opacity.
-- Every tile keeps a 4:5 frame, uses `object-fit: contain`, lazy-loads its image and shares one baseline. On fine-pointer devices, vertical wheel input anywhere inside the complete `More from @neorealmlab` section becomes horizontal rail movement only while more content remains in that direction; at either edge, normal page scrolling resumes. Touch keeps direct horizontal scrolling and gentle snap, and the browser scrollbar remains visually concealed.
+- Every tile keeps a 4:5 frame, uses `object-fit: contain`, lazy-loads its image and shares one baseline. On fine-pointer devices, vertical wheel input anywhere inside the complete `More from @neorealmlab` section eases toward a bounded horizontal target only while more content remains in that direction; reaching either target edge immediately releases normal page scrolling. Touch keeps direct horizontal scrolling and gentle snap, and the browser scrollbar remains visually concealed.
 
 ### Web archive waterfall
 

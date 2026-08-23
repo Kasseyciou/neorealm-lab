@@ -1868,10 +1868,10 @@ html {
 
 .b-nav::before {
   z-index: -2;
-  background: rgba(12, 13, 12, 0.22);
-  backdrop-filter: blur(18px) saturate(128%);
-  -webkit-backdrop-filter: blur(18px) saturate(128%);
-  filter: url(#silk-veil-distortion);
+  background: rgba(12, 13, 12, 0.16);
+  backdrop-filter: blur(6px) saturate(116%) contrast(104%);
+  -webkit-backdrop-filter: blur(6px) saturate(116%) contrast(104%);
+  filter: url(#ice-ripple-distortion);
 }
 
 .b-nav::after {
@@ -2182,7 +2182,7 @@ html {
 .instagram-rail-viewport {
   overflow-x: auto;
   overscroll-behavior-inline: contain;
-  scroll-snap-type: x proximity;
+  scroll-snap-type: none;
   scrollbar-color: rgba(242, 241, 235, 0.34) transparent;
   scrollbar-width: thin;
 }
@@ -2411,10 +2411,10 @@ html {
   }
 
   .b-nav::before {
-    filter: none;
-    background: rgba(12, 13, 12, 0.38);
-    backdrop-filter: blur(16px) saturate(120%);
-    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    background: rgba(12, 13, 12, 0.22);
+    backdrop-filter: blur(6px) saturate(112%) contrast(103%);
+    -webkit-backdrop-filter: blur(6px) saturate(112%) contrast(103%);
+    filter: url(#ice-ripple-distortion);
   }
 
   .b-waterfall,
@@ -2537,6 +2537,10 @@ html {
     padding-inline: 18px;
   }
 
+  .instagram-rail-viewport {
+    scroll-snap-type: x proximity;
+  }
+
   .instagram-tile {
     filter: grayscale(0.88) saturate(0.18) contrast(0.94);
     opacity: 0.8;
@@ -2582,10 +2586,6 @@ html {
   .waterfall-image::after,
   .trail-clone {
     display: none;
-  }
-
-  .b-nav::before {
-    filter: none;
   }
 
   .instagram-tile {
