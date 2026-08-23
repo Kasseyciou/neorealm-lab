@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Zen+Old+Mincho:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./styles.css" />
+    <script src="./web-projects.js" defer></script>
     <script src="./app.js" defer></script>
   </head>
   <body data-direction="b">
@@ -411,32 +412,16 @@
           <div class="archive-copy-sticky">
             <h2 id="b-archive-title">Selected websites, proven in practice.</h2>
             <p>精選過往網站案例，呈現跨產業的資訊整理、介面設計與響應式開發經驗。</p>
+            <div class="archive-filters" role="toolbar" aria-label="篩選網站作品">
+              <button type="button" data-archive-filter="all" aria-pressed="true">All Projects</button>
+              <button type="button" data-archive-filter="brand" aria-pressed="false">Brand Website</button>
+              <button type="button" data-archive-filter="platform" aria-pressed="false">Service Platform</button>
+              <button type="button" data-archive-filter="campaign" aria-pressed="false">Campaign &amp; Content</button>
+            </div>
+            <p class="archive-filter-status" data-archive-filter-status role="status" aria-live="polite"></p>
           </div>
         </div>
-        <div class="archive-flow" data-waterfall aria-label="Web Standardizer 過往網頁案例瀑布牆">
-          <figure class="archive-case archive-tall" data-trail-card data-depth="0.72">
-            <img src="./assets/archive-duopel.jpg" alt="Duopel 響應式產品網站畫面" width="650" height="600" loading="lazy" decoding="async" />
-            <figcaption><strong>Duopel</strong><span>Responsive website</span></figcaption>
-          </figure>
-          <figure class="archive-case archive-medium" data-trail-card data-depth="1">
-            <img src="./assets/archive-echarm.jpg" alt="醫創網服務平台網站畫面" width="650" height="600" loading="lazy" decoding="async" />
-            <figcaption><strong>醫創網</strong><span>Web design + responsive</span></figcaption>
-          </figure>
-          <figure class="archive-case archive-wide" data-trail-card data-depth="0.58">
-            <img src="./assets/archive-marryu.jpg" alt="MarryU 與 Peggy Yu 婚禮服務網站畫面" width="650" height="541" loading="lazy" decoding="async" />
-            <figcaption><strong>MarryU × Peggy Yu</strong><span>Content website + responsive</span></figcaption>
-          </figure>
-          <figure class="archive-case archive-tall" data-trail-card data-depth="0.88">
-            <img src="./assets/archive-gama-bears.jpg" alt="GAMA BEARS 橘子熊網站畫面" width="650" height="765" loading="lazy" decoding="async" />
-            <figcaption><strong>GAMA BEARS 橘子熊</strong><span>Legacy website</span></figcaption>
-          </figure>
-          <figure class="archive-case archive-detail" data-trail-card data-depth="0.64" aria-label="Duopel 網站局部細節">
-            <img src="./assets/archive-duopel.jpg" alt="Duopel 網站局部裁切" width="650" height="600" loading="lazy" decoding="async" />
-          </figure>
-          <figure class="archive-case archive-detail archive-detail-lower" data-trail-card data-depth="0.94" aria-label="MarryU 網站局部細節">
-            <img src="./assets/archive-marryu.jpg" alt="MarryU 網站局部裁切" width="650" height="541" loading="lazy" decoding="async" />
-          </figure>
-        </div>
+        <div class="archive-flow" data-waterfall data-archive-projects aria-label="NeoRealm LAB 網頁設計作品瀑布牆"></div>
       </section>
 
       <footer id="b-contact" class="b-contact">

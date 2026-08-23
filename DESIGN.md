@@ -9,6 +9,7 @@ colors:
   b-accent: "#d9f45f"
   b-line: "rgba(242, 241, 235, 0.2)"
   kv-black: "#080908"
+  studio-surface: "#20211e"
   status-success: "#315c16"
   status-error: "#8d211a"
 typography:
@@ -30,6 +31,18 @@ typography:
     fontWeight: 400
     lineHeight: 1.7
     letterSpacing: "normal"
+  navigation:
+    fontFamily: '"Marcellus", "Zen Old Mincho", serif'
+    fontSize: "12px"
+    fontWeight: 650
+    lineHeight: 1.2
+    letterSpacing: "0.03em"
+  label:
+    fontFamily: '"Marcellus", "Zen Old Mincho", serif'
+    fontSize: "11px"
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: "0.08em"
 rounded:
   sharp: "0px"
 spacing:
@@ -47,6 +60,27 @@ components:
     rounded: "{rounded.sharp}"
     height: "72px"
   waterfall-card:
+    backgroundColor: "{colors.b-black}"
+    textColor: "{colors.b-ink}"
+    rounded: "{rounded.sharp}"
+  kv-stage:
+    backgroundColor: "{colors.kv-black}"
+    textColor: "{colors.b-ink}"
+    rounded: "{rounded.sharp}"
+    height: "178dvh"
+  studio-story:
+    backgroundColor: "{colors.b-black}"
+    textColor: "{colors.b-ink}"
+    rounded: "{rounded.sharp}"
+  instagram-field:
+    backgroundColor: "{colors.b-black}"
+    textColor: "{colors.b-ink}"
+    rounded: "{rounded.sharp}"
+  archive-filter-waterfall:
+    backgroundColor: "{colors.b-black}"
+    textColor: "{colors.b-ink}"
+    rounded: "{rounded.sharp}"
+  archive-editor:
     backgroundColor: "{colors.b-black}"
     textColor: "{colors.b-ink}"
     rounded: "{rounded.sharp}"
@@ -108,6 +142,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 ### Studio story
 
 - Desktop uses a 50/50 grid: sticky visual left, three viewport-height text chapters right.
+- The sticky visual begins at the viewport's left edge and extends from the 72px navigation boundary to the viewport bottom; it must not sit inside a decorative outer margin.
 - The active generated scene crossfades and updates the `01 / 03` index.
 - Active copy enters through a bottom-up typographic crop; completed copy exits upward through the inverse crop. Body text follows the heading by 90ms.
 - Mobile holds the visual at 49dvh while chapters pass beneath it.
@@ -132,8 +167,15 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 ### Web archive waterfall
 
 - Sticky narrative stays secondary to a two-column masonry evidence stream.
-- Four true archived cases are accompanied by two deliberate detail crops; detail crops must not be named as extra projects.
+- `All Projects` plus `Brand Website`, `Service Platform`, and `Campaign & Content` filters reflow the masonry evidence stream; the active category uses the single Acid Signal rule and reports its project count through a polite live region.
+- Four true archived cases are accompanied by two deliberate detail crops; detail crops follow their source project's category and must not be named as extra projects.
 - The same bounded depth and image-trail vocabulary connects old web craft to the current interface without turning it into a lengthy case study.
+
+### Web archive editor
+
+- `admin.html` is a restrained Operate-mode editor for adding, editing, deleting, categorizing, uploading and reordering archive projects.
+- `web-projects.js` is the replaceable content adapter shared by the editor and public archive. The prototype stores normalized records and compressed image data in `localStorage`; an open front-end tab reloads when that storage changes.
+- The local adapter is explicitly labelled as a prototype. Production still requires authentication, durable database records and external object storage; local browser state must never be presented as a deployed CMS.
 
 ### Mobile and reduced motion
 
@@ -183,5 +225,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - **The One-Signal Rule:** Acid Signal directs attention; it does not become ambient decoration.
 - **The Sharp System Rule:** production geometry remains rectangular.
 - **The Motion-Off Rule:** mobile and reduced-motion users receive the same content without nonessential transforms.
+- **The Filtered Provenance Rule:** archive categories help visitors scan supporting evidence; filtering must reflow the visible masonry stream and announce the resulting count.
+- **The Local-Is-Not-Production Rule:** `admin.html` and `localStorage` are prototype tools only; production requires authentication, durable database records and external object storage.
 - **The Two-Act Inquiry Rule:** qualify with a dark pricing ledger, then invert to a warm-white proposal sheet; never blend both acts into a generic card grid.
 - **The Recommended-Only Signal Rule:** within pricing, Acid Signal belongs to the recommended center plan only.

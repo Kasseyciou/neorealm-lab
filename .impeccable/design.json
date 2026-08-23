@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-22T16:46:01Z",
+  "generatedAt": "2026-08-23T05:05:54Z",
   "title": "Design System: NeoRealm LAB Graphite Cinema",
   "extensions": {
     "colorMeta": {
@@ -49,17 +49,9 @@
       "css": ".ds-btn-primary { display:inline-flex; min-height:48px; align-items:center; justify-content:center; padding:12px 20px; border:1px solid #d9f45f; border-radius:0; background:#d9f45f; color:#11110f; font-family:Marcellus,serif; font-size:13px; text-decoration:none; transition:background 180ms ease,color 180ms ease,transform 180ms ease; } .ds-btn-primary:hover { background:#f2f1eb; border-color:#f2f1eb; } .ds-btn-primary:focus-visible { outline:2px solid currentColor; outline-offset:4px; } .ds-btn-primary:active { transform:translateY(1px); }"
     },
     {
-      "name": "Secondary Project Action",
-      "kind": "button",
-      "refersTo": "button-secondary",
-      "description": "Projection White outline action used over cinematic media.",
-      "html": "<a class=\"ds-btn-secondary\" href=\"#\">Start a Project</a>",
-      "css": ".ds-btn-secondary { display:inline-flex; min-height:48px; align-items:center; justify-content:center; padding:12px 20px; border:1px solid #f2f1eb; border-radius:0; background:transparent; color:#f2f1eb; font-family:Marcellus,serif; font-size:13px; text-decoration:none; transition:background 180ms ease,color 180ms ease,transform 180ms ease; } .ds-btn-secondary:hover { background:#f2f1eb; color:#11110f; } .ds-btn-secondary:focus-visible { outline:2px solid currentColor; outline-offset:4px; } .ds-btn-secondary:active { transform:translateY(1px); }"
-    },
-    {
       "name": "Ice Ripple Navigation",
       "kind": "nav",
-      "refersTo": "navigation",
+      "refersTo": "ice-ripple-navigation",
       "description": "Fixed Ice Ripple navigation with Studio, Work, and Services at left, the white SVG wordmark centered on the viewport, and an Acid Signal project action at right; the high-frequency displacement uses no inner or outer glow.",
       "html": "<nav class=\"ds-nav\"><strong>NeoRealm LAB</strong><div><a href=\"#\">Studio</a><a href=\"#\">Work</a><a href=\"#\">Services</a></div><a class=\"ds-nav-action\" href=\"#\">Start a Project</a></nav>",
       "css": ".ds-nav { position:fixed; inset:0 0 auto; z-index:18; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; min-height:72px; padding:10px 4vw; border-bottom:1px solid rgba(255,255,255,.16); background:rgba(12,13,12,.16); backdrop-filter:blur(6px) saturate(116%) contrast(104%); color:#f2f1eb; font-family:Marcellus,serif; } .ds-nav div { display:flex; gap:32px; } .ds-nav a { color:inherit; font-size:12px; text-decoration:none; } .ds-nav a:focus-visible { outline:2px solid currentColor; outline-offset:4px; } .ds-nav-action { justify-self:end; padding:10px 14px; border:1px solid #d9f45f; color:#d9f45f!important; }"
@@ -83,7 +75,7 @@
     {
       "name": "Perspective Salon Gallery",
       "kind": "custom",
-      "refersTo": "web-case-stage",
+      "refersTo": "waterfall-card",
       "description": "Sticky narrative beside three asymmetric exhibit lanes; ten works are sampled from a twenty-image pool in a 4/3/3 distribution, preserve their full 4:5 canvas, and use generous spacing, plane-specific shadows, parallax, focus-clearing blur, and a velocity-shaped Canvas water trail for depth.",
       "html": "<section class=\"ds-waterfall\"><header><h2>Worlds in motion.</h2></header><div class=\"ds-streams\"><div class=\"far\"></div><div class=\"near\"></div><div class=\"mid\"></div></div></section>",
       "css": ".ds-waterfall { display:grid; grid-template-columns:.54fr 1.46fr; background:#1b1b18; color:#f2f1eb; } .ds-waterfall header { position:sticky; top:20vh; align-self:start; padding:15vh 6vw; } .ds-streams { display:grid; grid-template-columns:.72fr 1.12fr .78fr; gap:1.8vw; padding:18vh 3vw 20vh 0; } .ds-streams div { min-height:1200px; background:#11110f; } .ds-streams .far { transform:scale(.82); opacity:.68; } .ds-streams .near { transform:scale(1.08); } .ds-streams .mid { transform:scale(.93); opacity:.9; }"
@@ -97,16 +89,24 @@
       "css": ".ds-instagram { overflow:hidden; padding:10vw 0; background:#11110f; color:#f2f1eb; } .ds-instagram div { display:grid; width:max-content; grid-auto-columns:clamp(180px,18vw,292px); grid-auto-flow:column; gap:1vw; overflow-x:auto; scroll-snap-type:x proximity; } .ds-instagram a { aspect-ratio:4/5; scroll-snap-align:start; filter:grayscale(1) saturate(.1); opacity:.7; transition:filter 360ms cubic-bezier(.16,1,.3,1),opacity 240ms ease; } .ds-instagram img { width:100%; height:100%; object-fit:contain; } .ds-instagram a:hover,.ds-instagram a:focus-visible { filter:none; opacity:1; }"
     },
     {
-      "name": "Image Trail Card",
-      "kind": "card",
-      "refersTo": "release-wall-card",
-      "description": "Flowing media card with bounded scroll depth and clipped fine-pointer image trails.",
-      "html": "<article class=\"ds-release\"><div></div><h3>Cinematic Worldbuilding</h3><p>World, character, sequence</p></article>",
-      "css": ".ds-release { position:relative; min-height:420px; overflow:hidden; border-radius:0; background:#11110f; color:#f2f1eb; box-shadow:0 24px 80px rgba(0,0,0,.24); } .ds-release div { position:absolute; inset:0; background:#20211e; } .ds-release h3,.ds-release p { position:absolute; left:28px; z-index:1; } .ds-release h3 { bottom:52px; margin:0; font:400 34px/1 Marcellus,serif; } .ds-release p { bottom:24px; margin:0; color:#b0aea5; font:400 13px/1.5 'Zen Old Mincho',serif; } .ds-release:focus-within { outline:2px solid #f2f1eb; outline-offset:4px; }"
+      "name": "Filterable Web Archive",
+      "kind": "custom",
+      "refersTo": "archive-filter-waterfall",
+      "description": "Supporting web evidence with All Projects, Brand Website, Service Platform, and Campaign & Content filters; cards reflow and a polite live region reports the visible count.",
+      "html": "<section class=\"ds-archive\"><div class=\"ds-archive-filters\" role=\"toolbar\" aria-label=\"Filter web projects\"><button type=\"button\" aria-pressed=\"true\">All Projects</button><button type=\"button\">Brand Website</button><button type=\"button\">Service Platform</button><button type=\"button\">Campaign &amp; Content</button></div><p class=\"ds-archive-status\" role=\"status\" aria-live=\"polite\">4 projects</p><div class=\"ds-archive-flow\"><article></article><article></article><article></article><article></article></div></section>",
+      "css": ".ds-archive { padding:72px 0; background:#11110f; color:#f2f1eb; font-family:Marcellus,serif; } .ds-archive-filters { display:flex; flex-wrap:wrap; gap:8px 18px; } .ds-archive-filters button { min-height:38px; padding:0 0 2px; border:0; border-bottom:1px solid transparent; background:transparent; color:#b0aea5; font:400 12px/1.2 Marcellus,serif; } .ds-archive-filters button:hover,.ds-archive-filters button[aria-pressed=true] { border-color:#d9f45f; color:#f2f1eb; } .ds-archive-filters button:focus-visible { outline:2px solid #d9f45f; outline-offset:5px; } .ds-archive-status { min-height:1.6em; margin:12px 0 30px; color:#b0aea5; font-size:10px; letter-spacing:.09em; text-transform:uppercase; } .ds-archive-flow { columns:2; column-gap:28px; } .ds-archive-flow article { display:inline-block; width:100%; height:220px; margin:0 0 28px; break-inside:avoid; background:#1b1b18; }"
+    },
+    {
+      "name": "Local Web Archive Editor",
+      "kind": "custom",
+      "refersTo": "archive-editor",
+      "description": "Operate-mode local prototype for image upload, project copy, category, layout, deletion, and drag or arrow ordering; browser localStorage is not a production CMS.",
+      "html": "<section class=\"ds-admin\"><aside><h2>作品排序</h2><button type=\"button\">新增作品</button><div class=\"ds-admin-item\">Project · drag or arrows</div></aside><form><strong>Local prototype</strong><p>正式上線需登入驗證、資料庫與物件儲存。</p><label>作品名稱<input required></label><label>作品分類<select><option>Brand Website</option></select></label><label>圖片<input type=\"file\" accept=\"image/jpeg,image/png,image/webp\"></label><button type=\"submit\">儲存並更新前台</button><p role=\"status\" aria-live=\"polite\"></p></form></section>",
+      "css": ".ds-admin { display:grid; grid-template-columns:.72fr 1.28fr; gap:1px; background:rgba(242,241,235,.2); color:#f2f1eb; font-family:'Zen Old Mincho',serif; } .ds-admin aside,.ds-admin form { padding:32px; background:#11110f; } .ds-admin h2,.ds-admin strong,.ds-admin button,.ds-admin select { font-family:Marcellus,serif; } .ds-admin-item { margin-top:24px; padding:18px; border:1px solid rgba(242,241,235,.2); } .ds-admin label { display:grid; gap:8px; margin-top:18px; } .ds-admin input,.ds-admin select { min-height:48px; padding:10px 0; border:0; border-bottom:1px solid rgba(242,241,235,.38); border-radius:0; background:transparent; color:#f2f1eb; } .ds-admin button { min-height:44px; margin-top:18px; border:1px solid #d9f45f; border-radius:0; background:#d9f45f; color:#11110f; } .ds-admin :focus-visible { outline:2px solid #d9f45f; outline-offset:4px; }"
     },
     {
       "name": "Project Inquiry Dialog",
-      "kind": "dialog",
+      "kind": "custom",
       "refersTo": "project-inquiry-dialog",
       "description": "Full-viewport native dialog with a fixed dark header and a reduced-motion-safe clip-path reveal; Escape, close and backdrop interactions return focus to the opener.",
       "html": "<dialog class=\"ds-inquiry\"><div class=\"ds-inquiry-shell\"><header><strong>NeoRealm LAB</strong><button type=\"button\" aria-label=\"Close project inquiry\">×</button></header><div class=\"ds-inquiry-scroll\"></div></div></dialog>",
@@ -114,7 +114,7 @@
     },
     {
       "name": "Inquiry Pricing and Proposal",
-      "kind": "form",
+      "kind": "custom",
       "refersTo": "project-proposal-sheet",
       "description": "Two-act inquiry: a dark three-column pricing ledger with only the recommended center plan in Acid Signal, followed by a warm-white underline-field proposal sheet.",
       "html": "<div class=\"ds-pricing\"><article>Implementation</article><article class=\"is-recommended\">Full experience</article><article>Design</article></div><section class=\"ds-proposal\"><form><label>Name<input name=\"name\"></label><label>Email<input name=\"email\"></label><p role=\"status\" aria-live=\"polite\"></p></form></section>",
@@ -123,16 +123,18 @@
   ],
   "narrative": {
     "northStar": "The Realm Becomes Real",
-    "overview": "NeoRealm LAB treats the selected site as an authored cinematic field. Graphite surfaces, Projection White type, one Acid Signal, a three-plane salon gallery, a low-chroma Instagram rail, and clipped pointer trails prove current web, AI visual, and motion capability before a supporting legacy archive appears.",
+    "overview": "NeoRealm LAB treats the selected site as an authored cinematic field. Graphite surfaces, Projection White type, one Acid Signal, a three-plane salon gallery, a low-chroma Instagram rail, and fluid pointer trails prove current web, AI visual, and motion capability before a filterable supporting archive appears; a separate restrained editor manages that archive through a replaceable local content adapter.",
     "keyCharacteristics": [
       "Direction B is selected; Direction A remains comparison apparatus only.",
       "Marcellus carries English display, navigation, and labels; Zen Old Mincho carries Chinese and body reading.",
       "The supplied SVG wordmark anchors the navigation.",
       "The 178dvh KV uses the supplied video and a clean loading poster.",
       "Studio synchronizes three generated abstract images with three scrolling chapters.",
+      "The Studio visual is flush with the viewport's left edge and navigation-to-bottom height on desktop.",
       "Three asymmetric work planes sample ten full 4:5 canvases in a 4/3/3 distribution and use generous spacing, plane-specific shadows, parallax, and optical blur for depth; a shuffled twenty-image low-chroma rail accepts section-wide bounded wheel-to-horizontal input.",
       "Mobile and reduced-motion modes remove nonessential transforms and video playback.",
       "Project inquiry moves from a dark editorial pricing ledger to an inverted warm-white proposal sheet inside a full-viewport native dialog.",
+      "The web archive reflows through three customer-legible categories, while a local Operate-mode editor manages image, copy, category, layout, deletion, and order without implying production authentication or durable cloud storage.",
       "The live interface demonstrates current web skill without exposing internal strategy; legacy work is supporting provenance."
     ],
     "rules": [
@@ -147,6 +149,8 @@
       { "name": "The Color-on-Approach Rule", "body": "The Instagram field stays low-chroma until pointer hover or keyboard focus restores original color.", "section": "colors" },
       { "name": "The Bounded Trail Rule", "body": "Fine-pointer media response uses clipped displacement bands and never becomes free dragging or reordering.", "section": "elevation" },
       { "name": "The Motion-Off Rule", "body": "Reduced motion pauses video and removes parallax, card drift, and ghost layers.", "section": "elevation" },
+      { "name": "The Filtered Provenance Rule", "body": "Archive categories reflow the visible masonry stream and announce the resulting count through a polite live region.", "section": "components" },
+      { "name": "The Local-Is-Not-Production Rule", "body": "The admin page and localStorage are prototype tools only; production requires authentication, durable database records, and external object storage.", "section": "components" },
       { "name": "The Sharp System Rule", "body": "Production geometry stays rectangular; prototype pills do not enter the product identity.", "section": "shapes" },
       { "name": "The Two-Act Inquiry Rule", "body": "Qualify with a dark pricing ledger, then invert to a warm-white proposal sheet; do not collapse the sequence into rounded cards.", "section": "components" },
       { "name": "The Recommended-Only Signal Rule", "body": "Within pricing, Acid Signal belongs only to the recommended center plan.", "section": "colors" }
@@ -159,18 +163,21 @@
       "Do keep Studio as a 50/50 sticky-image narrative with three scrolling steps.",
       "Do let the current interface prove web capability without narrating internal strategy.",
       "Do keep waterfall interaction bounded to fine-pointer desktop.",
+      "Do keep archive filters keyboard accessible and announce the visible project count.",
+      "Do label the local editor as a prototype and preserve the authentication, database, and object-storage production boundary.",
       "Do use the native dialog top layer and restore focus to the exact inquiry opener after every close path.",
       "Do stack pricing and collapse the proposal form to one column at 720px and below.",
       "Do report form loading, success, and recoverable error copy through a restrained polite live region.",
       "Do fully remove video playback and transforms for reduced motion."
     ],
     "donts": [
-      "Don't use DIN Condensed, Avenir Next, or a generic sans-serif as the selected identity.",
+      "Don't substitute generic sans-serif typography for the selected Marcellus and Zen Old Mincho roles.",
       "Don't expose the QR intro from the supplied video as the KV first frame.",
       "Don't make both KV messages compete during ordinary motion.",
       "Don't turn Studio into a carousel or uniform card grid.",
       "Don't allow release cards to reorder or move without bounds.",
       "Don't enable pointer effects on mobile.",
+      "Don't present localStorage or compressed browser image data as a production CMS.",
       "Don't present every pricing plan in Acid Signal or turn the ledger into floating rounded cards.",
       "Don't wrap proposal fields in cards; keep the warm-white sheet and underline-only controls.",
       "Don't let legacy cases outrank the current experience.",

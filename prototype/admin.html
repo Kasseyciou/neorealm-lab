@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>NeoRealm LAB｜Web Archive Editor</title>
+    <link rel="icon" href="data:," />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./admin.css" />
+    <script src="./web-projects.js" defer></script>
+    <script src="./admin.js" defer></script>
+  </head>
+  <body>
+    <header class="admin-header">
+      <a class="admin-brand" href="./index.html#b-archive" aria-label="返回 NeoRealm LAB 網站">
+        <img src="./assets/logo.svg" alt="NeoRealm LAB" width="288" height="113" />
+      </a>
+      <div>
+        <p>Web Archive Editor</p>
+        <a href="./index.html#b-archive">查看前台</a>
+      </div>
+    </header>
+
+    <main class="admin-shell">
+      <section class="admin-intro" aria-labelledby="admin-title">
+        <div>
+          <h1 id="admin-title">網站作品管理</h1>
+          <p>新增作品、更新圖片與文案，或拖曳調整前台顯示順序。</p>
+        </div>
+        <div class="admin-local-note">
+          <strong>Local prototype</strong>
+          <p>資料只儲存在目前瀏覽器。正式上線前仍需串接登入、資料庫與圖片儲存服務。</p>
+        </div>
+      </section>
+
+      <div class="admin-workspace">
+        <section class="project-list-panel" aria-labelledby="project-list-title">
+          <div class="panel-heading">
+            <div>
+              <h2 id="project-list-title">作品排序</h2>
+              <p data-project-count></p>
+            </div>
+            <button class="secondary-action" type="button" data-add-project>新增作品</button>
+          </div>
+          <div class="admin-project-list" data-admin-project-list></div>
+          <button class="reset-action" type="button" data-reset-projects>恢復預設資料</button>
+        </section>
+
+        <section class="project-editor-panel" aria-labelledby="project-editor-title">
+          <div class="panel-heading">
+            <div>
+              <h2 id="project-editor-title" data-editor-title>新增作品</h2>
+              <p>儲存後，已開啟的前台分頁會自動更新。</p>
+            </div>
+          </div>
+
+          <form class="project-editor" data-project-editor novalidate>
+            <input type="hidden" name="id" />
+            <div class="image-uploader" data-image-uploader>
+              <img data-image-preview alt="上傳圖片預覽" hidden />
+              <div class="image-uploader-empty" data-image-empty>
+                <strong>Upload project image</strong>
+                <span>JPG、PNG 或 WebP，會自動縮至 1600px 內</span>
+              </div>
+              <label>
+                <span>選擇圖片</span>
+                <input type="file" name="imageFile" accept="image/jpeg,image/png,image/webp" />
+              </label>
+            </div>
+
+            <div class="editor-grid">
+              <label>
+                <span>作品名稱</span>
+                <input type="text" name="title" required maxlength="80" autocomplete="off" />
+              </label>
+              <label>
+                <span>作品分類</span>
+                <select name="category" required></select>
+              </label>
+              <label class="editor-wide">
+                <span>簡短說明</span>
+                <textarea name="description" rows="3" required maxlength="180"></textarea>
+              </label>
+              <label class="editor-wide">
+                <span>圖片替代文字</span>
+                <input type="text" name="alt" required maxlength="140" />
+              </label>
+              <label>
+                <span>版面比例</span>
+                <select name="layout">
+                  <option value="tall">Tall</option>
+                  <option value="medium">Medium</option>
+                  <option value="wide">Wide</option>
+                </select>
+              </label>
+              <label class="detail-toggle">
+                <input type="checkbox" name="detail" />
+                <span>產生一張局部細節圖</span>
+              </label>
+            </div>
+
+            <div class="editor-actions">
+              <button class="delete-action" type="button" data-delete-project hidden>刪除作品</button>
+              <div>
+                <button class="secondary-action" type="button" data-cancel-edit>取消</button>
+                <button class="primary-action" type="submit">儲存並更新前台</button>
+              </div>
+            </div>
+            <p class="admin-status" data-admin-status role="status" aria-live="polite"></p>
+          </form>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

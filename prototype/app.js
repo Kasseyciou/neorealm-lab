@@ -451,6 +451,114 @@ function setupInstagramWheel() {
   }, { passive: true });
 }
 
+function setupWebArchive() {
+  const store = window.NeoRealmWebProjects;
+  const flow = document.querySelector('[data-archive-projects]');
+  const filters = Array.from(document.querySelectorAll('[data-archive-filter]'));
+  const status = document.querySelector('[data-archive-filter-status]');
+  if (!store || !flow || !filters.length) return;
+
+  const projects = store.get();
+  const depthPattern = [0.72, 1, 0.58, 0.88, 0.66, 0.94];
+
+  const createImage = (project, detail = false) => {
+    const image = document.createElement('img');
+    image.src = project.image;
+    image.alt = detail ? `${project.title} 網站局部裁切` : project.alt;
+    image.width = 650;
+    image.height = detail ? 600 : 720;
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    if (detail) image.style.objectPosition = project.detailPosition;
+    return image;
+  };
+
+  projects.forEach((project, index) => {
+    const figure = document.createElement('figure');
+    figure.className = `archive-case archive-${project.layout}`;
+    figure.dataset.trailCard = '';
+    figure.dataset.depth = String(depthPattern[index % depthPattern.length]);
+    figure.dataset.archiveCategory = project.category;
+    figure.dataset.projectId = project.id;
+    figure.append(createImage(project));
+
+    const caption = document.createElement('figcaption');
+    const title = document.createElement('strong');
+    const description = document.createElement('span');
+    title.textContent = project.title;
+    description.textContent = project.description;
+    caption.append(title, description);
+    figure.append(caption);
+    flow.append(figure);
+
+    if (project.detail) {
+      const detail = document.createElement('figure');
+      detail.className = 'archive-case archive-detail';
+      detail.dataset.trailCard = '';
+      detail.dataset.depth = String(depthPattern[(index + 3) % depthPattern.length]);
+      detail.dataset.archiveCategory = project.category;
+      detail.dataset.projectId = project.id;
+      detail.dataset.archiveDetail = '';
+      detail.setAttribute('aria-label', `${project.title} 網站局部細節`);
+      detail.append(createImage(project, true));
+      flow.append(detail);
+    }
+  });
+
+  const cards = Array.from(flow.querySelectorAll('[data-archive-category]'));
+  const projectCount = (category) => projects.filter((project) => category === 'all' || project.category === category).length;
+
+  const filterArchive = (category) => {
+    const previousRects = new Map(cards.filter((card) => !card.hidden).map((card) => [card, card.getBoundingClientRect()]));
+    cards.forEach((card) => {
+      card.hidden = category !== 'all' && card.dataset.archiveCategory !== category;
+    });
+
+    filters.forEach((filter) => {
+      const active = filter.dataset.archiveFilter === category;
+      filter.setAttribute('aria-pressed', String(active));
+    });
+
+    if (status) {
+      const activeLabel = filters.find((filter) => filter.dataset.archiveFilter === category)?.textContent.trim() || 'All Projects';
+      status.textContent = `${activeLabel} · ${projectCount(category)} projects`;
+    }
+
+    requestAnimationFrame(() => {
+      cards.filter((card) => !card.hidden).forEach((card) => {
+        const previous = previousRects.get(card);
+        const current = card.getBoundingClientRect();
+        if (!previous) {
+          card.animate(
+            [{ opacity: 0, transform: 'translate3d(0, 24px, 0)' }, { opacity: 1, transform: 'translate3d(0, var(--depth-shift, 0px), 0)' }],
+            { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+          );
+          return;
+        }
+        const deltaX = previous.left - current.left;
+        const deltaY = previous.top - current.top;
+        if (Math.abs(deltaX) < 1 && Math.abs(deltaY) < 1) return;
+        card.animate(
+          [
+            { transform: `translate3d(${deltaX}px, ${deltaY}px, 0)` },
+            { transform: 'translate3d(0, var(--depth-shift, 0px), 0)' },
+          ],
+          { duration: reducedMotion.matches ? 1 : 560, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+        );
+      });
+    });
+  };
+
+  filters.forEach((filter) => {
+    filter.addEventListener('click', () => filterArchive(filter.dataset.archiveFilter));
+  });
+  filterArchive('all');
+
+  window.addEventListener('storage', (event) => {
+    if (event.key === store.STORAGE_KEY) window.location.reload();
+  });
+}
+
 function setupWaterfallMotion() {
   const sections = Array.from(document.querySelectorAll('[data-waterfall-section]'));
   if (!sections.length) return;
@@ -775,6 +883,7 @@ setupStudioStory();
 setupTextMotion();
 setupActiveNavigation();
 setupRandomizedGallery();
+setupWebArchive();
 setupWaterfallMotion();
 setupImageTrails();
 setupWorkLightbox();
