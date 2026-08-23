@@ -3239,18 +3239,25 @@ html {
 
 .site-footer {
   display: grid;
-  grid-template-columns: minmax(150px, 0.46fr) minmax(400px, 1.22fr) minmax(380px, 1fr);
-  gap: clamp(42px, 5vw, 84px);
-  align-items: center;
-  padding: clamp(56px, 7vw, 108px) clamp(22px, 6vw, 96px) clamp(42px, 5vw, 72px);
+  gap: clamp(30px, 3vw, 48px);
+  padding: clamp(52px, 5.5vw, 82px) clamp(22px, 6vw, 96px) clamp(34px, 4vw, 58px);
   border-top: 1px solid var(--b-line);
   background: var(--b-black);
   color: var(--b-ink);
 }
 
+.site-footer-intro {
+  display: grid;
+  grid-template-columns: minmax(142px, 168px) minmax(0, 1fr);
+  gap: clamp(34px, 4.2vw, 68px);
+  align-items: center;
+  width: min(100%, 860px);
+  margin-inline: auto;
+}
+
 .site-footer-brand {
   display: block;
-  width: min(168px, 100%);
+  width: 100%;
 }
 
 .site-footer-brand img {
@@ -3259,17 +3266,19 @@ html {
 }
 
 .site-footer-manifesto {
-  max-width: 44ch;
+  max-width: 62ch;
   margin: 0;
   color: var(--b-ink);
-  font: 400 clamp(17px, 1.48vw, 22px) / 1.42 "Marcellus", "Zen Old Mincho", serif;
-  letter-spacing: -0.018em;
+  font: 400 clamp(13px, 1vw, 15px) / 1.46 "Marcellus", "Zen Old Mincho", serif;
+  letter-spacing: -0.012em;
 }
 
 .site-footer-links {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px clamp(22px, 2.5vw, 42px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px clamp(22px, 3vw, 54px);
+  width: min(100%, 800px);
+  margin-inline: auto;
   align-content: center;
 }
 
@@ -3299,13 +3308,9 @@ html {
 }
 
 @media (max-width: 1180px) {
-  .site-footer {
-    grid-template-columns: minmax(150px, 0.55fr) minmax(0, 1.25fr);
-  }
-
   .site-footer-links {
-    grid-column: 1 / -1;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(100%, 560px);
   }
 
   .site-footer-links a {
@@ -3334,19 +3339,24 @@ html {
     padding: 52px 18px 42px;
   }
 
+  .site-footer-intro {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
   .site-footer-brand {
     width: 142px;
   }
 
   .site-footer-manifesto {
-    max-width: 30ch;
-    font-size: 18px;
+    max-width: 38ch;
+    font-size: 14px;
   }
 
   .site-footer-links {
-    grid-column: auto;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px 18px;
+    width: 100%;
   }
 
   .site-footer-links a {
