@@ -109,7 +109,7 @@ Customer-facing sequence:
 1. Supplied moving-image KV and primary promise.
 2. Sticky Studio introduction with three generated abstract scenes.
 3. `Worlds in motion` — ten selected 4:5 visual works in a three-depth gallery.
-4. A horizontal low-chroma field containing all twenty supplied Instagram works; it restores color on hover or focus.
+4. A horizontal low-chroma field containing all twenty supplied Instagram works; it restores color on hover or focus, and compacts into a two-row rail on mobile.
 5. AI visual, motion and web service sequence.
 6. `Selected web archive` — four real cases plus two detail crops in a flowing evidence wall.
 7. Generated cinematic studio contact scene and project CTA.
@@ -160,7 +160,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 
 ### Instagram field
 
-- The gallery resolves into one horizontally scrollable, load-shuffled row containing all twenty supplied Instagram works before Services.
+- The gallery resolves into one horizontally scrollable, load-shuffled row containing all twenty supplied Instagram works before Services; at 720px and below it becomes two synchronized rows with tiles scaled to 60% of the former mobile size.
 - Tiles are grayscale and low-chroma by default; hover and keyboard focus restore the original color and full opacity.
 - Every tile keeps a 4:5 frame, uses `object-fit: contain`, lazy-loads its image and shares one baseline. On fine-pointer devices, vertical wheel input anywhere inside the complete `More from @neorealmlab` section eases toward a bounded horizontal target only while more content remains in that direction; reaching either target edge immediately releases normal page scrolling. Touch keeps direct horizontal scrolling and gentle snap, and the browser scrollbar remains visually concealed.
 
@@ -207,7 +207,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 ### Project Inquiry
 
 - **Shell:** A full-viewport native dialog (`100vw × 100dvh`) with a fixed 72px dark header, master wordmark, square 48px close control and independently scrolling body. Opening reveals the sharp shell upward with `clip-path` and restrained vertical settlement; reduced motion removes the reveal and transform entirely.
-- **Pricing ledger:** The first act is a dark, three-column editorial ledger separated by hairlines. Plans are not rounded cards. Only the recommended center plan receives a solid Acid Signal field; the other plans stay graphite with outlined actions so the accent keeps its directional role.
+- **Pricing ledger:** The first act is a dark, three-column editorial ledger separated by hairlines. Plans are not rounded cards. All plans rest on graphite; fine-pointer hover and keyboard focus temporarily turn only the active plan into a solid Acid Signal field.
 - **Proposal sheet:** The second act inverts to Projection White with Cinema Black text. Its copy-and-form split is spacious rather than carded; fields remain transparent with underline-only boundaries, square corners and a strengthened underline on focus.
 - **Responsive behavior:** At 720px and below, the ledger stacks into one column with horizontal dividers, the sticky proposal copy becomes static and the form collapses to one column. The dialog header reduces to 64px without losing a minimum 44px close target.
 - **Submission states:** The submit action disables and uses restrained `Sending…` copy while in flight. A polite live region reports loading, success and recoverable error states; success uses muted green (`#315c16`), error uses muted red (`#8d211a`) and neither state introduces animation, cards or decorative alerts.
@@ -228,4 +228,4 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - **The Filtered Provenance Rule:** archive categories help visitors scan supporting evidence; filtering must reflow the visible masonry stream and announce the resulting count.
 - **The Local-Is-Not-Production Rule:** `admin.html` and `localStorage` are prototype tools only; production requires authentication, durable database records and external object storage.
 - **The Two-Act Inquiry Rule:** qualify with a dark pricing ledger, then invert to a warm-white proposal sheet; never blend both acts into a generic card grid.
-- **The Recommended-Only Signal Rule:** within pricing, Acid Signal belongs to the recommended center plan only.
+- **The Active-Plan Signal Rule:** within pricing, Acid Signal appears only on the plan currently approached by pointer or keyboard focus.
