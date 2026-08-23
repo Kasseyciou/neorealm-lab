@@ -167,7 +167,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 ### Web archive waterfall
 
 - Sticky narrative stays secondary to a two-column masonry evidence stream.
-- `All Projects` plus `Brand Website`, `Service Platform`, and `Campaign & Content` filters reflow the masonry evidence stream; the active category uses the single Acid Signal rule and reports its project count through a polite live region.
+- `All Projects` plus `Brand Website` and `Campaign` filters reflow the masonry evidence stream; the active category uses the single Acid Signal rule and reports its project count through a polite live region.
 - Four true archived cases are accompanied by two deliberate detail crops; detail crops follow their source project's category and must not be named as extra projects.
 - The same bounded depth and image-trail vocabulary connects old web craft to the current interface without turning it into a lengthy case study.
 

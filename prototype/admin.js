@@ -218,6 +218,10 @@ deleteButton.addEventListener('click', () => {
   const id = form.elements.id.value;
   const project = projects.find((item) => item.id === id);
   if (!project || !window.confirm(`確定刪除「${project.title}」？`)) return;
+  if (projects.length <= 1) {
+    announce('至少需要保留一個網站作品。', true);
+    return;
+  }
   projects = projects.filter((item) => item.id !== id);
   saveProjects('作品已刪除。');
   resetEditor();

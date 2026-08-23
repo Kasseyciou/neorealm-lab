@@ -2,8 +2,7 @@
   const STORAGE_KEY = 'neorealm.webProjects.v1';
   const categories = [
     { value: 'brand', label: 'Brand Website' },
-    { value: 'platform', label: 'Service Platform' },
-    { value: 'campaign', label: 'Campaign & Content' },
+    { value: 'campaign', label: 'Campaign' },
   ];
 
   const defaults = [
@@ -22,7 +21,7 @@
       id: 'echarm',
       title: '醫創網',
       description: 'Healthcare service platform',
-      category: 'platform',
+      category: 'campaign',
       image: './assets/archive-echarm.jpg',
       alt: '醫創網服務平台網站畫面',
       layout: 'medium',
@@ -57,7 +56,11 @@
       id: String(project.id),
       title: String(project.title),
       description: String(project.description || ''),
-      category: categories.some(({ value }) => value === project.category) ? project.category : 'brand',
+      category: project.category === 'platform'
+        ? 'campaign'
+        : categories.some(({ value }) => value === project.category)
+          ? project.category
+          : 'brand',
       image: String(project.image),
       alt: String(project.alt || `${project.title} 網站作品畫面`),
       layout: ['tall', 'medium', 'wide'].includes(project.layout) ? project.layout : ['tall', 'medium', 'wide'][index % 3],
