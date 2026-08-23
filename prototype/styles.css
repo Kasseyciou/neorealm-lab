@@ -3808,7 +3808,13 @@ body.work-lightbox-open {
 
   .work-lightbox.is-archive-work .work-lightbox-figure {
     display: flex;
-    height: 100%;
+    /* Grid-centred children resolve percentage height as auto on mobile.
+       Use the viewport minus the shell's fixed vertical insets so the long
+       artwork owns a bounded, independently scrollable reading viewport. */
+    height: calc(100dvh - 98px);
+    min-height: 0;
+    max-height: none;
+    align-self: stretch;
     flex-direction: column;
     gap: 14px;
   }
@@ -3831,7 +3837,8 @@ body.work-lightbox-open {
     inset: auto;
     width: 100%;
     height: auto;
-    flex: 1 1 auto;
+    min-height: 0;
+    flex: 1 1 0;
   }
 }
 

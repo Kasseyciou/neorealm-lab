@@ -510,13 +510,18 @@ function setupWebArchive() {
   };
 
   const prepareLightbox = (figure, project) => {
+    const projectUrl = /^https?:\/\//i.test(String(project.projectUrl || ''))
+      ? project.projectUrl
+      : '';
     Object.assign(figure.dataset, {
       src: project.lightboxImage,
       alt: project.alt,
       title: project.title,
       description: project.description,
       category: project.category,
-      projectUrl: project.projectUrl,
+      // Older local records can contain the literal "undefined". Keep the
+      // action absent unless it is an explicitly valid external URL.
+      projectUrl,
       lightboxKind: 'archive',
     });
 
