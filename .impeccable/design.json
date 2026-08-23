@@ -27,7 +27,7 @@
       { "name": "studio-vignette", "value": "inset 0 0 90px rgba(0, 0, 0, 0.16)", "purpose": "Contains the active abstract Studio image." }
     ],
     "motion": [
-      { "name": "material-reveal", "value": "520ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Settles Studio transitions and clipped pointer trails without delaying feedback." },
+      { "name": "material-reveal", "value": "520ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Settles Studio transitions and the colorful hover canvas fade without delaying feedback." },
       { "name": "state-fade", "value": "420ms ease", "purpose": "Studio step and KV message visibility changes." },
       { "name": "text-crop", "value": "640ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Moves customer-facing copy through directional clip-path entrances and faster inverse exits; body copy may follow its heading by no more than 90ms." },
       { "name": "poster-fade", "value": "480ms ease", "purpose": "Crossfades the KV poster only after video passes 6.2 seconds." },
@@ -76,7 +76,7 @@
       "name": "Perspective Salon Gallery",
       "kind": "custom",
       "refersTo": "waterfall-card",
-      "description": "Sticky narrative beside three asymmetric exhibit lanes; ten works are sampled from a twenty-image pool in a 4/3/3 distribution, preserve their full 4:5 canvas, and use generous spacing, plane-specific shadows, parallax, focus-clearing blur, and a velocity-shaped Canvas water trail for depth.",
+      "description": "Sticky narrative beside three asymmetric exhibit lanes; ten works are sampled from a twenty-image pool in a 4/3/3 distribution, preserve their full 4:5 canvas, and use generous spacing, plane-specific shadows, parallax, focus-clearing blur, and a velocity-shaped colorful WebGL RGB separation for depth.",
       "html": "<section class=\"ds-waterfall\"><header><h2>Worlds in motion.</h2></header><div class=\"ds-streams\"><div class=\"far\"></div><div class=\"near\"></div><div class=\"mid\"></div></div></section>",
       "css": ".ds-waterfall { display:grid; grid-template-columns:.54fr 1.46fr; background:#1b1b18; color:#f2f1eb; } .ds-waterfall header { position:sticky; top:20vh; align-self:start; padding:15vh 6vw; } .ds-streams { display:grid; grid-template-columns:.72fr 1.12fr .78fr; gap:1.8vw; padding:18vh 3vw 20vh 0; } .ds-streams div { min-height:1200px; background:#11110f; } .ds-streams .far { transform:scale(.82); opacity:.68; } .ds-streams .near { transform:scale(1.08); } .ds-streams .mid { transform:scale(.93); opacity:.9; }"
     },
@@ -147,7 +147,7 @@
       { "name": "The Full-Frame Plate Rule", "body": "Preserve the supplied 4:5 post canvas with contain fitting; never crop artwork to manufacture depth.", "section": "layout" },
       { "name": "The Optical Depth Rule", "body": "Only middle and far gallery planes blur; pointer hover and keyboard focus restore full clarity before the image opens in a native lightbox.", "section": "elevation" },
       { "name": "The Color-on-Approach Rule", "body": "The Instagram field stays low-chroma until pointer hover or keyboard focus restores original color.", "section": "colors" },
-      { "name": "The Bounded Trail Rule", "body": "Fine-pointer media response uses clipped displacement bands and never becomes free dragging or reordering.", "section": "elevation" },
+      { "name": "The Bounded Color Rule", "body": "Fine-pointer media response uses a local, velocity-shaped RGB separation and never becomes free dragging or reordering.", "section": "elevation" },
       { "name": "The Motion-Off Rule", "body": "Reduced motion pauses video and removes parallax, card drift, and ghost layers.", "section": "elevation" },
       { "name": "The Filtered Provenance Rule", "body": "Archive categories reflow the visible masonry stream and announce the resulting count through a polite live region.", "section": "components" },
       { "name": "The Local-Is-Not-Production Rule", "body": "The admin page and localStorage are prototype tools only; production requires authentication, durable database records, and external object storage.", "section": "components" },

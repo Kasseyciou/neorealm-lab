@@ -155,7 +155,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - Deliberately generous vertical intervals and plane-specific soft shadows separate the ten plates: near is strongest, middle is moderate, and far is faint.
 - Perspective comes from lane width, scale, speed and position—not from changing or cropping the artwork ratio.
 - Middle and far lanes receive bounded optical blur that clears on hover or keyboard focus. Card titles and descriptions stay out of the composition and appear below the full image only after opening the native lightbox.
-- Fine-pointer hover shifts the media slightly and feeds pointer velocity into a bounded Canvas refraction brush. Interpolated soft droplets redraw locally displaced image fragments, forming a fluid water trail that decays within roughly 620–880ms without running a permanent animation loop.
+- Fine-pointer hover replaces the image with a bounded, per-image WebGL `colorful` pass: pointer speed controls local RGB channel separation around the cursor, then the canvas fades away and disposes. It is inspired by the MIT-licensed Codrops colorful hover treatment, but does not use a global renderer or perpetual render loop.
 - This is perceptual drag, not draggable/reorderable UI.
 
 ### Instagram field
@@ -169,7 +169,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - Sticky narrative stays secondary to a two-column masonry evidence stream.
 - `All Projects` plus `Brand Website` and `Campaign` filters reflow the masonry evidence stream; the active category uses the single Acid Signal rule and reports its project count through a polite live region.
 - Four true archived cases are accompanied by two deliberate detail crops; detail crops follow their source project's category and must not be named as extra projects.
-- The same bounded depth and image-trail vocabulary connects old web craft to the current interface without turning it into a lengthy case study.
+- The same bounded depth and colorful chromatic-hover vocabulary connects old web craft to the current interface without turning it into a lengthy case study.
 
 ### Web archive editor
 
@@ -180,9 +180,9 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 ### Mobile and reduced motion
 
 - Between 721px and 980px, all ten selected plates reflow into two columns while retaining quieter near, middle and far depth treatments.
-- At 720px and below, work and archive remain two compact media columns while the narrative becomes a sticky top veil.
+- At 720px and below, work and archive remain two compact media columns while the narrative becomes a sticky top veil; the WebGL hover canvas is disabled.
 - The three desktop lanes collapse through `display: contents` into two compact mobile columns in near → middle → far DOM priority; scroll-speed transforms, depth shifts and image trails are disabled.
-- Reduced motion pauses video and removes parallax, displacement animation, depth and trail layers while keeping all information available.
+- Reduced motion pauses video and removes parallax, chromatic hover animation, depth and trail layers while keeping all information available.
 - Reduced motion also removes typographic crops, blur and spatial travel; copy remains immediately visible.
 
 ## Imagery
@@ -198,7 +198,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - The comparison selector exposes `aria-expanded` / `aria-hidden`, closes on outside click or Escape, and returns focus on Escape.
 - The Project Inquiry uses the native `<dialog>` top layer. Escape, the close control and a direct backdrop press close it; focus enters at the close control and returns to the exact opener.
 - The work lightbox follows the same native-dialog focus contract and reveals the selected full-frame image before its title and description.
-- Cards are visual media, not fake controls; use a crosshair cursor only where the fine-pointer trail is available.
+- Cards are visual media, not fake controls; use a crosshair cursor only where the fine-pointer chromatic hover is available.
 - Headings and sticky copy retain adequate contrast over the media fields.
 - The page must not introduce horizontal overflow at 390px.
 
@@ -221,7 +221,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - **The Full-Frame Plate Rule:** preserve the supplied 4:5 post canvas; never crop artwork to manufacture depth.
 - **The Optical Depth Rule:** only middle and far planes blur, and direct attention restores full clarity.
 - **The Color-on-Approach Rule:** the Instagram field stays quiet until pointer hover or keyboard focus restores color.
-- **The Bounded Trail Rule:** hover may leave a soft, velocity-shaped water trace over imagery, but the Canvas runs only while droplets remain and never destabilizes reading or implies free dragging.
+- **The Bounded Color Rule:** hover uses a local, velocity-shaped RGB separation around the pointer; the WebGL canvas exists only while a fine-pointer interaction is active and never implies free dragging.
 - **The One-Signal Rule:** Acid Signal directs attention; it does not become ambient decoration.
 - **The Sharp System Rule:** production geometry remains rectangular.
 - **The Motion-Off Rule:** mobile and reduced-motion users receive the same content without nonessential transforms.

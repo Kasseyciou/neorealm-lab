@@ -2077,41 +2077,6 @@ html {
   object-fit: contain;
 }
 
-.waterfall-image.ig-post::before,
-.waterfall-image.ig-post::after {
-  inset: 0;
-  background-color: var(--b-black);
-  background-image: var(--ig-image);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.waterfall-image::before,
-.waterfall-image::after {
-  position: absolute;
-  inset: -3%;
-  background-image: inherit;
-  background-position: inherit;
-  background-repeat: no-repeat;
-  background-size: inherit;
-  content: "";
-  opacity: var(--trail-opacity, 0);
-  transition: opacity 180ms ease, transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-
-.waterfall-image::before {
-  clip-path: polygon(0 18%, 100% 18%, 100% 36%, 0 36%, 0 56%, 100% 56%, 100% 68%, 0 68%);
-  transform: translate3d(var(--trail-x, 0px), var(--trail-y, 0px), 0);
-}
-
-.waterfall-image::after {
-  clip-path: polygon(0 43%, 100% 43%, 100% 51%, 0 51%, 0 76%, 100% 76%, 100% 84%, 0 84%);
-  transform: translate3d(calc(var(--trail-x, 0px) * -0.55), calc(var(--trail-y, 0px) * -0.55), 0);
-}
-
 .waterfall-card figcaption {
   position: absolute;
   inset: auto 0 0;
@@ -2340,7 +2305,7 @@ html {
   transform: scale(1.4);
 }
 
-.archive-flow .archive-case > img:not(.trail-clone) {
+.archive-flow .archive-case > img {
   position: absolute;
   inset: -2%;
   width: 104%;
@@ -2350,34 +2315,30 @@ html {
   transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1), filter 220ms ease;
 }
 
-.archive-flow .archive-detail > img:not(.trail-clone) {
+.archive-flow .archive-detail > img {
   transform: translate3d(var(--media-x, 0px), var(--media-y, 0px), 0) scale(1.42);
 }
 
-.trail-clone {
-  position: absolute;
-  inset: -2%;
-  z-index: 2;
-  width: 104%;
-  height: 104%;
-  object-fit: cover;
-  object-position: inherit;
-  clip-path: polygon(0 22%, 100% 22%, 100% 39%, 0 39%, 0 61%, 100% 61%, 100% 74%, 0 74%);
-  opacity: var(--trail-opacity, 0);
-  transform: translate3d(var(--trail-x, 0px), var(--trail-y, 0px), 0) scale(1.04);
-  transition: opacity 180ms ease, transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-}
-
-.liquid-trail-canvas {
+.colorful-hover-canvas {
   position: absolute;
   inset: 0;
   z-index: 2;
   width: 100%;
   height: 100%;
-  opacity: 0.92;
+  opacity: 0;
   pointer-events: none;
-  transform: translateZ(0);
+  transition: opacity 150ms ease;
+  will-change: opacity;
+}
+
+.colorful-hover-canvas-archive {
+  inset: -2%;
+  width: 104%;
+  height: 104%;
+}
+
+.colorful-hover-canvas.is-active {
+  opacity: 1;
 }
 
 .contact-studio-image {
@@ -2392,7 +2353,7 @@ html {
   }
 
   .waterfall-card:hover .waterfall-image,
-  .archive-flow .archive-case:hover > img:not(.trail-clone) {
+  .archive-flow .archive-case:hover > img {
     filter: saturate(1) contrast(1.02);
   }
 
@@ -2658,10 +2619,7 @@ html {
     height: 390px;
   }
 
-  .waterfall-image::before,
-  .waterfall-image::after,
-  .trail-clone,
-  .liquid-trail-canvas {
+  .colorful-hover-canvas {
     display: none;
   }
 }
@@ -2676,10 +2634,7 @@ html {
     will-change: auto;
   }
 
-  .waterfall-image::before,
-  .waterfall-image::after,
-  .trail-clone,
-  .liquid-trail-canvas {
+  .colorful-hover-canvas {
     display: none;
   }
 
