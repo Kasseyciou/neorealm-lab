@@ -120,7 +120,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - Deliberately generous vertical intervals and plane-specific soft shadows separate the ten plates: near is strongest, middle is moderate, and far is faint.
 - Perspective comes from lane width, scale, speed and position—not from changing or cropping the artwork ratio.
 - Middle and far lanes receive bounded optical blur that clears on hover or keyboard focus. Card titles and descriptions stay out of the composition and appear below the full image only after opening the native lightbox.
-- Fine-pointer hover shifts the media slightly and displaces two clipped image bands up to about 42px, creating a visible dragged-image trail.
+- Fine-pointer hover shifts the media slightly and feeds pointer velocity into a bounded Canvas refraction brush. Interpolated soft droplets redraw locally displaced image fragments, forming a fluid water trail that decays within roughly 620–880ms without running a permanent animation loop.
 - This is perceptual drag, not draggable/reorderable UI.
 
 ### Instagram field
@@ -179,7 +179,7 @@ Scale is deliberately lower than the 45px Aether CSS demonstration because navig
 - **The Full-Frame Plate Rule:** preserve the supplied 4:5 post canvas; never crop artwork to manufacture depth.
 - **The Optical Depth Rule:** only middle and far planes blur, and direct attention restores full clarity.
 - **The Color-on-Approach Rule:** the Instagram field stays quiet until pointer hover or keyboard focus restores color.
-- **The Bounded Trail Rule:** hover may smear clipped image bands, but never destabilize reading or imply free dragging.
+- **The Bounded Trail Rule:** hover may leave a soft, velocity-shaped water trace over imagery, but the Canvas runs only while droplets remain and never destabilizes reading or implies free dragging.
 - **The One-Signal Rule:** Acid Signal directs attention; it does not become ambient decoration.
 - **The Sharp System Rule:** production geometry remains rectangular.
 - **The Motion-Off Rule:** mobile and reduced-motion users receive the same content without nonessential transforms.

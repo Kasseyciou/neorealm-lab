@@ -2303,6 +2303,17 @@ html {
   pointer-events: none;
 }
 
+.liquid-trail-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  opacity: 0.92;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
 .contact-studio-image {
   background: url("./assets/contact-studio.png") center / cover no-repeat;
   filter: saturate(0.7) contrast(1.08);
@@ -2567,7 +2578,8 @@ html {
 
   .waterfall-image::before,
   .waterfall-image::after,
-  .trail-clone {
+  .trail-clone,
+  .liquid-trail-canvas {
     display: none;
   }
 }
@@ -2584,7 +2596,8 @@ html {
 
   .waterfall-image::before,
   .waterfall-image::after,
-  .trail-clone {
+  .trail-clone,
+  .liquid-trail-canvas {
     display: none;
   }
 

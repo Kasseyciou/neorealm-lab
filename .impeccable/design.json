@@ -84,7 +84,7 @@
       "name": "Perspective Salon Gallery",
       "kind": "custom",
       "refersTo": "web-case-stage",
-      "description": "Sticky narrative beside three asymmetric exhibit lanes; ten works are sampled from a twenty-image pool in a 4/3/3 distribution, preserve their full 4:5 canvas, and use generous spacing, plane-specific shadows, parallax, and focus-clearing blur for depth.",
+      "description": "Sticky narrative beside three asymmetric exhibit lanes; ten works are sampled from a twenty-image pool in a 4/3/3 distribution, preserve their full 4:5 canvas, and use generous spacing, plane-specific shadows, parallax, focus-clearing blur, and a velocity-shaped Canvas water trail for depth.",
       "html": "<section class=\"ds-waterfall\"><header><h2>Worlds in motion.</h2></header><div class=\"ds-streams\"><div class=\"far\"></div><div class=\"near\"></div><div class=\"mid\"></div></div></section>",
       "css": ".ds-waterfall { display:grid; grid-template-columns:.54fr 1.46fr; background:#1b1b18; color:#f2f1eb; } .ds-waterfall header { position:sticky; top:20vh; align-self:start; padding:15vh 6vw; } .ds-streams { display:grid; grid-template-columns:.72fr 1.12fr .78fr; gap:1.8vw; padding:18vh 3vw 20vh 0; } .ds-streams div { min-height:1200px; background:#11110f; } .ds-streams .far { transform:scale(.82); opacity:.68; } .ds-streams .near { transform:scale(1.08); } .ds-streams .mid { transform:scale(.93); opacity:.9; }"
     },
