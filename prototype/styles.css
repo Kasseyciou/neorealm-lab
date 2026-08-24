@@ -2971,7 +2971,7 @@ html {
 .studio-step h2 {
   max-width: 10ch;
   margin-bottom: 34px;
-  font-family: "Marcellus", "Zen Old Mincho", serif;
+  font-family: "Marcellus", "Zen Old Mincho", "Noto Serif TC", serif;
   font-size: clamp(48px, 6vw, 88px);
   font-weight: 400;
   letter-spacing: -0.03em;
@@ -2992,7 +2992,7 @@ html {
 .b-service-title h2,
 .b-archive h2,
 .b-contact h2 {
-  font-family: "Marcellus", "Zen Old Mincho", serif;
+  font-family: "Marcellus", "Zen Old Mincho", "Noto Serif TC", serif;
   font-size: clamp(48px, 6vw, 88px);
   font-weight: 400;
   line-height: 0.96;
@@ -3290,7 +3290,7 @@ html {
   max-width: 62ch;
   margin: 0;
   color: var(--b-ink);
-  font: 400 clamp(13px, 1vw, 15px) / 1.46 "Marcellus", "Zen Old Mincho", serif;
+  font: 400 clamp(13px, 1vw, 15px) / 1.46 "Marcellus", "Zen Old Mincho", "Noto Serif TC", serif;
   letter-spacing: -0.012em;
 }
 
@@ -3309,7 +3309,7 @@ html {
   align-items: center;
   gap: 10px;
   color: var(--b-muted);
-  font: 400 12px / 1.35 "Marcellus", "Zen Old Mincho", serif;
+  font: 400 12px / 1.35 "Marcellus", "Zen Old Mincho", "Noto Serif TC", serif;
   letter-spacing: 0.025em;
   text-decoration: none;
   transition: color 180ms ease, transform 180ms ease;
@@ -3595,6 +3595,11 @@ body.work-lightbox-open {
   place-items: center;
 }
 
+.work-lightbox-media:focus,
+.work-lightbox-media:focus-visible {
+  outline: 0;
+}
+
 .work-lightbox-media img {
   display: block;
   width: auto;
@@ -3625,7 +3630,7 @@ body.work-lightbox-open {
 
 .work-lightbox h2 {
   margin: 0;
-  font-family: "Marcellus", "Zen Old Mincho", serif;
+  font-family: "Marcellus", "Zen Old Mincho", "Noto Serif TC", serif;
   font-size: clamp(26px, 3vw, 42px);
   font-weight: 400;
   letter-spacing: -0.025em;
@@ -3636,7 +3641,7 @@ body.work-lightbox-open {
   max-width: 58ch;
   margin: 0;
   color: var(--b-muted);
-  font: 400 15px/1.7 "Zen Old Mincho", serif;
+  font: 400 15px/1.7 "Zen Old Mincho", "Noto Serif TC", serif;
 }
 
 .archive-lightbox-trigger {
@@ -3644,19 +3649,25 @@ body.work-lightbox-open {
 }
 
 .work-lightbox.is-archive-work .work-lightbox-figure {
-  position: relative;
-  display: block;
+  display: grid;
   width: min(100%, 1320px);
-  height: 100%;
+  height: calc(100dvh - clamp(102px, 13vh, 160px));
+  min-height: 0;
   max-height: 100%;
+  grid-template-columns: minmax(236px, 320px) minmax(0, 1fr) 5px;
+  grid-template-rows: minmax(0, 1fr);
+  column-gap: clamp(16px, 2.5vw, 34px);
+  align-items: stretch;
+  overflow: hidden;
 }
 
 .work-lightbox.is-archive-work .work-lightbox-media {
-  position: absolute;
-  inset: 0 0 0 clamp(280px, 31%, 390px);
+  position: static;
+  grid-column: 2;
+  grid-row: 1;
   display: block;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   max-height: none;
   min-height: 0;
   overflow-x: hidden;
@@ -3671,14 +3682,15 @@ body.work-lightbox-open {
 }
 
 .work-lightbox-scrollbar {
-  position: absolute;
+  position: static;
+  grid-column: 3;
+  grid-row: 1;
   z-index: 3;
-  top: 14px;
-  right: 12px;
-  bottom: 14px;
-  width: 12px;
-  border: 1px solid rgba(242, 241, 235, 0.22);
-  background: rgba(17, 17, 15, 0.7);
+  align-self: stretch;
+  width: 5px;
+  min-height: 0;
+  border: 0;
+  background: rgba(242, 241, 235, 0.14);
   cursor: ns-resize;
   touch-action: none;
 }
@@ -3690,19 +3702,21 @@ body.work-lightbox-open {
 .work-lightbox-scrollbar span {
   display: block;
   width: 100%;
-  min-height: 48px;
+  min-height: 32px;
   background: var(--b-accent);
-  transition: background-color 160ms ease;
+  transition: background-color 160ms ease, width 160ms ease, margin 160ms ease;
 }
 
 .work-lightbox-scrollbar:hover span,
 .work-lightbox-scrollbar:focus-visible span {
   background: var(--b-ink);
+  width: 7px;
+  margin-left: -1px;
 }
 
 .work-lightbox-scrollbar:focus-visible {
-  outline: 2px solid var(--b-accent);
-  outline-offset: 4px;
+  outline: 1px solid var(--b-accent);
+  outline-offset: 3px;
 }
 
 .work-lightbox.is-archive-work .work-lightbox-media img {
@@ -3714,10 +3728,11 @@ body.work-lightbox-open {
 }
 
 .work-lightbox.is-archive-work figcaption {
-  position: absolute;
-  inset: 0 auto 0 0;
+  position: static;
+  grid-column: 1;
+  grid-row: 1;
   display: block;
-  width: min(26%, 320px);
+  width: auto;
   padding-top: 18px;
 }
 
@@ -3838,24 +3853,24 @@ body.work-lightbox-open {
   }
 
   .work-lightbox.is-archive-work .work-lightbox-figure {
-    display: flex;
-    /* Grid-centred children resolve percentage height as auto on mobile.
-       Use the viewport minus the shell's fixed vertical insets so the long
-       artwork owns a bounded, independently scrollable reading viewport. */
+    display: grid;
+    /* The bounded media row owns both the long artwork and its dedicated
+       track, so the scroll affordance never covers the artwork. */
     height: calc(100dvh - 98px);
     min-height: 0;
     max-height: none;
     align-self: stretch;
-    flex-direction: column;
-    gap: 14px;
+    grid-template-columns: minmax(0, 1fr) 4px;
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 10px;
+    row-gap: 14px;
   }
 
   .work-lightbox.is-archive-work figcaption {
     position: static;
-    inset: auto;
+    grid-column: 1 / -1;
+    grid-row: 1;
     width: auto;
-    order: -1;
-    flex: 0 0 auto;
     padding-top: 12px;
   }
 
@@ -3864,12 +3879,18 @@ body.work-lightbox-open {
   }
 
   .work-lightbox.is-archive-work .work-lightbox-media {
-    position: relative;
-    inset: auto;
+    position: static;
+    grid-column: 1;
+    grid-row: 2;
     width: 100%;
-    height: auto;
+    height: 100%;
     min-height: 0;
-    flex: 1 1 0;
+  }
+
+  .work-lightbox-scrollbar {
+    grid-column: 2;
+    grid-row: 2;
+    width: 4px;
   }
 }
 
@@ -4017,6 +4038,11 @@ body.project-dialog-open {
   color: var(--b-black);
 }
 
+.project-dialog-close:focus-visible {
+  border-color: var(--b-accent);
+  outline: 0;
+}
+
 .project-dialog-scroll {
   height: 100dvh;
   overflow-x: hidden;
@@ -4058,7 +4084,7 @@ body.project-dialog-open {
 .project-inquiry-copy h2 {
   max-width: 10ch;
   margin: 0;
-  font-family: "Marcellus", "Zen Old Mincho", serif;
+  font-family: "Marcellus", "Zen Old Mincho", "Noto Serif TC", serif;
   font-size: clamp(52px, 7.6vw, 96px);
   font-weight: 400;
   letter-spacing: -0.035em;
@@ -4105,7 +4131,7 @@ body.project-dialog-open {
 .pricing-entry h3 {
   min-height: 2.8em;
   margin: 0 0 44px;
-  font-family: "Marcellus", "Zen Old Mincho", serif;
+  font-family: "Marcellus", "Zen Old Mincho", "Noto Serif TC", serif;
   font-size: clamp(25px, 2.2vw, 34px);
   font-weight: 400;
   line-height: 1.35;
@@ -4133,7 +4159,7 @@ body.project-dialog-open {
 }
 
 .pricing-value-custom strong {
-  font-family: "Zen Old Mincho", serif;
+  font-family: "Zen Old Mincho", "Noto Serif TC", serif;
   font-size: clamp(42px, 4.2vw, 64px);
   letter-spacing: -0.03em;
 }
@@ -4274,7 +4300,7 @@ body.project-dialog-open {
 .form-field label {
   display: block;
   margin-bottom: 10px;
-  font-family: "Marcellus", "Zen Old Mincho", serif;
+  font-family: "Marcellus", "Zen Old Mincho", "Noto Serif TC", serif;
   font-size: 12px;
   letter-spacing: 0.04em;
 }
@@ -4291,7 +4317,7 @@ body.project-dialog-open {
   outline: 0;
   background: transparent;
   color: var(--b-black);
-  font: 400 16px/1.6 "Zen Old Mincho", serif;
+  font: 400 16px/1.6 "Zen Old Mincho", "Noto Serif TC", serif;
   transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
