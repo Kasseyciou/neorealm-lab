@@ -53,7 +53,7 @@
     if (!value) return '';
     try {
       const url = new URL(String(value));
-      return ['https:', 'http:'].includes(url.protocol) ? url.href : '';
+      return url.protocol === 'https:' ? url.href : '';
     } catch {
       return '';
     }

@@ -22,7 +22,7 @@ python3 -m http.server 4173 --directory prototype
 
 Open `http://127.0.0.1:4173/`.
 
-Open the local archive editor at `http://127.0.0.1:4173/admin.html`.
+Open the local archive editor at `http://127.0.0.1:4173/admin.html`. The Pages build deliberately excludes this local-only editor; repository access through GitHub is the current authenticated control boundary.
 
 Production follow-up:
 
