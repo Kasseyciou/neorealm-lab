@@ -336,6 +336,7 @@ function setupRandomizedGallery() {
       mediaType: tile.dataset.mediaType || 'IMAGE',
       videoSrc: tile.dataset.videoSrc || '',
       embedSrc: tile.dataset.embedSrc || '',
+      carousel: tile.dataset.carousel || '[]',
     };
     Object.assign(tile.dataset, item);
     tile.setAttribute('aria-label', `放大查看 ${title}`);
@@ -516,7 +517,7 @@ function setupWorkLightbox() {
     event.preventDefault();
   });
   dialog.addEventListener('keydown', (event) => {
-    if (dialog.classList.contains('has-carousel') && !event.target.closest('a, button, input, textarea, select')) {
+    if (dialog.classList.contains('has-carousel') && !event.target.closest('input, textarea, select')) {
       if (event.key === 'ArrowLeft') {
         stepSlide(-1);
         event.preventDefault();
