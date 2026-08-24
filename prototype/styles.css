@@ -3886,9 +3886,10 @@ body.work-lightbox-open {
 
   .work-lightbox-media video,
   .work-lightbox-media iframe {
-    width: min(100%, 340px);
-    height: auto;
-    max-height: 66dvh;
+    width: auto;
+    max-width: 100%;
+    height: min(66dvh, calc((100vw - 32px) * 16 / 9));
+    max-height: none;
   }
 
   .work-lightbox figcaption {
