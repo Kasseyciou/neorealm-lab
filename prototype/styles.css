@@ -3290,6 +3290,7 @@ html {
   --piece-scale: 0.9;
   align-self: flex-end;
   width: 92%;
+  margin-top: -clamp(72px, 8vw, 128px);
   box-shadow: 0 28px 84px rgba(0, 0, 0, 0.28);
 }
 
@@ -3387,6 +3388,24 @@ html {
   .waterfall-column-near .waterfall-card.gallery-tail-quiet {
     --piece-scale: 1;
     width: 100%;
+    margin-top: 0;
+  }
+
+  .b-waterfall .waterfall-flow {
+    display: block;
+    column-count: 2;
+    column-gap: 10px;
+    padding: 28px 10px 92px;
+  }
+
+  .b-waterfall .waterfall-card,
+  .b-waterfall .waterfall-card.card-post,
+  .b-waterfall .waterfall-card.card-post.is-reel {
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 10px;
+    break-inside: avoid;
+    vertical-align: top;
   }
 
   .site-footer {
