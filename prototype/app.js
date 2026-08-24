@@ -58,10 +58,20 @@ async function hydrateInstagramFeed() {
   if (!railTrack) return false;
 
   try {
-    const response = await fetch('./data/instagram-feed.json', { cache: 'no-store' });
-    if (!response.ok) return false;
-    const feed = await response.json();
-    if (!Array.isArray(feed.items) || !feed.items.length) return false;
+    let items = [];
+    try {
+      items = await window.NeoRealmSupabase?.getInstagramFeed?.() || [];
+    } catch (error) {
+      console.warn('Supabase Instagram library unavailable; trying the deployed feed snapshot.', error);
+    }
+    if (!items.length) {
+      const response = await fetch('./data/instagram-feed.json', { cache: 'no-store' });
+      if (response.ok) {
+        const feed = await response.json();
+        items = Array.isArray(feed.items) ? feed.items : [];
+      }
+    }
+    if (!items.length) return false;
     let titleOverrides = {};
     try {
       titleOverrides = await window.NeoRealmSupabase?.getInstagramTitles?.() || {};
@@ -70,7 +80,7 @@ async function hydrateInstagramFeed() {
     }
 
     const fragment = document.createDocumentFragment();
-    feed.items.slice(0, 20).forEach((item) => {
+    items.slice(0, 20).forEach((item) => {
       if (!item?.src || !item?.permalink) return;
       const tile = document.createElement('a');
       tile.className = 'instagram-tile';
@@ -355,6 +365,7 @@ function setupRandomizedGallery() {
     const item = selection[index];
     const imageWrap = card.querySelector('.waterfall-image');
     const image = imageWrap?.querySelector('img');
+    card.hidden = !item;
     if (!item || !imageWrap || !image) return;
 
     setMediaLoadingState(imageWrap, image);

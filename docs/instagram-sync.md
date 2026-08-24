@@ -10,10 +10,10 @@ The work wall can update from NeoRealm LAB's Instagram posts. The access token m
 @neorealmlab professional account
           ↓ Meta Instagram API
 scheduled serverless job (token in secret storage)
-          ↓ validate, crop and cache
-public feed.json + optimized media cache
+          ↓ validate and archive
+Supabase Database + Storage
           ↓
-Worlds in motion adapter
+admin-selected 20-post public feed
           ↘ static curated fallback if sync fails
 ```
 
@@ -22,19 +22,20 @@ Implemented production flow:
 1. Keep the Instagram account as a professional Business or Creator account.
 2. Create a Meta app and authorize only the permissions required to read the account's own media.
 3. Store the access token in the GitHub Actions repository secret `INSTAGRAM_ACCESS_TOKEN`; the public Instagram user ID is configured in the workflow.
-4. GitHub Actions runs every six hours and on every `main` deployment.
-5. Request recent media with the caption, media type, media or thumbnail URL, permalink and timestamp fields.
-6. Download the newest media into the temporary GitHub Pages artifact so expiring Instagram CDN URLs are never shipped to the browser.
-7. Publish a sanitized `data/instagram-feed.json` containing no token or private account data.
-8. Render the newest 20 posts in the horizontal feed and select 10 for the layered waterfall. Preserve the current static wall whenever the endpoint is unavailable, empty or malformed.
+4. Store the Supabase service-role key in the GitHub Actions repository secret `SUPABASE_SERVICE_ROLE_KEY`.
+5. GitHub Actions runs weekly, on every `main` deployment and on manual workflow dispatch.
+6. Follow the Instagram API pagination cursor and upsert every available post into `instagram_posts`; existing records are retained.
+7. Cache permanent cover and carousel images in the public `instagram-media` Supabase Storage bucket. Reels use the official Instagram embed to avoid exhausting storage with a complete video archive.
+8. The first successful import selects the newest 20 posts. Later imports remain hidden until selected in `admin.html`, so new posts never displace an intentional front-end selection.
+9. The public page reads the selected, ordered records directly from Supabase and keeps `data/instagram-feed.json` plus the curated demo wall as failure fallbacks.
 
 ## Editorial rules
 
-- A new post may enter the wall automatically, but featured titles and commercial case-study status remain curated.
+- A new post enters the permanent library automatically but does not enter the public wall until selected in the admin.
 - Reels use their thumbnail in the wall and open the original permalink for playback until the site has an approved video-hosting strategy.
 - Carousel posts use the cover by default; child media can be enabled later.
 - Captions are optional display data and must be truncated safely.
-- Deleted or archived posts disappear on the next successful refresh.
+- Posts deleted or archived on Instagram remain in the Supabase library unless they are deliberately removed there.
 
 ## Deployment secrets
 
@@ -43,14 +44,15 @@ Suggested names:
 ```text
 INSTAGRAM_ACCOUNT_ID
 INSTAGRAM_ACCESS_TOKEN
+SUPABASE_SERVICE_ROLE_KEY
 ```
 
 Do not add real values to `.env`, source files, GitHub Actions YAML, screenshots or issue text. Configure them directly in the chosen hosting provider's secret manager or GitHub Actions repository secrets.
 
 ## Active behavior
 
-- The newest 20 posts are synchronized; the page randomizes their order on every visit.
-- The gallery selects 10 of those posts for the layered waterfall presentation.
+- All media returned through Instagram pagination are archived. The admin selects and orders up to 20 public posts.
+- The gallery selects 10 of those public posts for the layered waterfall presentation.
 - The horizontal feed always uses a uniform 4:5 frame. Reel posters are cropped inside that frame and open as controlled 9:16 video in the lightbox. The lightbox prefers a cached MP4 and falls back to Instagram's official embed when Meta withholds the video file.
 - Carousel children are synchronized when Meta returns them and can be browsed with visible previous/next controls or the left/right arrow keys in the lightbox.
 - If synchronization fails, GitHub Pages keeps the previous successful deployment. Local development and an empty feed use the curated demo images.

@@ -18,7 +18,11 @@ const lightboxPreview = document.querySelector('[data-lightbox-preview]');
 const lightboxEmpty = document.querySelector('[data-lightbox-empty]');
 const instagramTitleList = document.querySelector('[data-instagram-title-list]');
 const instagramTitleStatus = document.querySelector('[data-instagram-title-status]');
+const instagramSelectionCount = document.querySelector('[data-instagram-selection-count]');
 let projects = [];
+let instagramPosts = [];
+let instagramTitleOverrides = {};
+const instagramTitleDrafts = new Map();
 let coverBlob = null;
 let pageBlob = null;
 let draggedId = '';
@@ -213,32 +217,157 @@ async function removeProject(project) {
   say('作品已刪除。');
 }
 
+async function persistInstagramOrder(selectedPosts) {
+  const results = await Promise.all(selectedPosts.map((post, index) => (
+    db.from('instagram_posts').update({ display_order: index }).eq('media_id', post.id)
+  )));
+  const failed = results.find(({ error }) => error);
+  if (failed) throw failed.error;
+}
+
+async function loadInstagramLibrary() {
+  [instagramPosts, instagramTitleOverrides] = await Promise.all([
+    api.getInstagramPosts(),
+    api.getInstagramTitles(),
+  ]);
+  renderInstagramLibrary();
+}
+
+function renderInstagramLibrary() {
+  instagramTitleList.textContent = '';
+  const selected = instagramPosts.filter((post) => post.visible);
+  instagramSelectionCount.textContent = `${selected.length} / 20 已選 · 共 ${instagramPosts.length} 則永久保存`;
+
+  if (!instagramPosts.length) {
+    const empty = document.createElement('p');
+    empty.className = 'instagram-library-empty';
+    empty.textContent = '作品庫尚無資料。完成 GitHub 的 Supabase 同步設定後，執行一次 Sync Instagram workflow 即可匯入。';
+    instagramTitleList.append(empty);
+    return;
+  }
+
+  instagramPosts.forEach((item) => {
+    const row = document.createElement('article');
+    row.className = 'instagram-title-row';
+    row.classList.toggle('is-selected', item.visible);
+
+    const image = new Image();
+    image.src = item.src;
+    image.alt = '';
+    image.loading = 'lazy';
+
+    const field = document.createElement('label');
+    const meta = document.createElement('span');
+    const parsedDate = item.timestamp ? new Date(item.timestamp) : null;
+    const date = parsedDate && !Number.isNaN(parsedDate.getTime())
+      ? new Intl.DateTimeFormat('zh-TW', { dateStyle: 'medium' }).format(parsedDate)
+      : '日期未提供';
+    meta.textContent = `${item.visible ? `前台第 ${selected.findIndex((post) => post.id === item.id) + 1} 則` : '作品庫'} · ${date}`;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.maxLength = 72;
+    input.value = instagramTitleDrafts.has(item.id)
+      ? instagramTitleDrafts.get(item.id)
+      : instagramTitleOverrides[item.id] || '';
+    input.placeholder = item.title || 'NeoRealm LAB Visual';
+    input.setAttribute('aria-label', `${item.title || 'Instagram 貼文'}的燈箱標題`);
+    input.addEventListener('input', () => instagramTitleDrafts.set(item.id, input.value));
+    field.append(meta, input);
+
+    const actions = document.createElement('div');
+    actions.className = 'instagram-row-actions';
+
+    const visibility = document.createElement('label');
+    visibility.className = 'instagram-visibility-control';
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = item.visible;
+    checkbox.disabled = !item.visible && selected.length >= 20;
+    checkbox.setAttribute('aria-label', `${item.visible ? '從前台移除' : '顯示於前台'} ${item.title}`);
+    const visibilityText = document.createElement('span');
+    visibilityText.textContent = item.visible ? '前台顯示' : '加入前台';
+    visibility.append(checkbox, visibilityText);
+    checkbox.onchange = async () => {
+      checkbox.disabled = true;
+      instagramTitleStatus.classList.remove('is-error');
+      instagramTitleStatus.textContent = '正在更新前台選擇…';
+      const { error } = await db.rpc('set_instagram_post_visibility', {
+        p_media_id: item.id,
+        p_visible: checkbox.checked,
+      });
+      if (error) {
+        instagramTitleStatus.classList.add('is-error');
+        instagramTitleStatus.textContent = error.message;
+      } else {
+        instagramTitleStatus.textContent = checkbox.checked ? '已加入前台展示。' : '已從前台移除，作品仍保留在作品庫。';
+      }
+      try {
+        await loadInstagramLibrary();
+      } catch (loadError) {
+        instagramTitleStatus.classList.add('is-error');
+        instagramTitleStatus.textContent = `選擇已更新，但作品庫重新載入失敗：${loadError.message}`;
+      }
+    };
+
+    const orderActions = document.createElement('div');
+    orderActions.className = 'instagram-order-actions';
+    if (item.visible) {
+      const selectedIndex = selected.findIndex((post) => post.id === item.id);
+      [['上移', -1, '向前移動'], ['下移', 1, '向後移動']].forEach(([symbol, offset, actionLabel]) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = symbol;
+        button.setAttribute('aria-label', `${actionLabel} ${item.title}`);
+        button.disabled = offset < 0 ? selectedIndex === 0 : selectedIndex === selected.length - 1;
+        button.onclick = async () => {
+          const nextIndex = selectedIndex + offset;
+          [selected[selectedIndex], selected[nextIndex]] = [selected[nextIndex], selected[selectedIndex]];
+          try {
+            await persistInstagramOrder(selected);
+            instagramTitleStatus.classList.remove('is-error');
+            instagramTitleStatus.textContent = '前台 IG 順序已更新。';
+            await loadInstagramLibrary();
+          } catch (error) {
+            instagramTitleStatus.classList.add('is-error');
+            instagramTitleStatus.textContent = error.message;
+          }
+        };
+        orderActions.append(button);
+      });
+    }
+
+    const save = document.createElement('button');
+    save.type = 'button';
+    save.className = 'secondary-action';
+    save.textContent = '儲存標題';
+    save.onclick = async () => {
+      save.disabled = true;
+      const title = input.value.trim();
+      const result = title
+        ? await db.from('instagram_title_overrides').upsert({ media_id: item.id, title })
+        : await db.from('instagram_title_overrides').delete().eq('media_id', item.id);
+      save.disabled = false;
+      instagramTitleStatus.classList.toggle('is-error', Boolean(result.error));
+      instagramTitleStatus.textContent = result.error ? result.error.message : 'Instagram 燈箱標題已更新。';
+      if (!result.error) {
+        instagramTitleOverrides[item.id] = title;
+        instagramTitleDrafts.delete(item.id);
+      }
+    };
+
+    actions.append(visibility, orderActions, save);
+    row.append(image, field, actions);
+    instagramTitleList.append(row);
+  });
+}
+
 async function setupInstagramTitles() {
   try {
-    const [feedResponse, overrides] = await Promise.all([
-      fetch('./data/instagram-feed.json', { cache: 'no-store' }),
-      api.getInstagramTitles(),
-    ]);
-    const feed = await feedResponse.json();
-    instagramTitleList.textContent = '';
-    feed.items.forEach((item) => {
-      const row = document.createElement('article');
-      row.className = 'instagram-title-row';
-      const image = new Image(); image.src = item.src; image.alt = ''; image.loading = 'lazy';
-      const field = document.createElement('label');
-      const label = document.createElement('span'); label.textContent = `貼文 ${item.id}`;
-      const input = document.createElement('input'); input.type = 'text'; input.maxLength = 72; input.value = overrides[item.id] || ''; input.placeholder = item.title || 'NeoRealm LAB Visual';
-      const save = document.createElement('button'); save.type = 'button'; save.className = 'secondary-action'; save.textContent = '儲存標題';
-      save.onclick = async () => {
-        const title = input.value.trim();
-        const result = title
-          ? await db.from('instagram_title_overrides').upsert({ media_id: item.id, title })
-          : await db.from('instagram_title_overrides').delete().eq('media_id', item.id);
-        instagramTitleStatus.textContent = result.error ? result.error.message : 'Instagram 燈箱標題已更新。';
-      };
-      field.append(label, input); row.append(image, field, save); instagramTitleList.append(row);
-    });
-  } catch (error) { instagramTitleList.textContent = error.message; }
+    await loadInstagramLibrary();
+  } catch (error) {
+    instagramSelectionCount.textContent = '讀取失敗';
+    instagramTitleList.textContent = `無法讀取 Instagram 作品庫：${error.message}`;
+  }
 }
 
 async function runAuthorization(session) {

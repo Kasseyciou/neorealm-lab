@@ -9,11 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./admin.css?v=20260824-2" />
+    <link rel="stylesheet" href="./admin.css?v=20260824-3" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="./supabase-client.js?v=20260824-1" defer></script>
+    <script src="./supabase-client.js?v=20260824-2" defer></script>
     <script src="./web-projects.js?v=20260824-1" defer></script>
-    <script src="./admin-supabase.js?v=20260824-6" defer></script>
+    <script src="./admin-supabase.js?v=20260824-7" defer></script>
   </head>
   <body>
     <header class="admin-header">
@@ -137,12 +137,13 @@
       <section class="instagram-title-editor" aria-labelledby="instagram-title-editor-heading">
         <div class="panel-heading">
           <div>
-            <h2 id="instagram-title-editor-heading">Instagram 燈箱標題</h2>
-            <p>為每則同步貼文設定獨立展示標題；留白時使用 IG caption 第一個句子。</p>
+            <h2 id="instagram-title-editor-heading">Instagram 作品庫</h2>
+            <p>同步貼文會永久保留在作品庫。選擇最多 20 則顯示於前台，並可調整順序與燈箱標題。</p>
           </div>
+          <p class="instagram-selection-count" data-instagram-selection-count>正在讀取作品庫…</p>
         </div>
         <div class="instagram-title-list" data-instagram-title-list>
-          <p class="instagram-title-loading">正在讀取 Instagram feed…</p>
+          <p class="instagram-title-loading">正在讀取 Instagram 作品庫…</p>
         </div>
         <p class="admin-status" data-instagram-title-status role="status" aria-live="polite"></p>
       </section>

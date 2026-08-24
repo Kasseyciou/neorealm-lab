@@ -521,6 +521,13 @@ select:focus-visible {
   border-top: 1px solid var(--line);
 }
 
+.instagram-selection-count {
+  margin: 0;
+  color: var(--accent);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
 .instagram-title-list {
   display: grid;
   margin-top: 24px;
@@ -529,11 +536,15 @@ select:focus-visible {
 
 .instagram-title-row {
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr) auto;
+  grid-template-columns: 72px minmax(220px, 1fr) minmax(260px, auto);
   gap: 18px;
   align-items: center;
   padding: 14px 0;
   border-bottom: 1px solid var(--line);
+}
+
+.instagram-title-row.is-selected {
+  background: rgba(217, 244, 95, 0.035);
 }
 
 .instagram-title-row img {
@@ -566,6 +577,73 @@ select:focus-visible {
   outline: 0;
 }
 
+.instagram-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.instagram-title-row .instagram-visibility-control {
+  display: inline-flex;
+  min-height: 42px;
+  gap: 8px;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.instagram-visibility-control:has(input:checked) {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.instagram-visibility-control:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.instagram-title-row .instagram-visibility-control span {
+  color: inherit;
+  font-size: 12px;
+}
+
+.instagram-visibility-control input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.instagram-order-actions {
+  display: flex;
+  gap: 1px;
+}
+
+.instagram-order-actions button {
+  min-width: 44px;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.instagram-order-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.28;
+}
+
+.instagram-library-empty {
+  margin: 0;
+  padding: 28px 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 @media (max-width: 900px) {
   .admin-intro,
   .admin-workspace {
@@ -580,6 +658,16 @@ select:focus-visible {
     padding-left: 0;
     border-top: 1px solid var(--line);
     border-left: 0;
+  }
+
+  .instagram-title-row {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+
+  .instagram-row-actions {
+    grid-column: 2;
+    justify-self: start;
+    justify-content: flex-start;
   }
 }
 
@@ -638,8 +726,4 @@ select:focus-visible {
     width: 58px;
   }
 
-  .instagram-title-row .secondary-action {
-    grid-column: 2;
-    justify-self: start;
-  }
 }
