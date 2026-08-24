@@ -35,11 +35,11 @@ const extensionFor = (contentType) => contentType.includes('png')
 
 const cleanId = (value) => String(value).replace(/[^a-zA-Z0-9_-]/g, '');
 const storageUrl = (objectPath) => `${supabaseUrl}/storage/v1/object/public/instagram-media/${objectPath.split('/').map(encodeURIComponent).join('/')}`;
-const supabaseHeaders = (extra = {}) => ({
-  apikey: serviceRoleKey,
-  Authorization: `Bearer ${serviceRoleKey}`,
-  ...extra,
-});
+const supabaseHeaders = (extra = {}) => {
+  const headers = { apikey: serviceRoleKey, ...extra };
+  if (serviceRoleKey.split('.').length === 3) headers.Authorization = `Bearer ${serviceRoleKey}`;
+  return headers;
+};
 
 async function fetchInstagramMedia() {
   const firstPage = new URL(`https://graph.instagram.com/${userId}/media`);
