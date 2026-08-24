@@ -157,11 +157,14 @@ async function syncToSupabase(allMedia) {
     let videoPath = existing?.video_path || null;
     let carousel = Array.isArray(existing?.carousel) ? existing.carousel : [];
 
+    const shouldRefreshVideo = media.media_type === 'VIDEO'
+      && (!videoPath || /^https?:\/\//i.test(videoPath));
+
     try {
       if (!coverPath) coverPath = await uploadRemoteMedia(coverSource, `${id}/cover`);
       // Persist a web-ready Reel file as well as its cover. Without this the
       // front end has no native source and must fall back to Instagram's embed.
-      if (media.media_type === 'VIDEO' && !videoPath && media.media_url) {
+      if (shouldRefreshVideo && media.media_url) {
         videoPath = await uploadRemoteVideo(media.media_url, `${id}/video`);
       }
       if (!carousel.length && media.children?.data?.length) {
@@ -175,6 +178,10 @@ async function syncToSupabase(allMedia) {
       }
     } catch (error) {
       console.warn(`Skipping media assets for ${media.id}: ${error.message}`);
+      // Instagram media URLs are short-lived, but can still be played natively
+      // while the next archive attempt runs. This prevents a storage-size or
+      // transient download failure from immediately degrading a Reel to embed.
+      if (shouldRefreshVideo && media.media_url) videoPath = media.media_url;
       if (!coverPath) continue;
     }
 

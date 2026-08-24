@@ -5,9 +5,11 @@
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
   });
 
-  const publicUrl = (bucket, path) => path
-    ? sdk.storage.from(bucket).getPublicUrl(path).data.publicUrl
-    : '';
+  const publicUrl = (bucket, path) => {
+    if (!path) return '';
+    if (/^https?:\/\//i.test(path)) return path;
+    return sdk.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+  };
 
   const mapInstagramPost = (post) => ({
     id: post.media_id,

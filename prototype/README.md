@@ -1,10 +1,9 @@
 # NeoRealm LAB direction prototype
 
-This is the selected Direction B interaction prototype for NeoRealm LAB. Direction A remains only as an in-page comparison archive.
+This is the selected Realms in Motion interaction prototype for NeoRealm LAB. The former Direction A comparison has been removed from the production page.
 
-- Direction A: The Mutable Standard, an asymmetric editorial system.
-- Direction B: Realms in Motion, a cinematic release sequence using the supplied SVG logo, Marcellus, and Zen Old Mincho.
-- Both directions treat the new website as the primary case study.
+- The selected direction uses a cinematic release sequence with the supplied SVG logo, Marcellus, and Zen Old Mincho.
+- The new website remains the primary case study.
 - The B hero uses the supplied `ok1-1.mp4` with a loading poster, scroll depth, and a second copy state.
 - The studio story pairs three temporary abstract images with scroll-switched copy.
 - The studio visual is flush with the viewport's left and bottom edges on desktop.

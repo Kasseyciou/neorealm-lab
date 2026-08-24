@@ -23,9 +23,9 @@ Implemented production flow:
 2. Create a Meta app and authorize only the permissions required to read the account's own media.
 3. Store the access token in the GitHub Actions repository secret `INSTAGRAM_ACCESS_TOKEN`; the public Instagram user ID is configured in the workflow.
 4. Store the Supabase service-role key in the GitHub Actions repository secret `SUPABASE_SERVICE_ROLE_KEY`.
-5. GitHub Actions runs weekly, on every `main` deployment and on manual workflow dispatch.
+5. GitHub Actions runs daily, on every `main` deployment and on manual workflow dispatch.
 6. Follow the Instagram API pagination cursor and upsert every available post into `instagram_posts`; existing records are retained.
-7. Cache permanent cover images, carousel images and Reel video files in the public `instagram-media` Supabase Storage bucket. Larger Reel source files are optimized to web-ready H.264 MP4s before upload. The public lightbox plays archived Reel files natively; Instagram embed is only the fallback when the source cannot be archived.
+7. Cache permanent cover images, carousel images and Reel video files in the public `instagram-media` Supabase Storage bucket. Larger Reel source files are optimized to web-ready H.264 MP4s before upload. If Meta temporarily blocks an archive, the fresh short-lived Reel source URL is retained as a native playback bridge and refreshed daily; the Instagram embed is the final fallback only when that source fails in the browser.
 8. The first successful import selects the newest 20 posts. Later imports remain hidden until selected in `admin.html`, so new posts never displace an intentional front-end selection.
 9. The public page reads the selected, ordered records directly from Supabase and keeps `data/instagram-feed.json` plus the curated demo wall as failure fallbacks.
 

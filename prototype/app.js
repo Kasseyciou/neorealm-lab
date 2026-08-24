@@ -276,12 +276,28 @@ function setupTextMotion() {
 }
 
 function setupActiveNavigation() {
-  const links = Array.from(document.querySelectorAll('.b-nav .site-links a[href^="#"]'));
+  const links = Array.from(document.querySelectorAll('.b-nav .site-links [data-scroll-target]'));
   const sections = links
-    .map((link) => document.querySelector(link.getAttribute('href')))
+    .map((link) => document.getElementById(link.dataset.scrollTarget))
     .filter(Boolean)
     .sort((a, b) => a.offsetTop - b.offsetTop);
   if (!links.length || !sections.length) return;
+
+  const initialTarget = links.find((link) => `#${link.dataset.scrollTarget}` === window.location.hash);
+  if (initialTarget) {
+    window.requestAnimationFrame(() => {
+      document.getElementById(initialTarget.dataset.scrollTarget)?.scrollIntoView({ block: 'start' });
+      history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    });
+  }
+
+  links.forEach((link) => {
+    link.addEventListener('click', () => {
+      const section = document.getElementById(link.dataset.scrollTarget);
+      section?.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
+      if (window.location.hash) history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    });
+  });
 
   let frame = 0;
   const refresh = () => {
@@ -295,7 +311,7 @@ function setupActiveNavigation() {
     }
 
     links.forEach((link) => {
-      const active = link.getAttribute('href') === `#${activeId}`;
+      const active = link.dataset.scrollTarget === activeId;
       link.classList.toggle('is-active', active);
       if (active) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
@@ -435,6 +451,7 @@ function setupWorkLightbox() {
   let slides = [];
   let slideIndex = 0;
   let imageRequest = 0;
+  let nativeVideoFallback = '';
   const loadImage = (src, alt) => {
     const request = ++imageRequest;
     dialog.classList.add('is-loading');
@@ -545,6 +562,13 @@ function setupWorkLightbox() {
     loading.querySelector('em').textContent = 'Loading visual…';
     window.requestAnimationFrame(syncScrollbar);
   });
+  video.addEventListener('error', () => {
+    if (!nativeVideoFallback || !dialog.classList.contains('is-video-work')) return;
+    video.pause();
+    video.hidden = true;
+    embed.hidden = false;
+    embed.src = nativeVideoFallback;
+  });
   window.addEventListener('resize', syncScrollbar);
 
   const open = (source) => {
@@ -569,6 +593,7 @@ function setupWorkLightbox() {
     if (slides.length > 1) renderSlide();
     else if (!isVideo) loadImage(item.src, item.alt || item.title);
     const hasNativeVideo = isVideo && item.videoSrc;
+    nativeVideoFallback = isVideo && item.embedSrc ? item.embedSrc : '';
     dialog.classList.toggle('is-video-work', isVideo);
     const categoryLabel = window.NeoRealmWebProjects?.categories
       .find((entry) => entry.value === item.category)?.label;
@@ -617,6 +642,7 @@ function setupWorkLightbox() {
       video.removeAttribute('src');
       video.removeAttribute('poster');
       video.load();
+      nativeVideoFallback = '';
       embed.removeAttribute('src');
       scrollbar.hidden = true;
       trigger?.focus({ preventScroll: true });
