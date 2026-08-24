@@ -7,8 +7,8 @@ const destination = path.resolve('.site-dist');
 await rm(destination, { recursive: true, force: true });
 await cp(source, destination, { recursive: true });
 
-for (const privateFile of ['admin.html', 'admin.js', 'admin.css']) {
-  await rm(path.join(destination, privateFile), { force: true });
-}
+// The Supabase-backed editor is safe to publish: authentication and every
+// mutation are enforced server-side by Row Level Security.
+await rm(path.join(destination, 'admin.js'), { force: true });
 
-console.log('Prepared public Pages artifact without the local-only archive editor.');
+console.log('Prepared public Pages artifact with the Supabase-protected editor.');

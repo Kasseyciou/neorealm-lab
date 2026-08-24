@@ -90,6 +90,16 @@
     return copy(defaults);
   };
 
+  const getRemote = async () => {
+    try {
+      const remote = await global.NeoRealmSupabase?.getProjects?.();
+      return Array.isArray(remote) && remote.length ? normalize(remote) : get();
+    } catch (error) {
+      console.warn('NeoRealm project data could not be loaded from Supabase.', error);
+      return get();
+    }
+  };
+
   const save = (projects) => {
     const normalized = normalize(projects);
     if (!normalized.length) throw new Error('至少需要保留一個網站作品。');
@@ -102,6 +112,7 @@
     categories: copy(categories),
     defaults: copy(defaults),
     get,
+    getRemote,
     save,
   };
 }(window));

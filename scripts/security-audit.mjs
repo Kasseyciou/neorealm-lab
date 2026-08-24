@@ -2,10 +2,11 @@ import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 
 const publicRoot = path.resolve('.site-dist');
-const forbiddenPublicFiles = new Set(['admin.html', 'admin.js', 'admin.css']);
+const forbiddenPublicFiles = new Set(['admin.js']);
 const secretPatterns = [
   /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,
   /\bgh[pousr]_[A-Za-z0-9_]{30,}\b/,
+  /\bsb_secret_[A-Za-z0-9_-]{16,}\b/,
   /\bEAA[A-Za-z0-9]{40,}\b/,
   /(?:access[_-]?token|client[_-]?secret)\s*[:=]\s*["'][^"']{16,}["']/i,
 ];
@@ -36,4 +37,4 @@ if (findings.length) {
   process.exit(1);
 }
 
-console.log('Security audit passed: no public admin files or common embedded credential patterns found.');
+console.log('Security audit passed: no obsolete local-only editor or common embedded credential patterns found.');

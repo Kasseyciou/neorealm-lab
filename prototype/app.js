@@ -44,7 +44,11 @@ async function hydrateInstagramFeed() {
     const feed = await response.json();
     if (!Array.isArray(feed.items) || !feed.items.length) return false;
     let titleOverrides = {};
-    try { titleOverrides = JSON.parse(localStorage.getItem('neorealm-instagram-titles-v1') || '{}'); } catch { titleOverrides = {}; }
+    try {
+      titleOverrides = await window.NeoRealmSupabase?.getInstagramTitles?.() || {};
+    } catch {
+      try { titleOverrides = JSON.parse(localStorage.getItem('neorealm-instagram-titles-v1') || '{}'); } catch { titleOverrides = {}; }
+    }
 
     const fragment = document.createDocumentFragment();
     feed.items.slice(0, 20).forEach((item) => {
@@ -633,14 +637,14 @@ function setupInstagramWheel() {
   }, { passive: true });
 }
 
-function setupWebArchive() {
+async function setupWebArchive() {
   const store = window.NeoRealmWebProjects;
   const flow = document.querySelector('[data-archive-projects]');
   const filters = Array.from(document.querySelectorAll('[data-archive-filter]'));
   const status = document.querySelector('[data-archive-filter-status]');
   if (!store || !flow || !filters.length) return;
 
-  const projects = store.get();
+  const projects = await (store.getRemote?.() || store.get());
   const depthPattern = [0.72, 1, 0.58, 0.88, 0.66, 0.94];
 
   const createImage = (project) => {
@@ -914,7 +918,7 @@ async function boot() {
   setupActiveNavigation();
   await hydrateInstagramFeed();
   setupRandomizedGallery();
-  setupWebArchive();
+  await setupWebArchive();
   setupWaterfallMotion();
   window.NeoRealmColorfulHover?.setup();
   setupWorkLightbox();

@@ -10,8 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./admin.css?v=20260824-1" />
-    <script src="./web-projects.js?v=20260823-4" defer></script>
-    <script src="./admin.js?v=20260824-1" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="./supabase-client.js?v=20260824-1" defer></script>
+    <script src="./web-projects.js?v=20260824-1" defer></script>
+    <script src="./admin-supabase.js?v=20260824-1" defer></script>
   </head>
   <body>
     <header class="admin-header">
@@ -21,18 +23,33 @@
       <div>
         <p>Web Archive Editor</p>
         <a href="./index.html#b-archive">查看前台</a>
+        <button class="admin-signout" type="button" data-signout hidden>登出</button>
       </div>
     </header>
 
-    <main class="admin-shell">
+    <section class="admin-auth" data-auth-panel>
+      <form data-auth-form>
+        <p>Protected workspace</p>
+        <h1>登入內容後台</h1>
+        <label><span>Email</span><input type="email" name="email" value="kasseyworks@gmail.com" autocomplete="email" required /></label>
+        <label><span>密碼</span><input type="password" name="password" minlength="8" autocomplete="current-password" required /></label>
+        <div class="admin-auth-actions">
+          <button class="primary-action" type="submit" data-auth-action="signin">登入</button>
+          <button class="secondary-action" type="button" data-auth-action="signup">首次建立帳號</button>
+        </div>
+        <p class="admin-status" data-auth-status role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <main class="admin-shell" data-admin-app hidden>
       <section class="admin-intro" aria-labelledby="admin-title">
         <div>
           <h1 id="admin-title">網站作品管理</h1>
           <p>新增、更新或刪除作品，也可以拖曳調整前台顯示順序。</p>
         </div>
         <div class="admin-local-note">
-          <strong>Local prototype</strong>
-          <p>資料只儲存在目前瀏覽器。正式上線前仍需串接登入、資料庫與圖片儲存服務。</p>
+          <strong>Supabase secured</strong>
+          <p>作品資料與圖片已由 Supabase Database、Storage 與 Row Level Security 保護。</p>
         </div>
       </section>
 

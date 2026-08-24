@@ -88,6 +88,37 @@ select:focus-visible {
   color: var(--accent);
 }
 
+.admin-signout {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.admin-auth {
+  display: grid;
+  min-height: calc(100vh - 72px);
+  place-items: center;
+  padding: 32px 20px;
+}
+
+.admin-auth form {
+  display: grid;
+  width: min(460px, 100%);
+  gap: 20px;
+  padding: clamp(28px, 5vw, 52px);
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.admin-auth h1,
+.admin-auth p { margin: 0; }
+.admin-auth h1 { font: 400 clamp(34px, 5vw, 52px)/1.05 "Marcellus", serif; }
+.admin-auth > form > p:first-child { color: var(--accent); font: 12px "Marcellus", serif; letter-spacing: .12em; text-transform: uppercase; }
+.admin-auth label { display: grid; gap: 8px; }
+.admin-auth input { min-height: 48px; border: 1px solid var(--line); background: var(--black); color: var(--ink); padding: 10px 12px; }
+.admin-auth-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
 .admin-shell {
   width: min(1500px, 100%);
   margin: 0 auto;
