@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="./supabase-client.js?v=20260824-1" defer></script>
     <script src="./web-projects.js?v=20260824-1" defer></script>
-    <script src="./admin-supabase.js?v=20260824-1" defer></script>
+    <script src="./admin-supabase.js?v=20260824-2" defer></script>
   </head>
   <body>
     <header class="admin-header">
@@ -36,6 +36,7 @@
         <div class="admin-auth-actions">
           <button class="primary-action" type="submit" data-auth-action="signin">登入</button>
           <button class="secondary-action" type="button" data-auth-action="signup">首次建立帳號</button>
+          <button class="secondary-action" type="button" data-auth-action="resend">重寄驗證信</button>
         </div>
         <p class="admin-status" data-auth-status role="status" aria-live="polite"></p>
       </form>

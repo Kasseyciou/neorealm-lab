@@ -18,6 +18,9 @@ const lightboxPreview = document.querySelector('[data-lightbox-preview]');
 const lightboxEmpty = document.querySelector('[data-lightbox-empty]');
 const instagramTitleList = document.querySelector('[data-instagram-title-list]');
 const instagramTitleStatus = document.querySelector('[data-instagram-title-status]');
+const emailRedirectTo = location.hostname === 'kasseyciou.github.io'
+  ? 'https://kasseyciou.github.io/neorealm-lab/admin.html'
+  : new URL('./admin.html', location.href).href.split(/[?#]/)[0];
 let projects = [];
 let coverBlob = null;
 let pageBlob = null;
@@ -283,8 +286,24 @@ authForm.addEventListener('click', async (event) => {
   event.preventDefault();
   if (!authForm.reportValidity()) return;
   authStatus.textContent = '建立帳號中…';
-  const { error } = await db.auth.signUp({ email: authForm.elements.email.value, password: authForm.elements.password.value });
+  const { error } = await db.auth.signUp({
+    email: authForm.elements.email.value,
+    password: authForm.elements.password.value,
+    options: { emailRedirectTo },
+  });
   authStatus.textContent = error ? error.message : '帳號已建立。請先到信箱完成驗證，再回來登入。';
+});
+authForm.addEventListener('click', async (event) => {
+  if (event.target.dataset.authAction !== 'resend') return;
+  event.preventDefault();
+  if (!authForm.elements.email.reportValidity()) return;
+  authStatus.textContent = '正在重寄驗證信…';
+  const { error } = await db.auth.resend({
+    type: 'signup',
+    email: authForm.elements.email.value,
+    options: { emailRedirectTo },
+  });
+  authStatus.textContent = error ? error.message : '新的驗證信已寄出，請使用最新一封信中的連結。';
 });
 authForm.onsubmit = async (event) => {
   event.preventDefault();
