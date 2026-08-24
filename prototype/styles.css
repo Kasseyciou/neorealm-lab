@@ -3633,7 +3633,8 @@ body.work-lightbox-open {
   transition: filter 520ms cubic-bezier(0.16, 1, 0.3, 1), opacity 360ms ease, transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.work-lightbox-media video {
+.work-lightbox-media video,
+.work-lightbox-media iframe {
   display: block;
   width: auto;
   max-width: min(100%, 430px);
@@ -3644,7 +3645,12 @@ body.work-lightbox-open {
   object-fit: contain;
 }
 
+.work-lightbox-media iframe {
+  border: 0;
+}
+
 .work-lightbox-media video[hidden],
+.work-lightbox-media iframe[hidden],
 .work-lightbox-media img[hidden] {
   display: none;
 }
@@ -3878,7 +3884,8 @@ body.work-lightbox-open {
     max-height: 60dvh;
   }
 
-  .work-lightbox-media video {
+  .work-lightbox-media video,
+  .work-lightbox-media iframe {
     width: min(100%, 340px);
     height: auto;
     max-height: 66dvh;

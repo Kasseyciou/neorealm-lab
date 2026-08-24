@@ -61,6 +61,7 @@ async function hydrateInstagramFeed() {
         description: item.description || '',
         mediaType: item.mediaType || 'IMAGE',
         videoSrc: item.videoSrc || '',
+        embedSrc: item.mediaType === 'VIDEO' ? `${item.permalink.replace(/\/?$/, '/')}embed/` : '',
         permalink: item.permalink,
       });
 
@@ -287,6 +288,7 @@ function setupRandomizedGallery() {
       permalink: tile.dataset.permalink || tile.href,
       mediaType: tile.dataset.mediaType || 'IMAGE',
       videoSrc: tile.dataset.videoSrc || '',
+      embedSrc: tile.dataset.embedSrc || '',
     };
     Object.assign(tile.dataset, item);
     tile.setAttribute('aria-label', `放大查看 ${title}`);
@@ -361,6 +363,7 @@ function setupWorkLightbox() {
   const closeButton = dialog?.querySelector('[data-lightbox-close]');
   const image = dialog?.querySelector('[data-lightbox-image]');
   const video = dialog?.querySelector('[data-lightbox-video]');
+  const embed = dialog?.querySelector('[data-lightbox-embed]');
   const title = dialog?.querySelector('[data-lightbox-title]');
   const description = dialog?.querySelector('[data-lightbox-description]');
   const category = dialog?.querySelector('[data-lightbox-category]');
@@ -373,7 +376,7 @@ function setupWorkLightbox() {
     ...document.querySelectorAll('.instagram-tile'),
   ];
   let trigger = null;
-  if (!dialog || !closeButton || !image || !video || !title || !description || !category || !launch || !media || !scrollbar || !scrollbarThumb || !sources.length) return;
+  if (!dialog || !closeButton || !image || !video || !embed || !title || !description || !category || !launch || !media || !scrollbar || !scrollbarThumb || !sources.length) return;
 
   const syncScrollbar = () => {
     const scrollable = dialog.classList.contains('is-archive-work') && media.scrollHeight > media.clientHeight + 1;
@@ -445,8 +448,9 @@ function setupWorkLightbox() {
     title.textContent = item.title;
     description.textContent = item.description;
     const isArchive = item.lightboxKind === 'archive';
-    const isVideo = !isArchive && item.mediaType === 'VIDEO' && item.videoSrc;
-    dialog.classList.toggle('is-video-work', Boolean(isVideo));
+    const isVideo = !isArchive && item.mediaType === 'VIDEO';
+    const hasNativeVideo = isVideo && item.videoSrc;
+    dialog.classList.toggle('is-video-work', isVideo);
     const categoryLabel = window.NeoRealmWebProjects?.categories
       .find((entry) => entry.value === item.category)?.label;
     category.hidden = !isArchive || !categoryLabel;
@@ -455,8 +459,9 @@ function setupWorkLightbox() {
     if (item.projectUrl) launch.href = item.projectUrl;
     else launch.removeAttribute('href');
     image.hidden = Boolean(isVideo);
-    video.hidden = !isVideo;
-    if (isVideo) {
+    video.hidden = !hasNativeVideo;
+    embed.hidden = !isVideo || Boolean(hasNativeVideo);
+    if (hasNativeVideo) {
       video.poster = item.src;
       video.src = item.videoSrc;
       video.load();
@@ -466,6 +471,8 @@ function setupWorkLightbox() {
       video.removeAttribute('poster');
       video.load();
     }
+    if (isVideo && !hasNativeVideo && item.embedSrc) embed.src = item.embedSrc;
+    else embed.removeAttribute('src');
     dialog.showModal();
     document.body.classList.add('work-lightbox-open');
     window.requestAnimationFrame(() => {
@@ -487,6 +494,7 @@ function setupWorkLightbox() {
       video.removeAttribute('src');
       video.removeAttribute('poster');
       video.load();
+      embed.removeAttribute('src');
       scrollbar.hidden = true;
       trigger?.focus({ preventScroll: true });
     };
