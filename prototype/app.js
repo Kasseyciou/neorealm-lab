@@ -34,6 +34,25 @@ function shuffle(items) {
   return result;
 }
 
+function setMediaLoadingState(container, image) {
+  if (!container || !image) return;
+
+  const settle = () => {
+    container.classList.remove('is-media-loading');
+    container.classList.add('is-media-ready');
+  };
+
+  container.classList.remove('is-media-ready');
+  container.classList.add('is-media-loading');
+  image.addEventListener('load', settle, { once: true });
+  image.addEventListener('error', settle, { once: true });
+
+  // Cached images do not always emit a new load event after they are inserted.
+  queueMicrotask(() => {
+    if (image.complete && image.naturalWidth) settle();
+  });
+}
+
 async function hydrateInstagramFeed() {
   const railTrack = document.querySelector('.instagram-rail-track');
   if (!railTrack) return false;
@@ -74,12 +93,13 @@ async function hydrateInstagramFeed() {
       });
 
       const image = document.createElement('img');
-      image.src = item.src;
       image.width = 1080;
       image.height = item.mediaType === 'VIDEO' ? 1920 : 1350;
       image.loading = 'lazy';
       image.decoding = 'async';
       image.alt = tile.dataset.alt;
+      setMediaLoadingState(tile, image);
+      image.src = item.src;
       tile.append(image);
       if (Array.isArray(item.carousel) && item.carousel.length > 1) {
         tile.classList.add('has-carousel');
@@ -289,6 +309,7 @@ function setupRandomizedGallery() {
 
   const catalog = tiles.map((tile) => {
     const image = tile.querySelector('img');
+    setMediaLoadingState(tile, image);
     const src = image?.getAttribute('src') || '';
     const key = src.match(/ig-\d+/)?.[0] || '';
     const [fallbackTitle, fallbackDescription] = galleryMetadata[key] || ['NeoRealm LAB Visual', 'An ongoing visual experiment from NeoRealm LAB.'];
@@ -336,6 +357,7 @@ function setupRandomizedGallery() {
     const image = imageWrap?.querySelector('img');
     if (!item || !imageWrap || !image) return;
 
+    setMediaLoadingState(imageWrap, image);
     image.src = item.src;
     image.width = Number(item.width);
     image.height = Number(item.height);

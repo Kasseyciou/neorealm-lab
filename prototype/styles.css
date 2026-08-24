@@ -2101,6 +2101,41 @@ html {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transition: opacity 220ms ease;
+}
+
+.waterfall-image.ig-post.is-media-loading > img,
+.instagram-tile.is-media-loading > img {
+  opacity: 0;
+}
+
+.waterfall-image.ig-post.is-media-loading::before,
+.instagram-tile.is-media-loading::before {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  content: "";
+  background: #090a09;
+}
+
+.waterfall-image.ig-post.is-media-loading::after,
+.instagram-tile.is-media-loading::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 7;
+  width: 18px;
+  height: 18px;
+  content: "";
+  border: 1px solid rgba(242, 241, 235, 0.24);
+  border-top-color: var(--b-accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: instagram-media-spin 760ms linear infinite;
+}
+
+@keyframes instagram-media-spin {
+  to { transform: translate(-50%, -50%) rotate(1turn); }
 }
 
 .waterfall-card figcaption {
@@ -2192,7 +2227,7 @@ html {
   display: block;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  background-color: var(--b-surface);
+  background-color: #090a09;
   filter: grayscale(1) saturate(0.1) contrast(0.92);
   opacity: 0.7;
   transform: translateZ(0) scale(1);
@@ -2205,6 +2240,7 @@ html {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transition: opacity 220ms ease;
 }
 
 .instagram-rail-track[data-feed-source="instagram"] .instagram-tile img {
