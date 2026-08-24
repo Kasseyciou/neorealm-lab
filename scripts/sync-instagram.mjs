@@ -65,7 +65,7 @@ for (const media of payload.data.slice(0, 20)) {
   retainedFiles.add(filename);
   await writeFile(path.join(mediaDirectory, filename), Buffer.from(await mediaResponse.arrayBuffer()));
 
-  let videoSrc = '';
+  let videoSrc = media.media_type === 'VIDEO' ? media.media_url || '' : '';
   if (media.media_type === 'VIDEO' && media.media_url) {
     const videoResponse = await fetch(media.media_url);
     if (videoResponse.ok) {
