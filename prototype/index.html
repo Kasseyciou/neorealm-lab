@@ -38,12 +38,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Serif+TC:wght@400;500;600;700;900&family=Zen+Old+Mincho:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./styles.css?v=20260824-9" />
+    <link rel="stylesheet" href="./styles.css?v=20260824-10" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="./supabase-client.js?v=20260824-1" defer></script>
     <script src="./web-projects.js?v=20260824-1" defer></script>
     <script src="./colorful-hover.js?v=20260823-4" defer></script>
-    <script src="./app.js?v=20260824-9" defer></script>
+    <script src="./app.js?v=20260824-10" defer></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -548,6 +548,10 @@
         <figure class="work-lightbox-figure">
           <div id="work-lightbox-media" class="work-lightbox-media" tabindex="-1" aria-label="完整網站畫面，可使用方向鍵上下捲動">
             <img data-lightbox-image src="./assets/ig-demo/ig-01.jpg" alt="" width="864" height="1080" />
+            <div class="work-lightbox-loading" data-lightbox-loading role="status" aria-live="polite" aria-label="Loading visual">
+              <span aria-hidden="true"></span>
+              <em>Loading visual…</em>
+            </div>
             <video data-lightbox-video controls playsinline preload="metadata" hidden aria-label="Instagram Reel 影片播放器"></video>
             <iframe data-lightbox-embed title="Instagram Reel 影片播放器" allow="autoplay; fullscreen" allowfullscreen loading="lazy" scrolling="no" hidden></iframe>
             <div class="work-lightbox-carousel-controls" aria-label="輪播圖片控制">

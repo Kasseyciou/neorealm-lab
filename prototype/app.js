@@ -378,6 +378,7 @@ function setupWorkLightbox() {
   const dialog = document.querySelector('#work-lightbox');
   const closeButton = dialog?.querySelector('[data-lightbox-close]');
   const image = dialog?.querySelector('[data-lightbox-image]');
+  const loading = dialog?.querySelector('[data-lightbox-loading]');
   const video = dialog?.querySelector('[data-lightbox-video]');
   const embed = dialog?.querySelector('[data-lightbox-embed]');
   const previousSlide = dialog?.querySelector('[data-lightbox-previous]');
@@ -395,15 +396,33 @@ function setupWorkLightbox() {
     ...document.querySelectorAll('.instagram-tile'),
   ];
   let trigger = null;
-  if (!dialog || !closeButton || !image || !video || !embed || !previousSlide || !nextSlide || !slideStatus || !title || !description || !category || !launch || !media || !scrollbar || !scrollbarThumb || !sources.length) return;
+  if (!dialog || !closeButton || !image || !loading || !video || !embed || !previousSlide || !nextSlide || !slideStatus || !title || !description || !category || !launch || !media || !scrollbar || !scrollbarThumb || !sources.length) return;
 
   let slides = [];
   let slideIndex = 0;
+  let imageRequest = 0;
+  const loadImage = (src, alt) => {
+    const request = ++imageRequest;
+    dialog.classList.add('is-loading');
+    loading.hidden = false;
+    image.removeAttribute('src');
+    image.alt = '';
+    const preload = new Image();
+    preload.onload = () => {
+      if (request !== imageRequest) return;
+      image.src = src;
+      image.alt = alt;
+    };
+    preload.onerror = () => {
+      if (request !== imageRequest) return;
+      loading.querySelector('em').textContent = 'Image unavailable';
+    };
+    preload.src = src;
+  };
   const renderSlide = () => {
     if (!slides.length) return;
     const slide = slides[slideIndex];
-    image.src = slide.src;
-    image.alt = `${title.textContent}，第 ${slideIndex + 1} 張，共 ${slides.length} 張`;
+    loadImage(slide.src, `${title.textContent}，第 ${slideIndex + 1} 張，共 ${slides.length} 張`);
     previousSlide.disabled = slideIndex === 0;
     nextSlide.disabled = slideIndex === slides.length - 1;
     slideStatus.textContent = `${String(slideIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
@@ -486,7 +505,12 @@ function setupWorkLightbox() {
     event.preventDefault();
   });
   media.addEventListener('scroll', syncScrollbar, { passive: true });
-  image.addEventListener('load', () => window.requestAnimationFrame(syncScrollbar));
+  image.addEventListener('load', () => {
+    dialog.classList.remove('is-loading');
+    loading.hidden = true;
+    loading.querySelector('em').textContent = 'Loading visual…';
+    window.requestAnimationFrame(syncScrollbar);
+  });
   window.addEventListener('resize', syncScrollbar);
 
   const open = (source) => {
@@ -496,8 +520,6 @@ function setupWorkLightbox() {
     trigger = source;
     dialog.classList.toggle('is-archive-work', item.lightboxKind === 'archive');
     media.scrollTop = 0;
-    image.src = item.src;
-    image.alt = item.alt || item.title;
     title.textContent = item.title;
     description.textContent = item.description;
     const isArchive = item.lightboxKind === 'archive';
@@ -511,6 +533,7 @@ function setupWorkLightbox() {
     nextSlide.hidden = slides.length <= 1;
     slideStatus.hidden = slides.length <= 1;
     if (slides.length > 1) renderSlide();
+    else if (!isVideo) loadImage(item.src, item.alt || item.title);
     const hasNativeVideo = isVideo && item.videoSrc;
     dialog.classList.toggle('is-video-work', isVideo);
     const categoryLabel = window.NeoRealmWebProjects?.categories
@@ -524,6 +547,8 @@ function setupWorkLightbox() {
     video.hidden = !hasNativeVideo;
     embed.hidden = !isVideo || Boolean(hasNativeVideo);
     if (hasNativeVideo) {
+      dialog.classList.remove('is-loading');
+      loading.hidden = true;
       video.poster = item.src;
       video.src = item.videoSrc;
       video.load();

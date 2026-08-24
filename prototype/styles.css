@@ -3653,6 +3653,41 @@ body.work-lightbox-open {
   display: grid;
   min-height: 0;
   place-items: center;
+  overflow: hidden;
+  background: #090a09;
+}
+
+.work-lightbox-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  gap: 12px;
+  place-items: center;
+  align-content: center;
+  pointer-events: none;
+  background: #090a09;
+  color: var(--b-muted);
+  font: 600 10px/1 "Marcellus", serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.work-lightbox-loading span {
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(242, 241, 235, 0.24);
+  border-top-color: var(--b-accent);
+  border-radius: 50%;
+  animation: work-lightbox-spin 760ms linear infinite;
+}
+
+.work-lightbox-loading[hidden] {
+  display: none;
+}
+
+@keyframes work-lightbox-spin {
+  to { transform: rotate(1turn); }
 }
 
 .work-lightbox-carousel-controls {
@@ -3800,7 +3835,7 @@ body.work-lightbox-open {
 }
 
 .work-lightbox.is-archive-work .work-lightbox-media {
-  position: static;
+  position: relative;
   grid-column: 2;
   grid-row: 1;
   display: block;

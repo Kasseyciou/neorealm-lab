@@ -249,10 +249,13 @@ async function runAuthorization(session) {
     await db.auth.signOut();
     throw new Error('此帳號沒有後台權限。');
   }
+  const needsInitialLoad = app.hidden;
   authStatus.textContent = '正在載入管理介面…';
   authPanel.hidden = true; app.hidden = false; signout.hidden = false;
-  await loadAdminData();
-  resetEditor();
+  if (needsInitialLoad) {
+    await loadAdminData();
+    resetEditor();
+  }
 }
 
 function authorize(session) {
@@ -327,5 +330,8 @@ authForm.onsubmit = async (event) => {
     submit.disabled = false;
   }
 };
-db.auth.onAuthStateChange((_event, session) => setTimeout(() => authorize(session), 0));
+db.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_OUT') setTimeout(() => authorize(null), 0);
+  if (event === 'SIGNED_IN' && session) setTimeout(() => authorize(session), 0);
+});
 db.auth.getSession().then(({ data }) => authorize(data.session));
