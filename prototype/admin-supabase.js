@@ -25,6 +25,7 @@ let projects = [];
 let coverBlob = null;
 let pageBlob = null;
 let draggedId = '';
+let authorizationTask = null;
 
 const say = (message, error = false) => {
   status.textContent = message;
@@ -220,24 +221,41 @@ async function setupInstagramTitles() {
   } catch (error) { instagramTitleList.textContent = error.message; }
 }
 
-async function authorize(session) {
+async function runAuthorization(session) {
   if (!session) {
     authPanel.hidden = false; app.hidden = true; signout.hidden = true; return;
   }
-  const { data: profile } = await db.from('profiles').select('role').eq('id', session.user.id).maybeSingle();
+  authStatus.textContent = '正在確認後台權限…';
+  const { data: profile, error: profileError } = await db
+    .from('profiles').select('role').eq('id', session.user.id).maybeSingle();
+  if (profileError) throw profileError;
   let role = profile?.role;
   if (!role) {
     const { data, error } = await db.rpc('claim_first_admin');
+    if (error) throw error;
     if (!error && data) role = 'admin';
   }
   if (!['admin', 'editor'].includes(role)) {
     await db.auth.signOut();
-    authStatus.textContent = '此帳號沒有後台權限。';
-    return;
+    throw new Error('此帳號沒有後台權限。');
   }
   authPanel.hidden = true; app.hidden = false; signout.hidden = false;
   await Promise.all([loadProjects(), setupInstagramTitles()]);
   resetEditor();
+}
+
+function authorize(session) {
+  if (authorizationTask) return authorizationTask;
+  authorizationTask = runAuthorization(session)
+    .catch((error) => {
+      console.error('NeoRealm admin authorization failed.', error);
+      authPanel.hidden = false;
+      app.hidden = true;
+      signout.hidden = !session;
+      authStatus.textContent = `登入成功，但後台初始化失敗：${error.message || '未知錯誤'}`;
+    })
+    .finally(() => { authorizationTask = null; });
+  return authorizationTask;
 }
 
 store.categories.forEach(({ value, label }) => form.elements.category.add(new Option(label, value)));
@@ -307,9 +325,21 @@ authForm.addEventListener('click', async (event) => {
 });
 authForm.onsubmit = async (event) => {
   event.preventDefault();
+  const submit = authForm.querySelector('[data-auth-action="signin"]');
   authStatus.textContent = '登入中…';
-  const { error } = await db.auth.signInWithPassword({ email: authForm.elements.email.value, password: authForm.elements.password.value });
-  if (error) authStatus.textContent = error.message;
+  submit.disabled = true;
+  try {
+    const { data, error } = await db.auth.signInWithPassword({
+      email: authForm.elements.email.value,
+      password: authForm.elements.password.value,
+    });
+    if (error) throw error;
+    await authorize(data.session);
+  } catch (error) {
+    authStatus.textContent = error.message || '登入失敗，請稍後再試。';
+  } finally {
+    submit.disabled = false;
+  }
 };
 db.auth.onAuthStateChange((_event, session) => setTimeout(() => authorize(session), 0));
 db.auth.getSession().then(({ data }) => authorize(data.session));
