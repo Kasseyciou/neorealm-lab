@@ -3288,9 +3288,12 @@ html {
 
 .waterfall-column-near .waterfall-card.gallery-tail-quiet {
   --piece-scale: 0.9;
+  --piece-x: 72%;
+  z-index: 4;
   align-self: flex-end;
   width: 92%;
-  margin-top: -clamp(72px, 8vw, 128px);
+  margin-top: -clamp(220px, 18vw, 320px);
+  transform-origin: right center;
   box-shadow: 0 28px 84px rgba(0, 0, 0, 0.28);
 }
 
@@ -3387,6 +3390,7 @@ html {
 
   .waterfall-column-near .waterfall-card.gallery-tail-quiet {
     --piece-scale: 1;
+    --piece-x: 0%;
     width: 100%;
     margin-top: 0;
   }
