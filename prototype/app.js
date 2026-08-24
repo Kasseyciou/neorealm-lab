@@ -753,10 +753,8 @@ async function setupWebArchive() {
 
     const caption = document.createElement('figcaption');
     const title = document.createElement('strong');
-    const description = document.createElement('span');
     title.textContent = project.title;
-    description.textContent = project.description;
-    caption.append(title, description);
+    caption.append(title);
     figure.append(caption);
     prepareLightbox(figure, project);
     flow.append(figure);

@@ -2367,9 +2367,11 @@ html {
 
 .archive-flow .archive-case > img {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  /* Overscan by one physical pixel so fractional masonry dimensions never
+     reveal the graphite surface between the image and its bottom gradient. */
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
   object-fit: cover;
   object-position: center;
   filter: saturate(0.74) contrast(1.05);
@@ -2378,6 +2380,10 @@ html {
 }
 
 .archive-flow .archive-case figcaption {
+  right: -1px;
+  bottom: -1px;
+  left: -1px;
+  padding-bottom: 19px;
   z-index: 3;
   pointer-events: none;
 }
@@ -2396,9 +2402,9 @@ html {
 }
 
 .colorful-hover-canvas-archive {
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
 }
 
 .colorful-hover-canvas.is-active.is-ready {
