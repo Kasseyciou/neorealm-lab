@@ -1,0 +1,24 @@
+# NeoRealm LAB（新境研所）
+
+> NeoRealm LAB 是位於台灣、可遠端合作的獨立數位創意工作室，整合品牌策略、UI/UX、網站設計與前端開發，以及 AI Creative 影像和短影音製作。
+
+## Official website
+
+- Website: https://kasseyciou.github.io/neorealm-lab/
+- Instagram: https://www.instagram.com/neorealmlab/
+- Threads: https://www.threads.com/@neorealmlab
+
+## Services
+
+- 品牌網站設計與開發：品牌策略、資訊架構、UI/UX、響應式前端、部署與後續擴充。
+- UI/UX 設計：使用流程、桌機與行動介面，以及設計系統規劃。
+- AI Creative 影音製作：AI Key Visual、角色與場景系統、短影音及 Campaign 內容素材。
+
+## Working approach
+
+NeoRealm LAB 先釐清商業目標、受眾與訊息，再整合內容、視覺、動態與網站技術，將概念製作成可發布、可操作且可以上線的成果。
+
+## Contact
+
+- Email: kasseyworks@gmail.com
+- Telephone: +886-953-323-017
