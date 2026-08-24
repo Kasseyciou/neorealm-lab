@@ -1,5 +1,10 @@
-import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { tmpdir } from 'node:os';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+
+const execFileAsync = promisify(execFile);
 
 const token = process.env.INSTAGRAM_ACCESS_TOKEN;
 const userId = process.env.INSTAGRAM_USER_ID || 'me';
@@ -68,19 +73,57 @@ async function fetchInstagramMedia() {
   return media;
 }
 
-async function uploadRemoteMedia(sourceUrl, objectPath) {
-  const mediaResponse = await fetch(sourceUrl);
-  if (!mediaResponse.ok) throw new Error(`Media download returned ${mediaResponse.status}.`);
-  const contentType = mediaResponse.headers.get('content-type') || 'image/jpeg';
+async function uploadBuffer(buffer, contentType, objectPath) {
   const extension = extensionFor(contentType);
   const finalPath = `${objectPath}.${extension}`;
   const uploadResponse = await fetch(`${supabaseUrl}/storage/v1/object/instagram-media/${finalPath.split('/').map(encodeURIComponent).join('/')}`, {
     method: 'POST',
     headers: supabaseHeaders({ 'Content-Type': contentType, 'x-upsert': 'true' }),
-    body: await mediaResponse.arrayBuffer(),
+    body: buffer,
   });
   if (!uploadResponse.ok) throw new Error(`Supabase Storage upload returned ${uploadResponse.status}: ${(await uploadResponse.text()).slice(0, 300)}`);
   return finalPath;
+}
+
+async function uploadRemoteMedia(sourceUrl, objectPath) {
+  const mediaResponse = await fetch(sourceUrl);
+  if (!mediaResponse.ok) throw new Error(`Media download returned ${mediaResponse.status}.`);
+  const contentType = mediaResponse.headers.get('content-type') || 'image/jpeg';
+  return uploadBuffer(await mediaResponse.arrayBuffer(), contentType, objectPath);
+}
+
+async function optimizeVideo(buffer) {
+  const directory = await mkdtemp(path.join(tmpdir(), 'neorealm-instagram-'));
+  const source = path.join(directory, 'source.mp4');
+  const output = path.join(directory, 'web.mp4');
+  try {
+    await writeFile(source, buffer);
+    await execFileAsync('ffmpeg', [
+      '-y', '-i', source,
+      '-vf', 'scale=min(720\\,iw):-2',
+      '-c:v', 'libx264', '-preset', 'medium', '-crf', '24',
+      '-c:a', 'aac', '-b:a', '128k',
+      '-movflags', '+faststart', output,
+    ], { maxBuffer: 1024 * 1024 });
+    return readFile(output);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+}
+
+async function uploadRemoteVideo(sourceUrl, objectPath) {
+  const mediaResponse = await fetch(sourceUrl);
+  if (!mediaResponse.ok) throw new Error(`Video download returned ${mediaResponse.status}.`);
+  const source = Buffer.from(await mediaResponse.arrayBuffer());
+  const safeDirectUploadBytes = 35 * 1024 * 1024;
+  const video = source.length > safeDirectUploadBytes ? await optimizeVideo(source) : source;
+
+  try {
+    return await uploadBuffer(video, 'video/mp4', objectPath);
+  } catch (error) {
+    if (video !== source) throw error;
+    return uploadBuffer(await optimizeVideo(source), 'video/mp4', objectPath);
+  }
 }
 
 async function supabaseRequest(resource, options = {}) {
@@ -116,10 +159,10 @@ async function syncToSupabase(allMedia) {
 
     try {
       if (!coverPath) coverPath = await uploadRemoteMedia(coverSource, `${id}/cover`);
-      // Persist the original Reel file as well as its cover. Without this the
+      // Persist a web-ready Reel file as well as its cover. Without this the
       // front end has no native source and must fall back to Instagram's embed.
       if (media.media_type === 'VIDEO' && !videoPath && media.media_url) {
-        videoPath = await uploadRemoteMedia(media.media_url, `${id}/video`);
+        videoPath = await uploadRemoteVideo(media.media_url, `${id}/video`);
       }
       if (!carousel.length && media.children?.data?.length) {
         carousel = [];
