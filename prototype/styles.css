@@ -2072,6 +2072,14 @@ html {
   aspect-ratio: 4 / 5;
 }
 
+.waterfall-card.card-post.is-reel {
+  aspect-ratio: 9 / 16;
+}
+
+.waterfall-card.card-post.is-reel .waterfall-image img {
+  object-fit: cover;
+}
+
 .waterfall-image {
   position: absolute;
   inset: -2%;
@@ -2192,11 +2200,19 @@ html {
   scroll-snap-align: start;
 }
 
+.instagram-rail-track[data-feed-source="instagram"] .instagram-tile.is-reel {
+  aspect-ratio: 9 / 16;
+}
+
 .instagram-tile img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.instagram-rail-track[data-feed-source="instagram"] .instagram-tile.is-reel img {
+  object-fit: cover;
 }
 
 .instagram-tile:focus-visible {
@@ -2553,6 +2569,10 @@ html {
     aspect-ratio: 4 / 5;
   }
 
+  .waterfall-card.card-post.is-reel {
+    aspect-ratio: 9 / 16;
+  }
+
   .waterfall-card figcaption {
     padding: 70px 12px 12px;
   }
@@ -2676,7 +2696,7 @@ html {
   height: 178dvh;
   min-height: 1120px;
   overflow: visible;
-  background: #080908;
+  background: var(--kv-black);
 }
 
 .kv-sticky {
@@ -3613,6 +3633,26 @@ body.work-lightbox-open {
   transition: filter 520ms cubic-bezier(0.16, 1, 0.3, 1), opacity 360ms ease, transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.work-lightbox-media video {
+  display: block;
+  width: auto;
+  max-width: min(100%, 430px);
+  height: min(72dvh, 800px);
+  max-height: 100%;
+  aspect-ratio: 9 / 16;
+  background: #080908;
+  object-fit: contain;
+}
+
+.work-lightbox-media video[hidden],
+.work-lightbox-media img[hidden] {
+  display: none;
+}
+
+.work-lightbox.is-video-work .work-lightbox-figure {
+  width: min(100%, 760px);
+}
+
 .work-lightbox.is-visible .work-lightbox-media img {
   filter: blur(0) saturate(1);
   opacity: 1;
@@ -3836,6 +3876,12 @@ body.work-lightbox-open {
 
   .work-lightbox-media img {
     max-height: 60dvh;
+  }
+
+  .work-lightbox-media video {
+    width: min(100%, 340px);
+    height: auto;
+    max-height: 66dvh;
   }
 
   .work-lightbox figcaption {

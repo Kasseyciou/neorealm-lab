@@ -52,19 +52,22 @@ async function hydrateInstagramFeed() {
       tile.href = item.permalink;
       tile.target = '_blank';
       tile.rel = 'noreferrer';
+      tile.classList.toggle('is-reel', item.mediaType === 'VIDEO');
       tile.setAttribute('aria-label', `放大查看 ${item.title || 'NeoRealm LAB Visual'}`);
       Object.assign(tile.dataset, {
         src: item.src,
         alt: item.alt || item.title || 'NeoRealm LAB Instagram 作品',
         title: item.title || 'NeoRealm LAB Visual',
         description: item.description || '',
+        mediaType: item.mediaType || 'IMAGE',
+        videoSrc: item.videoSrc || '',
         permalink: item.permalink,
       });
 
       const image = document.createElement('img');
       image.src = item.src;
       image.width = 1080;
-      image.height = 1350;
+      image.height = item.mediaType === 'VIDEO' ? 1920 : 1350;
       image.loading = 'lazy';
       image.decoding = 'async';
       image.alt = tile.dataset.alt;
@@ -282,6 +285,8 @@ function setupRandomizedGallery() {
       title,
       description,
       permalink: tile.dataset.permalink || tile.href,
+      mediaType: tile.dataset.mediaType || 'IMAGE',
+      videoSrc: tile.dataset.videoSrc || '',
     };
     Object.assign(tile.dataset, item);
     tile.setAttribute('aria-label', `放大查看 ${title}`);
@@ -319,6 +324,7 @@ function setupRandomizedGallery() {
     image.alt = item.alt;
     imageWrap.style.setProperty('--ig-image', `url("${item.src}")`);
     Object.assign(card.dataset, item);
+    card.classList.toggle('is-reel', item.mediaType === 'VIDEO');
 
     let trigger = card.querySelector('.work-lightbox-trigger');
     if (!trigger) {
@@ -354,6 +360,7 @@ function setupWorkLightbox() {
   const dialog = document.querySelector('#work-lightbox');
   const closeButton = dialog?.querySelector('[data-lightbox-close]');
   const image = dialog?.querySelector('[data-lightbox-image]');
+  const video = dialog?.querySelector('[data-lightbox-video]');
   const title = dialog?.querySelector('[data-lightbox-title]');
   const description = dialog?.querySelector('[data-lightbox-description]');
   const category = dialog?.querySelector('[data-lightbox-category]');
@@ -366,7 +373,7 @@ function setupWorkLightbox() {
     ...document.querySelectorAll('.instagram-tile'),
   ];
   let trigger = null;
-  if (!dialog || !closeButton || !image || !title || !description || !category || !launch || !media || !scrollbar || !scrollbarThumb || !sources.length) return;
+  if (!dialog || !closeButton || !image || !video || !title || !description || !category || !launch || !media || !scrollbar || !scrollbarThumb || !sources.length) return;
 
   const syncScrollbar = () => {
     const scrollable = dialog.classList.contains('is-archive-work') && media.scrollHeight > media.clientHeight + 1;
@@ -438,6 +445,8 @@ function setupWorkLightbox() {
     title.textContent = item.title;
     description.textContent = item.description;
     const isArchive = item.lightboxKind === 'archive';
+    const isVideo = !isArchive && item.mediaType === 'VIDEO' && item.videoSrc;
+    dialog.classList.toggle('is-video-work', Boolean(isVideo));
     const categoryLabel = window.NeoRealmWebProjects?.categories
       .find((entry) => entry.value === item.category)?.label;
     category.hidden = !isArchive || !categoryLabel;
@@ -445,6 +454,18 @@ function setupWorkLightbox() {
     launch.hidden = !isArchive || !item.projectUrl;
     if (item.projectUrl) launch.href = item.projectUrl;
     else launch.removeAttribute('href');
+    image.hidden = Boolean(isVideo);
+    video.hidden = !isVideo;
+    if (isVideo) {
+      video.poster = item.src;
+      video.src = item.videoSrc;
+      video.load();
+    } else {
+      video.pause();
+      video.removeAttribute('src');
+      video.removeAttribute('poster');
+      video.load();
+    }
     dialog.showModal();
     document.body.classList.add('work-lightbox-open');
     window.requestAnimationFrame(() => {
@@ -461,6 +482,11 @@ function setupWorkLightbox() {
     const finish = () => {
       if (dialog.open) dialog.close();
       dialog.classList.remove('is-archive-work');
+      dialog.classList.remove('is-video-work');
+      video.pause();
+      video.removeAttribute('src');
+      video.removeAttribute('poster');
+      video.load();
       scrollbar.hidden = true;
       trigger?.focus({ preventScroll: true });
     };

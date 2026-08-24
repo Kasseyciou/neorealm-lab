@@ -65,6 +65,19 @@ for (const media of payload.data.slice(0, 20)) {
   retainedFiles.add(filename);
   await writeFile(path.join(mediaDirectory, filename), Buffer.from(await mediaResponse.arrayBuffer()));
 
+  let videoSrc = '';
+  if (media.media_type === 'VIDEO' && media.media_url) {
+    const videoResponse = await fetch(media.media_url);
+    if (videoResponse.ok) {
+      const videoFilename = `${String(media.id).replace(/[^a-zA-Z0-9_-]/g, '')}.mp4`;
+      retainedFiles.add(videoFilename);
+      await writeFile(path.join(mediaDirectory, videoFilename), Buffer.from(await videoResponse.arrayBuffer()));
+      videoSrc = `./assets/instagram-live/${videoFilename}`;
+    } else {
+      console.warn(`Reel ${media.id} will use its poster only: video download returned ${videoResponse.status}.`);
+    }
+  }
+
   const caption = String(media.caption || '').replace(/\s+/g, ' ').trim();
   const title = caption.split(/[。！？.!?\n]/)[0].trim().slice(0, 72) || 'NeoRealm LAB Visual';
   items.push({
@@ -74,6 +87,7 @@ for (const media of payload.data.slice(0, 20)) {
     alt: title,
     mediaType: media.media_type || 'IMAGE',
     src: `./assets/instagram-live/${filename}`,
+    videoSrc,
     permalink: media.permalink,
     timestamp: media.timestamp || '',
   });

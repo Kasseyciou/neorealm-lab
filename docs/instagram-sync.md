@@ -51,7 +51,7 @@ Do not add real values to `.env`, source files, GitHub Actions YAML, screenshots
 
 - The newest 20 posts are synchronized; the page randomizes their order on every visit.
 - The gallery selects 10 of those posts for the layered waterfall presentation.
-- Reels use their thumbnail and open in the existing site lightbox; the original Instagram permalink remains in the feed data.
+- Reels use a cached 9:16 thumbnail in both galleries and open as a controlled, inline video in the site lightbox. Image and carousel posts retain their native 4:5 presentation.
 - If synchronization fails, GitHub Pages keeps the previous successful deployment. Local development and an empty feed use the curated demo images.
 
 Official starting points:
