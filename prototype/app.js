@@ -77,6 +77,14 @@ async function hydrateInstagramFeed() {
       image.decoding = 'async';
       image.alt = tile.dataset.alt;
       tile.append(image);
+      if (Array.isArray(item.carousel) && item.carousel.length > 1) {
+        tile.classList.add('has-carousel');
+        const badge = document.createElement('span');
+        badge.className = 'instagram-carousel-badge';
+        badge.setAttribute('aria-hidden', 'true');
+        badge.innerHTML = '<svg viewBox="0 0 18 18"><rect x="5" y="3" width="10" height="10" fill="none" stroke="currentColor"/><path d="M3 6v9h9" fill="none" stroke="currentColor"/></svg>';
+        tile.append(badge);
+      }
       fragment.append(tile);
     });
 

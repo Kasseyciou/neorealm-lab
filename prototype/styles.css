@@ -2219,6 +2219,25 @@ html {
   opacity: 1;
 }
 
+.instagram-carousel-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  background: rgba(17, 17, 15, 0.76);
+  color: var(--b-ink);
+  pointer-events: none;
+}
+
+.instagram-carousel-badge svg {
+  width: 18px;
+  height: 18px;
+}
+
 .archive-waterfall {
   background: var(--b-black);
 }
@@ -3694,6 +3713,8 @@ body.work-lightbox-open {
 
 .work-lightbox-media iframe {
   border: 0;
+  clip-path: inset(0 12px 0 0);
+  margin-right: -12px;
 }
 
 .work-lightbox-media video[hidden],
