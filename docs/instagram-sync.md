@@ -25,15 +25,15 @@ Implemented production flow:
 4. Store the Supabase service-role key in the GitHub Actions repository secret `SUPABASE_SERVICE_ROLE_KEY`.
 5. GitHub Actions runs weekly, on every `main` deployment and on manual workflow dispatch.
 6. Follow the Instagram API pagination cursor and upsert every available post into `instagram_posts`; existing records are retained.
-7. Cache permanent cover and carousel images in the public `instagram-media` Supabase Storage bucket. Reels use the official Instagram embed to avoid exhausting storage with a complete video archive.
+7. Cache permanent cover images, carousel images and Reel video files in the public `instagram-media` Supabase Storage bucket. The public lightbox plays archived Reel files natively; Instagram embed is only the fallback when the source cannot be archived.
 8. The first successful import selects the newest 20 posts. Later imports remain hidden until selected in `admin.html`, so new posts never displace an intentional front-end selection.
 9. The public page reads the selected, ordered records directly from Supabase and keeps `data/instagram-feed.json` plus the curated demo wall as failure fallbacks.
 
 ## Editorial rules
 
 - A new post enters the permanent library automatically but does not enter the public wall until selected in the admin.
-- Reels use their thumbnail in the wall and open the original permalink for playback until the site has an approved video-hosting strategy.
-- Carousel posts use the cover by default; child media can be enabled later.
+- Reels use their thumbnail in the wall and play their archived MP4 in the lightbox; the Instagram embed is a fallback only when Meta withholds the media file.
+- Carousel posts use the cover in the wall and expose their synchronized child media in the lightbox.
 - Captions are optional display data and must be truncated safely.
 - Posts deleted or archived on Instagram remain in the Supabase library unless they are deliberately removed there.
 

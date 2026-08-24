@@ -116,6 +116,11 @@ async function syncToSupabase(allMedia) {
 
     try {
       if (!coverPath) coverPath = await uploadRemoteMedia(coverSource, `${id}/cover`);
+      // Persist the original Reel file as well as its cover. Without this the
+      // front end has no native source and must fall back to Instagram's embed.
+      if (media.media_type === 'VIDEO' && !videoPath && media.media_url) {
+        videoPath = await uploadRemoteMedia(media.media_url, `${id}/video`);
+      }
       if (!carousel.length && media.children?.data?.length) {
         carousel = [];
         for (const [childIndex, child] of media.children.data.entries()) {
