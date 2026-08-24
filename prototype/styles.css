@@ -3302,21 +3302,29 @@ html {
   width: 48px;
   height: 48px;
   place-items: center;
-  border: 1px solid rgba(242, 241, 235, 0.28);
+  border: 1px solid rgba(242, 241, 235, 0.22);
   border-radius: 0;
-  background: rgba(17, 17, 15, 0.94);
-  color: var(--b-muted);
+  background: rgba(27, 28, 25, 0.48);
+  color: rgba(242, 241, 235, 0.66);
   cursor: pointer;
-  opacity: 0.58;
+  opacity: 0.82;
+  backdrop-filter: blur(10px) saturate(82%);
+  -webkit-backdrop-filter: blur(10px) saturate(82%);
   transition: border-color 180ms ease, color 180ms ease, opacity 180ms ease, transform 180ms ease;
 }
 
 .scroll-top-control:hover,
 .scroll-top-control:focus-visible,
 .scroll-top-control.is-active {
-  border-color: var(--b-accent);
-  color: var(--b-accent);
-  opacity: 1;
+  border-color: rgba(242, 241, 235, 0.46);
+  background: rgba(27, 28, 25, 0.66);
+  color: var(--b-ink);
+  opacity: 0.94;
+}
+
+.scroll-top-control:focus-visible {
+  outline: 1px solid rgba(242, 241, 235, 0.5);
+  outline-offset: 3px;
 }
 
 .scroll-top-control:active {
@@ -3666,11 +3674,13 @@ body.work-lightbox-open {
   z-index: 2;
   width: 48px;
   height: 48px;
-  border: 1px solid rgba(242, 241, 235, 0.34);
+  border: 1px solid rgba(242, 241, 235, 0.26);
   border-radius: 0;
-  background: rgba(17, 17, 15, 0.62);
-  color: var(--b-ink);
+  background: rgba(27, 28, 25, 0.48);
+  color: rgba(242, 241, 235, 0.76);
   cursor: pointer;
+  backdrop-filter: blur(10px) saturate(82%);
+  -webkit-backdrop-filter: blur(10px) saturate(82%);
   transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease;
 }
 
@@ -3695,10 +3705,14 @@ body.work-lightbox-open {
 
 .work-lightbox-close:hover,
 .work-lightbox-close:focus-visible {
-  border-color: var(--b-accent);
-  outline: 0;
-  background: var(--b-accent);
-  color: var(--b-black);
+  border-color: rgba(242, 241, 235, 0.5);
+  background: rgba(27, 28, 25, 0.68);
+  color: var(--b-ink);
+}
+
+.work-lightbox-close:focus-visible {
+  outline: 1px solid rgba(242, 241, 235, 0.5);
+  outline-offset: 3px;
 }
 
 .work-lightbox-figure {
@@ -4306,11 +4320,13 @@ body.project-dialog-open {
   position: relative;
   width: 48px;
   height: 48px;
-  border: 1px solid rgba(242, 241, 235, 0.34);
+  border: 1px solid rgba(242, 241, 235, 0.26);
   border-radius: 0;
-  background: transparent;
-  color: var(--b-ink);
+  background: rgba(27, 28, 25, 0.48);
+  color: rgba(242, 241, 235, 0.76);
   cursor: pointer;
+  backdrop-filter: blur(10px) saturate(82%);
+  -webkit-backdrop-filter: blur(10px) saturate(82%);
   transition: border-color 180ms ease, background-color 180ms ease;
 }
 
@@ -4333,15 +4349,16 @@ body.project-dialog-open {
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-.project-dialog-close:hover {
-  border-color: var(--b-accent);
-  background: var(--b-accent);
-  color: var(--b-black);
+.project-dialog-close:hover,
+.project-dialog-close:focus-visible {
+  border-color: rgba(242, 241, 235, 0.5);
+  background: rgba(27, 28, 25, 0.68);
+  color: var(--b-ink);
 }
 
 .project-dialog-close:focus-visible {
-  border-color: var(--b-accent);
-  outline: 0;
+  outline: 1px solid rgba(242, 241, 235, 0.5);
+  outline-offset: 3px;
 }
 
 .project-dialog-scroll {
