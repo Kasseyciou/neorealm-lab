@@ -18,9 +18,6 @@ const lightboxPreview = document.querySelector('[data-lightbox-preview]');
 const lightboxEmpty = document.querySelector('[data-lightbox-empty]');
 const instagramTitleList = document.querySelector('[data-instagram-title-list]');
 const instagramTitleStatus = document.querySelector('[data-instagram-title-status]');
-const emailRedirectTo = location.hostname === 'kasseyciou.github.io'
-  ? 'https://kasseyciou.github.io/neorealm-lab/admin.html'
-  : new URL('./admin.html', location.href).href.split(/[?#]/)[0];
 let projects = [];
 let coverBlob = null;
 let pageBlob = null;
@@ -229,23 +226,11 @@ async function runAuthorization(session) {
   if (!session) {
     authPanel.hidden = false; app.hidden = true; signout.hidden = true; return;
   }
-  authStatus.textContent = '正在確認後台權限…';
-  const { data: profile, error: profileError } = await withTimeout(
-    db.from('profiles').select('role').eq('id', session.user.id).maybeSingle(),
-    12000,
-    '權限查詢',
-  );
-  if (profileError) throw profileError;
-  let role = profile?.role;
-  if (!role) {
-    const { data, error } = await withTimeout(db.rpc('claim_first_admin'), 12000, '管理員啟用');
-    if (error) throw error;
-    if (!error && data) role = 'admin';
-  }
-  if (!['admin', 'editor'].includes(role)) {
+  if (session.user.email?.toLowerCase() !== 'kasseyworks@gmail.com') {
     await db.auth.signOut();
     throw new Error('此帳號沒有後台權限。');
   }
+  authStatus.textContent = '正在載入管理介面…';
   authPanel.hidden = true; app.hidden = false; signout.hidden = false;
   await withTimeout(Promise.all([loadProjects(), setupInstagramTitles()]), 15000, '後台資料載入');
   resetEditor();
@@ -305,31 +290,6 @@ deleteButton.onclick = () => { const project = projects.find(({ id }) => id === 
 document.querySelector('[data-add-project]').onclick = resetEditor;
 document.querySelector('[data-cancel-edit]').onclick = resetEditor;
 signout.onclick = () => db.auth.signOut();
-authForm.addEventListener('click', async (event) => {
-  const action = event.target.dataset.authAction;
-  if (action !== 'signup') return;
-  event.preventDefault();
-  if (!authForm.reportValidity()) return;
-  authStatus.textContent = '建立帳號中…';
-  const { error } = await db.auth.signUp({
-    email: authForm.elements.email.value,
-    password: authForm.elements.password.value,
-    options: { emailRedirectTo },
-  });
-  authStatus.textContent = error ? error.message : '帳號已建立。請先到信箱完成驗證，再回來登入。';
-});
-authForm.addEventListener('click', async (event) => {
-  if (event.target.dataset.authAction !== 'resend') return;
-  event.preventDefault();
-  if (!authForm.elements.email.reportValidity()) return;
-  authStatus.textContent = '正在重寄驗證信…';
-  const { error } = await db.auth.resend({
-    type: 'signup',
-    email: authForm.elements.email.value,
-    options: { emailRedirectTo },
-  });
-  authStatus.textContent = error ? error.message : '新的驗證信已寄出，請使用最新一封信中的連結。';
-});
 authForm.onsubmit = async (event) => {
   event.preventDefault();
   const submit = authForm.querySelector('[data-auth-action="signin"]');
