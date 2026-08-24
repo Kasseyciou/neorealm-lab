@@ -14,6 +14,9 @@ let projects = store?.get() || [];
 let uploadedCoverImage = '';
 let uploadedLightboxImage = '';
 let draggedId = '';
+const instagramTitleList = document.querySelector('[data-instagram-title-list]');
+const instagramTitleStatus = document.querySelector('[data-instagram-title-status]');
+const INSTAGRAM_TITLE_KEY = 'neorealm-instagram-titles-v1';
 
 const categoryLabel = (value) => store.categories.find((category) => category.value === value)?.label || value;
 const icons = {
@@ -287,3 +290,50 @@ document.querySelector('[data-cancel-edit]').addEventListener('click', resetEdit
 
 renderList();
 resetEditor();
+
+async function setupInstagramTitleEditor() {
+  if (!instagramTitleList || !instagramTitleStatus) return;
+  try {
+    const response = await fetch('./data/instagram-feed.json', { cache: 'no-store' });
+    if (!response.ok) throw new Error('無法讀取 Instagram feed。');
+    const feed = await response.json();
+    let overrides = {};
+    try { overrides = JSON.parse(localStorage.getItem(INSTAGRAM_TITLE_KEY) || '{}'); } catch { overrides = {}; }
+    instagramTitleList.textContent = '';
+    feed.items.forEach((item) => {
+      const row = document.createElement('article');
+      row.className = 'instagram-title-row';
+      const thumbnail = document.createElement('img');
+      thumbnail.src = item.src;
+      thumbnail.alt = '';
+      thumbnail.loading = 'lazy';
+      const field = document.createElement('label');
+      const label = document.createElement('span');
+      label.textContent = `貼文 ${item.id}`;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.maxLength = 72;
+      input.value = overrides[item.id] || '';
+      input.placeholder = item.title || 'NeoRealm LAB Visual';
+      input.setAttribute('aria-label', `設定貼文 ${item.id} 的燈箱標題`);
+      const save = document.createElement('button');
+      save.type = 'button';
+      save.className = 'secondary-action';
+      save.textContent = '儲存標題';
+      save.addEventListener('click', () => {
+        const value = input.value.trim();
+        if (value) overrides[item.id] = value;
+        else delete overrides[item.id];
+        localStorage.setItem(INSTAGRAM_TITLE_KEY, JSON.stringify(overrides));
+        instagramTitleStatus.textContent = value ? '燈箱標題已儲存，重新整理前台後生效。' : '已恢復使用 IG caption 自動標題。';
+      });
+      field.append(label, input);
+      row.append(thumbnail, field, save);
+      instagramTitleList.append(row);
+    });
+  } catch (error) {
+    instagramTitleList.textContent = error.message;
+  }
+}
+
+setupInstagramTitleEditor();

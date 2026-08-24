@@ -43,6 +43,8 @@ async function hydrateInstagramFeed() {
     if (!response.ok) return false;
     const feed = await response.json();
     if (!Array.isArray(feed.items) || !feed.items.length) return false;
+    let titleOverrides = {};
+    try { titleOverrides = JSON.parse(localStorage.getItem('neorealm-instagram-titles-v1') || '{}'); } catch { titleOverrides = {}; }
 
     const fragment = document.createDocumentFragment();
     feed.items.slice(0, 20).forEach((item) => {
@@ -53,16 +55,18 @@ async function hydrateInstagramFeed() {
       tile.target = '_blank';
       tile.rel = 'noreferrer';
       tile.classList.toggle('is-reel', item.mediaType === 'VIDEO');
-      tile.setAttribute('aria-label', `放大查看 ${item.title || 'NeoRealm LAB Visual'}`);
+      const displayTitle = String(titleOverrides[item.id] || item.title || 'NeoRealm LAB Visual').trim();
+      tile.setAttribute('aria-label', `放大查看 ${displayTitle}`);
       Object.assign(tile.dataset, {
         src: item.src,
         alt: item.alt || item.title || 'NeoRealm LAB Instagram 作品',
-        title: item.title || 'NeoRealm LAB Visual',
+        title: displayTitle,
         description: item.description || '',
         mediaType: item.mediaType || 'IMAGE',
         videoSrc: item.videoSrc || '',
         embedSrc: item.mediaType === 'VIDEO' ? `${item.permalink.replace(/\/?$/, '/')}embed/` : '',
         permalink: item.permalink,
+        carousel: JSON.stringify(Array.isArray(item.carousel) ? item.carousel : []),
       });
 
       const image = document.createElement('img');
@@ -364,6 +368,9 @@ function setupWorkLightbox() {
   const image = dialog?.querySelector('[data-lightbox-image]');
   const video = dialog?.querySelector('[data-lightbox-video]');
   const embed = dialog?.querySelector('[data-lightbox-embed]');
+  const previousSlide = dialog?.querySelector('[data-lightbox-previous]');
+  const nextSlide = dialog?.querySelector('[data-lightbox-next]');
+  const slideStatus = dialog?.querySelector('[data-lightbox-slide-status]');
   const title = dialog?.querySelector('[data-lightbox-title]');
   const description = dialog?.querySelector('[data-lightbox-description]');
   const category = dialog?.querySelector('[data-lightbox-category]');
@@ -376,7 +383,29 @@ function setupWorkLightbox() {
     ...document.querySelectorAll('.instagram-tile'),
   ];
   let trigger = null;
-  if (!dialog || !closeButton || !image || !video || !embed || !title || !description || !category || !launch || !media || !scrollbar || !scrollbarThumb || !sources.length) return;
+  if (!dialog || !closeButton || !image || !video || !embed || !previousSlide || !nextSlide || !slideStatus || !title || !description || !category || !launch || !media || !scrollbar || !scrollbarThumb || !sources.length) return;
+
+  let slides = [];
+  let slideIndex = 0;
+  const renderSlide = () => {
+    if (!slides.length) return;
+    const slide = slides[slideIndex];
+    image.src = slide.src;
+    image.alt = `${title.textContent}，第 ${slideIndex + 1} 張，共 ${slides.length} 張`;
+    previousSlide.disabled = slideIndex === 0;
+    nextSlide.disabled = slideIndex === slides.length - 1;
+    slideStatus.textContent = `${String(slideIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+  };
+
+  const stepSlide = (offset) => {
+    const nextIndex = clamp(slideIndex + offset, 0, slides.length - 1);
+    if (nextIndex === slideIndex) return;
+    slideIndex = nextIndex;
+    renderSlide();
+  };
+
+  previousSlide.addEventListener('click', () => stepSlide(-1));
+  nextSlide.addEventListener('click', () => stepSlide(1));
 
   const syncScrollbar = () => {
     const scrollable = dialog.classList.contains('is-archive-work') && media.scrollHeight > media.clientHeight + 1;
@@ -423,6 +452,18 @@ function setupWorkLightbox() {
     event.preventDefault();
   });
   dialog.addEventListener('keydown', (event) => {
+    if (dialog.classList.contains('has-carousel') && !event.target.closest('a, button, input, textarea, select')) {
+      if (event.key === 'ArrowLeft') {
+        stepSlide(-1);
+        event.preventDefault();
+        return;
+      }
+      if (event.key === 'ArrowRight') {
+        stepSlide(1);
+        event.preventDefault();
+        return;
+      }
+    }
     if (!dialog.classList.contains('is-archive-work') || event.target.closest('a, button, input, textarea, select')) return;
     const step = Math.max(80, media.clientHeight * 0.82);
     if (event.key === 'ArrowDown' || event.key === 'PageDown') media.scrollTop += step;
@@ -449,6 +490,15 @@ function setupWorkLightbox() {
     description.textContent = item.description;
     const isArchive = item.lightboxKind === 'archive';
     const isVideo = !isArchive && item.mediaType === 'VIDEO';
+    let carousel = [];
+    try { carousel = JSON.parse(item.carousel || '[]'); } catch { carousel = []; }
+    slides = !isArchive && !isVideo && carousel.length > 1 ? carousel : [];
+    slideIndex = 0;
+    dialog.classList.toggle('has-carousel', slides.length > 1);
+    previousSlide.hidden = slides.length <= 1;
+    nextSlide.hidden = slides.length <= 1;
+    slideStatus.hidden = slides.length <= 1;
+    if (slides.length > 1) renderSlide();
     const hasNativeVideo = isVideo && item.videoSrc;
     dialog.classList.toggle('is-video-work', isVideo);
     const categoryLabel = window.NeoRealmWebProjects?.categories
@@ -490,6 +540,8 @@ function setupWorkLightbox() {
       if (dialog.open) dialog.close();
       dialog.classList.remove('is-archive-work');
       dialog.classList.remove('is-video-work');
+      dialog.classList.remove('has-carousel');
+      slides = [];
       video.pause();
       video.removeAttribute('src');
       video.removeAttribute('poster');

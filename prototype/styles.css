@@ -2200,10 +2200,6 @@ html {
   scroll-snap-align: start;
 }
 
-.instagram-rail-track[data-feed-source="instagram"] .instagram-tile.is-reel {
-  aspect-ratio: 9 / 16;
-}
-
 .instagram-tile img {
   display: block;
   width: 100%;
@@ -2211,7 +2207,7 @@ html {
   object-fit: contain;
 }
 
-.instagram-rail-track[data-feed-source="instagram"] .instagram-tile.is-reel img {
+.instagram-rail-track[data-feed-source="instagram"] .instagram-tile img {
   object-fit: cover;
 }
 
@@ -3610,9 +3606,60 @@ body.work-lightbox-open {
 }
 
 .work-lightbox-media {
+  position: relative;
   display: grid;
   min-height: 0;
   place-items: center;
+}
+
+.work-lightbox-carousel-controls {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  color: var(--b-black);
+  background: var(--b-accent);
+}
+
+.work-lightbox-carousel-controls:has(> :not([hidden])) {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.work-lightbox-carousel-controls button,
+.work-lightbox-carousel-controls span {
+  display: grid;
+  min-width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0 12px;
+  place-items: center;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: 600 12px/1 "Marcellus", serif;
+}
+
+.work-lightbox-carousel-controls button {
+  cursor: pointer;
+}
+
+.work-lightbox-carousel-controls button:hover,
+.work-lightbox-carousel-controls button:focus-visible {
+  outline: 0;
+  background: var(--b-black);
+  color: var(--b-accent);
+}
+
+.work-lightbox-carousel-controls button:disabled {
+  cursor: default;
+  opacity: 0.34;
+}
+
+.work-lightbox-carousel-controls [hidden] {
+  display: none;
 }
 
 .work-lightbox-media:focus,

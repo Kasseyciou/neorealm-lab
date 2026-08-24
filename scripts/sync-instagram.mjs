@@ -15,6 +15,7 @@ const fields = [
   'permalink',
   'timestamp',
   'username',
+  'children{media_type,media_url,thumbnail_url}',
 ].join(',');
 
 if (!token) {
@@ -80,6 +81,27 @@ for (const media of payload.data.slice(0, 20)) {
 
   const caption = String(media.caption || '').replace(/\s+/g, ' ').trim();
   const title = caption.split(/[。！？.!?\n]/)[0].trim().slice(0, 72) || 'NeoRealm LAB Visual';
+  const carousel = [];
+  for (const [childIndex, child] of (media.children?.data || []).entries()) {
+    const childSource = child.media_type === 'VIDEO'
+      ? child.thumbnail_url || child.media_url
+      : child.media_url;
+    if (!childSource) continue;
+    const childResponse = await fetch(childSource);
+    if (!childResponse.ok) {
+      console.warn(`Skipping carousel child ${child.id || childIndex}: download returned ${childResponse.status}.`);
+      continue;
+    }
+    const childType = childResponse.headers.get('content-type') || 'image/jpeg';
+    const childExtension = childType.includes('png') ? 'png' : childType.includes('webp') ? 'webp' : 'jpg';
+    const childFilename = `${String(media.id).replace(/[^a-zA-Z0-9_-]/g, '')}-slide-${childIndex + 1}.${childExtension}`;
+    retainedFiles.add(childFilename);
+    await writeFile(path.join(mediaDirectory, childFilename), Buffer.from(await childResponse.arrayBuffer()));
+    carousel.push({
+      src: `./assets/instagram-live/${childFilename}`,
+      mediaType: child.media_type || 'IMAGE',
+    });
+  }
   items.push({
     id: String(media.id),
     title,
@@ -90,6 +112,7 @@ for (const media of payload.data.slice(0, 20)) {
     videoSrc,
     permalink: media.permalink,
     timestamp: media.timestamp || '',
+    carousel,
   });
 }
 

@@ -51,7 +51,8 @@ Do not add real values to `.env`, source files, GitHub Actions YAML, screenshots
 
 - The newest 20 posts are synchronized; the page randomizes their order on every visit.
 - The gallery selects 10 of those posts for the layered waterfall presentation.
-- Reels use a cached 9:16 thumbnail in both galleries and open as a controlled, inline video in the site lightbox. The lightbox prefers a cached MP4 and falls back to Instagram's official embed when Meta withholds the video file. Image and carousel posts retain their native 4:5 presentation.
+- The horizontal feed always uses a uniform 4:5 frame. Reel posters are cropped inside that frame and open as controlled 9:16 video in the lightbox. The lightbox prefers a cached MP4 and falls back to Instagram's official embed when Meta withholds the video file.
+- Carousel children are synchronized when Meta returns them and can be browsed with visible previous/next controls or the left/right arrow keys in the lightbox.
 - If synchronization fails, GitHub Pages keeps the previous successful deployment. Local development and an empty feed use the curated demo images.
 
 Official starting points:

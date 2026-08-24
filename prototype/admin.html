@@ -9,9 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./admin.css?v=20260823-4" />
+    <link rel="stylesheet" href="./admin.css?v=20260824-1" />
     <script src="./web-projects.js?v=20260823-4" defer></script>
-    <script src="./admin.js?v=20260823-4" defer></script>
+    <script src="./admin.js?v=20260824-1" defer></script>
   </head>
   <body>
     <header class="admin-header">
@@ -117,6 +117,19 @@
           </form>
         </section>
       </div>
+
+      <section class="instagram-title-editor" aria-labelledby="instagram-title-editor-heading">
+        <div class="panel-heading">
+          <div>
+            <h2 id="instagram-title-editor-heading">Instagram 燈箱標題</h2>
+            <p>為每則同步貼文設定獨立展示標題；留白時使用 IG caption 第一個句子。</p>
+          </div>
+        </div>
+        <div class="instagram-title-list" data-instagram-title-list>
+          <p class="instagram-title-loading">正在讀取 Instagram feed…</p>
+        </div>
+        <p class="admin-status" data-instagram-title-status role="status" aria-live="polite"></p>
+      </section>
     </main>
   </body>
 </html>
