@@ -40,6 +40,10 @@ const setPreview = (image, empty, src = '') => {
 const slugify = (value) => value.toLowerCase().normalize('NFKD')
   .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || `project-${Date.now()}`;
 const extFor = (blob) => blob?.type === 'image/png' ? 'png' : blob?.type === 'image/webp' ? 'webp' : 'jpg';
+const withTimeout = (promise, milliseconds, label) => Promise.race([
+  promise,
+  new Promise((_, reject) => setTimeout(() => reject(new Error(`${label}逾時，請重新整理後再試。`)), milliseconds)),
+]);
 
 function compressImage(file, { width, height, maxWidth, crop = false }) {
   return new Promise((resolve, reject) => {
@@ -226,12 +230,15 @@ async function runAuthorization(session) {
     authPanel.hidden = false; app.hidden = true; signout.hidden = true; return;
   }
   authStatus.textContent = '正在確認後台權限…';
-  const { data: profile, error: profileError } = await db
-    .from('profiles').select('role').eq('id', session.user.id).maybeSingle();
+  const { data: profile, error: profileError } = await withTimeout(
+    db.from('profiles').select('role').eq('id', session.user.id).maybeSingle(),
+    12000,
+    '權限查詢',
+  );
   if (profileError) throw profileError;
   let role = profile?.role;
   if (!role) {
-    const { data, error } = await db.rpc('claim_first_admin');
+    const { data, error } = await withTimeout(db.rpc('claim_first_admin'), 12000, '管理員啟用');
     if (error) throw error;
     if (!error && data) role = 'admin';
   }
@@ -240,7 +247,7 @@ async function runAuthorization(session) {
     throw new Error('此帳號沒有後台權限。');
   }
   authPanel.hidden = true; app.hidden = false; signout.hidden = false;
-  await Promise.all([loadProjects(), setupInstagramTitles()]);
+  await withTimeout(Promise.all([loadProjects(), setupInstagramTitles()]), 15000, '後台資料載入');
   resetEditor();
 }
 
