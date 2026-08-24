@@ -3902,6 +3902,32 @@ body.work-lightbox-open {
   font: 400 15px/1.7 "Zen Old Mincho", "Noto Serif TC", serif;
 }
 
+/* Instagram captions can be much longer than the lightbox composition.
+   Keep the media and title stable while preserving the complete source copy. */
+.work-lightbox:not(.is-archive-work) [data-lightbox-description] {
+  max-block-size: min(18dvh, 164px);
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-inline-end: 12px;
+  scrollbar-color: rgba(242, 241, 235, 0.44) transparent;
+  scrollbar-width: thin;
+}
+
+.work-lightbox:not(.is-archive-work) [data-lightbox-description]::-webkit-scrollbar {
+  width: 4px;
+}
+
+.work-lightbox:not(.is-archive-work) [data-lightbox-description]::-webkit-scrollbar-thumb {
+  background: rgba(242, 241, 235, 0.44);
+}
+
+.work-lightbox:not(.is-archive-work) [data-lightbox-description]:focus-visible {
+  outline: 1px solid var(--b-accent);
+  outline-offset: 4px;
+}
+
 .archive-lightbox-trigger {
   cursor: zoom-in;
 }
@@ -4120,6 +4146,11 @@ body.work-lightbox-open {
 
   .work-lightbox p {
     font-size: 13px;
+  }
+
+  .work-lightbox:not(.is-archive-work) [data-lightbox-description] {
+    max-block-size: min(19dvh, 144px);
+    padding-inline-end: 10px;
   }
 
   .work-lightbox.is-archive-work .work-lightbox-figure {

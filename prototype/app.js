@@ -581,6 +581,9 @@ function setupWorkLightbox() {
     title.textContent = item.title;
     description.textContent = item.description;
     const isArchive = item.lightboxKind === 'archive';
+    description.tabIndex = isArchive ? -1 : 0;
+    if (isArchive) description.removeAttribute('aria-label');
+    else description.setAttribute('aria-label', 'Instagram 貼文說明；內容過長時可上下捲動閱讀');
     const isVideo = !isArchive && item.mediaType === 'VIDEO';
     let carousel = [];
     try { carousel = JSON.parse(item.carousel || '[]'); } catch { carousel = []; }
