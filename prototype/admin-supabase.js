@@ -41,6 +41,25 @@ const withTimeout = (promise, milliseconds, label) => Promise.race([
   promise,
   new Promise((_, reject) => setTimeout(() => reject(new Error(`${label}逾時，請重新整理後再試。`)), milliseconds)),
 ]);
+const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+
+async function loadAdminData() {
+  let lastError;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      await withTimeout(Promise.all([loadProjects(), setupInstagramTitles()]), 15000, '後台資料載入');
+      return;
+    } catch (error) {
+      lastError = error;
+      if (!/JWT issued at future/i.test(error.message || '')) throw error;
+      authStatus.textContent = `正在同步安全憑證… (${attempt + 1}/3)`;
+      await wait(3500);
+      const { error: refreshError } = await db.auth.refreshSession();
+      if (refreshError) lastError = refreshError;
+    }
+  }
+  throw lastError;
+}
 
 function compressImage(file, { width, height, maxWidth, crop = false }) {
   return new Promise((resolve, reject) => {
@@ -232,7 +251,7 @@ async function runAuthorization(session) {
   }
   authStatus.textContent = '正在載入管理介面…';
   authPanel.hidden = true; app.hidden = false; signout.hidden = false;
-  await withTimeout(Promise.all([loadProjects(), setupInstagramTitles()]), 15000, '後台資料載入');
+  await loadAdminData();
   resetEditor();
 }
 
