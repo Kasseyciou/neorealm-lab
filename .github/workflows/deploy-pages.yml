@@ -3,6 +3,8 @@ name: Deploy NeoRealm LAB to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '17 */6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -23,6 +25,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Sync Instagram feed
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_USER_ID: '17841473906347607'
+        run: node scripts/sync-instagram.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site

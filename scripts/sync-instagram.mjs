@@ -1,0 +1,96 @@
+import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
+const token = process.env.INSTAGRAM_ACCESS_TOKEN;
+const userId = process.env.INSTAGRAM_USER_ID || 'me';
+const siteRoot = path.resolve('prototype');
+const mediaDirectory = path.join(siteRoot, 'assets', 'instagram-live');
+const feedPath = path.join(siteRoot, 'data', 'instagram-feed.json');
+const fields = [
+  'id',
+  'caption',
+  'media_type',
+  'media_url',
+  'thumbnail_url',
+  'permalink',
+  'timestamp',
+  'username',
+].join(',');
+
+if (!token) {
+  console.log('INSTAGRAM_ACCESS_TOKEN is not configured; keeping the curated fallback feed.');
+  process.exit(0);
+}
+
+const endpoint = new URL(`https://graph.instagram.com/${userId}/media`);
+endpoint.searchParams.set('fields', fields);
+endpoint.searchParams.set('limit', '20');
+endpoint.searchParams.set('access_token', token);
+
+const response = await fetch(endpoint, {
+  headers: { Accept: 'application/json' },
+});
+
+if (!response.ok) {
+  const message = await response.text();
+  throw new Error(`Instagram API returned ${response.status}: ${message.slice(0, 500)}`);
+}
+
+const payload = await response.json();
+if (!Array.isArray(payload.data) || !payload.data.length) {
+  throw new Error('Instagram API returned no media; the current Pages deployment is left untouched.');
+}
+
+await mkdir(mediaDirectory, { recursive: true });
+await mkdir(path.dirname(feedPath), { recursive: true });
+
+const retainedFiles = new Set();
+const items = [];
+
+for (const media of payload.data.slice(0, 20)) {
+  const sourceUrl = media.media_type === 'VIDEO'
+    ? media.thumbnail_url || media.media_url
+    : media.media_url;
+  if (!sourceUrl || !media.id || !media.permalink) continue;
+
+  const mediaResponse = await fetch(sourceUrl);
+  if (!mediaResponse.ok) {
+    console.warn(`Skipping ${media.id}: media download returned ${mediaResponse.status}.`);
+    continue;
+  }
+
+  const contentType = mediaResponse.headers.get('content-type') || 'image/jpeg';
+  const extension = contentType.includes('png') ? 'png' : contentType.includes('webp') ? 'webp' : 'jpg';
+  const filename = `${String(media.id).replace(/[^a-zA-Z0-9_-]/g, '')}.${extension}`;
+  retainedFiles.add(filename);
+  await writeFile(path.join(mediaDirectory, filename), Buffer.from(await mediaResponse.arrayBuffer()));
+
+  const caption = String(media.caption || '').replace(/\s+/g, ' ').trim();
+  const title = caption.split(/[。！？.!?\n]/)[0].trim().slice(0, 72) || 'NeoRealm LAB Visual';
+  items.push({
+    id: String(media.id),
+    title,
+    description: caption.slice(0, 220),
+    alt: title,
+    mediaType: media.media_type || 'IMAGE',
+    src: `./assets/instagram-live/${filename}`,
+    permalink: media.permalink,
+    timestamp: media.timestamp || '',
+  });
+}
+
+if (!items.length) {
+  throw new Error('Instagram media could not be downloaded; the current Pages deployment is left untouched.');
+}
+
+for (const filename of await readdir(mediaDirectory)) {
+  if (!retainedFiles.has(filename)) await rm(path.join(mediaDirectory, filename));
+}
+
+await writeFile(feedPath, `${JSON.stringify({
+  account: 'neorealmlab',
+  syncedAt: new Date().toISOString(),
+  items,
+}, null, 2)}\n`);
+
+console.log(`Synced ${items.length} Instagram posts for @neorealmlab.`);

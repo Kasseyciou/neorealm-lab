@@ -34,6 +34,54 @@ function shuffle(items) {
   return result;
 }
 
+async function hydrateInstagramFeed() {
+  const railTrack = document.querySelector('.instagram-rail-track');
+  if (!railTrack) return false;
+
+  try {
+    const response = await fetch('./data/instagram-feed.json', { cache: 'no-store' });
+    if (!response.ok) return false;
+    const feed = await response.json();
+    if (!Array.isArray(feed.items) || !feed.items.length) return false;
+
+    const fragment = document.createDocumentFragment();
+    feed.items.slice(0, 20).forEach((item) => {
+      if (!item?.src || !item?.permalink) return;
+      const tile = document.createElement('a');
+      tile.className = 'instagram-tile';
+      tile.href = item.permalink;
+      tile.target = '_blank';
+      tile.rel = 'noreferrer';
+      tile.setAttribute('aria-label', `放大查看 ${item.title || 'NeoRealm LAB Visual'}`);
+      Object.assign(tile.dataset, {
+        src: item.src,
+        alt: item.alt || item.title || 'NeoRealm LAB Instagram 作品',
+        title: item.title || 'NeoRealm LAB Visual',
+        description: item.description || '',
+        permalink: item.permalink,
+      });
+
+      const image = document.createElement('img');
+      image.src = item.src;
+      image.width = 1080;
+      image.height = 1350;
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      image.alt = tile.dataset.alt;
+      tile.append(image);
+      fragment.append(tile);
+    });
+
+    if (!fragment.childNodes.length) return false;
+    railTrack.replaceChildren(fragment);
+    railTrack.dataset.feedSource = 'instagram';
+    return true;
+  } catch (error) {
+    console.warn('Live Instagram feed unavailable; using curated fallback.', error);
+    return false;
+  }
+}
+
 function setupKv() {
   const section = document.querySelector('[data-kv]');
   const video = section?.querySelector('.kv-video');
@@ -223,7 +271,9 @@ function setupRandomizedGallery() {
     const image = tile.querySelector('img');
     const src = image?.getAttribute('src') || '';
     const key = src.match(/ig-\d+/)?.[0] || '';
-    const [title, description] = galleryMetadata[key] || ['NeoRealm LAB Visual', 'An ongoing visual experiment from NeoRealm LAB.'];
+    const [fallbackTitle, fallbackDescription] = galleryMetadata[key] || ['NeoRealm LAB Visual', 'An ongoing visual experiment from NeoRealm LAB.'];
+    const title = tile.dataset.title || fallbackTitle;
+    const description = tile.dataset.description || fallbackDescription;
     const item = {
       src,
       width: image?.getAttribute('width') || '864',
@@ -231,6 +281,7 @@ function setupRandomizedGallery() {
       alt: image?.alt || title,
       title,
       description,
+      permalink: tile.dataset.permalink || tile.href,
     };
     Object.assign(tile.dataset, item);
     tile.setAttribute('aria-label', `放大查看 ${title}`);
@@ -762,15 +813,20 @@ function setupProjectDialog() {
   });
 }
 
-setupKv();
-setupStudioStory();
-setupTextMotion();
-setupActiveNavigation();
-setupRandomizedGallery();
-setupWebArchive();
-setupWaterfallMotion();
-window.NeoRealmColorfulHover?.setup();
-setupWorkLightbox();
-setupInstagramWheel();
-setupProjectDialog();
-setupScrollTop();
+async function boot() {
+  setupKv();
+  setupStudioStory();
+  setupTextMotion();
+  setupActiveNavigation();
+  await hydrateInstagramFeed();
+  setupRandomizedGallery();
+  setupWebArchive();
+  setupWaterfallMotion();
+  window.NeoRealmColorfulHover?.setup();
+  setupWorkLightbox();
+  setupInstagramWheel();
+  setupProjectDialog();
+  setupScrollTop();
+}
+
+boot();

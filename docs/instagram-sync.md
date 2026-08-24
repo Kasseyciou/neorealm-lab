@@ -17,16 +17,16 @@ Worlds in motion adapter
           ↘ static curated fallback if sync fails
 ```
 
-Recommended production implementation:
+Implemented production flow:
 
 1. Keep the Instagram account as a professional Business or Creator account.
 2. Create a Meta app and authorize only the permissions required to read the account's own media.
-3. Store the Instagram account ID and long-lived access token as deployment secrets, never in this repository.
-4. Run a Cloudflare Worker/Cron Trigger or equivalent scheduled function every 1–6 hours.
+3. Store the access token in the GitHub Actions repository secret `INSTAGRAM_ACCESS_TOKEN`; the public Instagram user ID is configured in the workflow.
+4. GitHub Actions runs every six hours and on every `main` deployment.
 5. Request recent media with the caption, media type, media or thumbnail URL, permalink and timestamp fields.
-6. Cache or proxy the media through owned storage/CDN rather than depending indefinitely on temporary Instagram media URLs.
-7. Publish a sanitized `feed.json` containing no token or private account data.
-8. Render the newest 12–18 approved items into the two waterfall columns. Preserve the current static wall whenever the endpoint is unavailable, empty or malformed.
+6. Download the newest media into the temporary GitHub Pages artifact so expiring Instagram CDN URLs are never shipped to the browser.
+7. Publish a sanitized `data/instagram-feed.json` containing no token or private account data.
+8. Render the newest 20 posts in the horizontal feed and select 10 for the layered waterfall. Preserve the current static wall whenever the endpoint is unavailable, empty or malformed.
 
 ## Editorial rules
 
@@ -47,16 +47,14 @@ INSTAGRAM_ACCESS_TOKEN
 
 Do not add real values to `.env`, source files, GitHub Actions YAML, screenshots or issue text. Configure them directly in the chosen hosting provider's secret manager or GitHub Actions repository secrets.
 
-## What remains before activation
+## Active behavior
 
-- Choose hosting/serverless provider.
-- Create and authorize the Meta app.
-- Supply the Instagram account ID and access token through secret storage.
-- Decide refresh frequency and maximum number of retained posts.
-- Confirm whether Reels play on-site or link to Instagram.
+- The newest 20 posts are synchronized; the page randomizes their order on every visit.
+- The gallery selects 10 of those posts for the layered waterfall presentation.
+- Reels use their thumbnail and open in the existing site lightbox; the original Instagram permalink remains in the feed data.
+- If synchronization fails, GitHub Pages keeps the previous successful deployment. Local development and an empty feed use the curated demo images.
 
 Official starting points:
 
 - <https://developers.facebook.com/docs/instagram-platform/>
 - <https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/>
-
