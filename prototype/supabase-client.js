@@ -21,6 +21,7 @@
     videoSrc: publicUrl('instagram-media', post.video_path),
     permalink: post.permalink,
     timestamp: post.posted_at || '',
+    syncedAt: post.synced_at || '',
     visible: Boolean(post.visible),
     displayOrder: post.display_order,
     carousel: Array.isArray(post.carousel)

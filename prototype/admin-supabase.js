@@ -19,6 +19,7 @@ const lightboxEmpty = document.querySelector('[data-lightbox-empty]');
 const instagramTitleList = document.querySelector('[data-instagram-title-list]');
 const instagramTitleStatus = document.querySelector('[data-instagram-title-status]');
 const instagramSelectionCount = document.querySelector('[data-instagram-selection-count]');
+const instagramRefreshButton = document.querySelector('[data-instagram-refresh]');
 let projects = [];
 let instagramPosts = [];
 let instagramTitleOverrides = {};
@@ -232,6 +233,48 @@ async function loadInstagramLibrary() {
   ]);
   renderInstagramLibrary();
 }
+
+async function refreshInstagramLibrary() {
+  if (!instagramRefreshButton || instagramRefreshButton.disabled) return;
+
+  const previousCount = instagramPosts.length;
+  const previousSync = Math.max(0, ...instagramPosts.map((post) => Date.parse(post.syncedAt) || 0));
+  instagramRefreshButton.disabled = true;
+  instagramRefreshButton.textContent = '刷新中…';
+  instagramTitleStatus.classList.remove('is-error');
+  instagramTitleStatus.textContent = '正在啟動 Instagram 同步…';
+
+  try {
+    const { error } = await db.functions.invoke('refresh-instagram', { method: 'POST' });
+    if (error) throw error;
+
+    instagramTitleStatus.textContent = '已啟動同步，正在抓取最新貼文；請保持此頁面開啟。';
+
+    for (let attempt = 0; attempt < 30; attempt += 1) {
+      await wait(5000);
+      const latestPosts = await api.getInstagramPosts();
+      const latestSync = Math.max(0, ...latestPosts.map((post) => Date.parse(post.syncedAt) || 0));
+      if (latestSync <= previousSync) continue;
+
+      await loadInstagramLibrary();
+      const added = Math.max(0, instagramPosts.length - previousCount);
+      instagramTitleStatus.textContent = added
+        ? `同步完成，新增 ${added} 則貼文；新作品已保留在作品庫，請自行選擇是否顯示於前台。`
+        : '同步完成，目前沒有新增貼文；現有作品資料已更新。';
+      return;
+    }
+
+    instagramTitleStatus.textContent = '同步仍在背景執行，稍後重新整理後台即可查看最新作品。';
+  } catch (error) {
+    instagramTitleStatus.classList.add('is-error');
+    instagramTitleStatus.textContent = `無法啟動同步：${error.message || '請稍後再試。'}`;
+  } finally {
+    instagramRefreshButton.disabled = false;
+    instagramRefreshButton.textContent = '立即刷新';
+  }
+}
+
+instagramRefreshButton?.addEventListener('click', refreshInstagramLibrary);
 
 function renderInstagramLibrary() {
   instagramTitleList.textContent = '';

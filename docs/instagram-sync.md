@@ -23,7 +23,7 @@ Implemented production flow:
 2. Create a Meta app and authorize only the permissions required to read the account's own media.
 3. Store the access token in the GitHub Actions repository secret `INSTAGRAM_ACCESS_TOKEN`; the public Instagram user ID is configured in the workflow.
 4. Store the Supabase service-role key in the GitHub Actions repository secret `SUPABASE_SERVICE_ROLE_KEY`.
-5. GitHub Actions runs daily, on every `main` deployment and on manual workflow dispatch.
+5. GitHub Actions runs daily at 03:17 UTC / 11:17 Asia/Taipei, on every `main` deployment, and whenever an authenticated administrator selects **立即刷新** in the content dashboard.
 6. Follow the Instagram API pagination cursor and upsert every available post into `instagram_posts`; existing records are retained.
 7. Cache permanent cover images, carousel images and Reel video files in the public `instagram-media` Supabase Storage bucket. Larger Reel source files are optimized to web-ready H.264 MP4s before upload. If Meta temporarily blocks an archive, the fresh short-lived Reel source URL is retained as a native playback bridge and refreshed daily; the Instagram embed is the final fallback only when that source fails in the browser.
 8. The first successful import selects the newest 20 posts. Later imports remain hidden until selected in `admin.html`, so new posts never displace an intentional front-end selection.
@@ -32,6 +32,7 @@ Implemented production flow:
 ## Editorial rules
 
 - A new post enters the permanent library automatically but does not enter the public wall until selected in the admin.
+- The dashboard refresh button invokes the authenticated `refresh-instagram` Supabase Edge Function, which dispatches the existing GitHub Actions workflow without exposing the GitHub credential to the browser. The function keeps its `GITHUB_ACTIONS_TOKEN` in Supabase secrets.
 - Reels use their thumbnail in the wall and play their archived MP4 in the lightbox; the Instagram embed is a fallback only when Meta withholds the media file.
 - Carousel posts use the cover in the wall and expose their synchronized child media in the lightbox.
 - Captions are optional display data and must be truncated safely.

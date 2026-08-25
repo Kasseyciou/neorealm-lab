@@ -528,9 +528,30 @@ select:focus-visible {
   font-variant-numeric: tabular-nums;
 }
 
+.instagram-library-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.instagram-refresh-button {
+  white-space: nowrap;
+}
+
+.instagram-refresh-button:disabled {
+  cursor: progress;
+  opacity: 0.58;
+}
+
+.instagram-sync-status {
+  margin-top: 12px;
+}
+
 .instagram-title-list {
   display: grid;
-  margin-top: 24px;
+  margin-top: 12px;
   border-top: 1px solid var(--line);
 }
 
@@ -724,6 +745,10 @@ select:focus-visible {
 
   .instagram-title-row img {
     width: 58px;
+  }
+
+  .instagram-library-controls {
+    justify-content: flex-start;
   }
 
 }
