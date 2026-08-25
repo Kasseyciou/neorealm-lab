@@ -971,41 +971,28 @@ function setupProjectDialog() {
     });
   });
 
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
+  form.addEventListener('submit', () => {
     if (!form.reportValidity() || !submit || !submitLabel || !status) return;
 
     submit.disabled = true;
     submitLabel.textContent = '傳送中…';
     status.className = 'project-form-status form-field-wide is-sending';
-    status.textContent = '正在安全傳送需求資料…';
+    status.textContent = '正在進行真人驗證…';
+  });
 
-    const payload = Object.fromEntries(new FormData(form).entries());
-    payload._url = window.location.href;
-
-    try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok || result.success === false) throw new Error('Submission failed');
-
+  const url = new URL(window.location.href);
+  if (url.searchParams.get('project') === 'sent') {
+    url.searchParams.delete('project');
+    window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+    openDialog(openers[0]);
+    if (status && submit && submitLabel) {
       form.reset();
       status.className = 'project-form-status form-field-wide is-success';
       status.textContent = '需求已送出。我會閱讀內容，並回覆到你填寫的 Email。';
+      submit.disabled = true;
       submitLabel.textContent = '已送出';
-    } catch (error) {
-      status.className = 'project-form-status form-field-wide is-error';
-      status.textContent = '目前無法送出。請稍後再試，或直接寄信至 neorealmlab@gmail.com。';
-      submit.disabled = false;
-      submitLabel.textContent = '重新送出';
     }
-  });
+  }
 }
 
 async function boot() {
