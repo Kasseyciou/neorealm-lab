@@ -1001,7 +1001,7 @@ function setupProjectDialog() {
       submitLabel.textContent = '已送出';
     } catch (error) {
       status.className = 'project-form-status form-field-wide is-error';
-      status.textContent = '目前無法送出。請稍後再試，或直接寄信至 kasseyworks@gmail.com。';
+      status.textContent = '目前無法送出。請稍後再試，或直接寄信至 neorealmlab@gmail.com。';
       submit.disabled = false;
       submitLabel.textContent = '重新送出';
     }
