@@ -3873,7 +3873,7 @@ body.work-lightbox-open {
 }
 
 .work-lightbox-media video,
-.work-lightbox-media iframe {
+.work-lightbox.is-video-fallback .work-lightbox-media img {
   display: block;
   width: auto;
   max-width: min(100%, 430px);
@@ -3884,14 +3884,53 @@ body.work-lightbox-open {
   object-fit: contain;
 }
 
-.work-lightbox-media iframe {
-  border: 0;
-  clip-path: inset(0 12px 0 0);
-  margin-right: -12px;
+.work-lightbox-video-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  color: var(--b-ink);
+  text-decoration: none;
+}
+
+.work-lightbox-video-fallback-play {
+  display: grid;
+  width: 70px;
+  height: 70px;
+  place-items: center;
+  border: 1px solid rgba(242, 241, 235, 0.58);
+  border-radius: 50%;
+  background: rgba(12, 13, 12, 0.68);
+  transition: background-color 180ms ease, transform 180ms ease;
+}
+
+.work-lightbox-video-fallback-play svg {
+  margin-inline-start: 3px;
+}
+
+.work-lightbox-video-fallback-label {
+  position: absolute;
+  bottom: 18px;
+  padding: 10px 14px;
+  background: rgba(12, 13, 12, 0.76);
+  font: 400 12px/1 "Marcellus", serif;
+  letter-spacing: 0.025em;
+}
+
+.work-lightbox-video-fallback:hover .work-lightbox-video-fallback-play,
+.work-lightbox-video-fallback:focus-visible .work-lightbox-video-fallback-play {
+  background: rgba(12, 13, 12, 0.9);
+  transform: scale(1.06);
+}
+
+.work-lightbox-video-fallback:focus-visible {
+  outline: 1px solid rgba(242, 241, 235, 0.72);
+  outline-offset: -1px;
 }
 
 .work-lightbox-media video[hidden],
-.work-lightbox-media iframe[hidden],
+.work-lightbox-video-fallback[hidden],
 .work-lightbox-media img[hidden] {
   display: none;
 }
@@ -4157,11 +4196,16 @@ body.work-lightbox-open {
   }
 
   .work-lightbox-media video,
-  .work-lightbox-media iframe {
+  .work-lightbox.is-video-fallback .work-lightbox-media img {
     width: auto;
     max-width: 100%;
-    height: min(56dvh, calc(100dvh - 330px), calc((100vw - 32px) * 16 / 9));
+    height: min(66dvh, calc(100dvh - 235px), calc((100vw - 32px) * 16 / 9));
     max-height: none;
+  }
+
+  .work-lightbox-video-fallback-play {
+    width: 62px;
+    height: 62px;
   }
 
   .work-lightbox figcaption {

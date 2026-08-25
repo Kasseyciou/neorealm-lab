@@ -432,7 +432,7 @@ function setupWorkLightbox() {
   const image = dialog?.querySelector('[data-lightbox-image]');
   const loading = dialog?.querySelector('[data-lightbox-loading]');
   const video = dialog?.querySelector('[data-lightbox-video]');
-  const embed = dialog?.querySelector('[data-lightbox-embed]');
+  const videoFallback = dialog?.querySelector('[data-lightbox-video-fallback]');
   const previousSlide = dialog?.querySelector('[data-lightbox-previous]');
   const nextSlide = dialog?.querySelector('[data-lightbox-next]');
   const slideStatus = dialog?.querySelector('[data-lightbox-slide-status]');
@@ -448,12 +448,12 @@ function setupWorkLightbox() {
     ...document.querySelectorAll('.instagram-tile'),
   ];
   let trigger = null;
-  if (!dialog || !closeButton || !image || !loading || !video || !embed || !previousSlide || !nextSlide || !slideStatus || !title || !description || !category || !launch || !media || !scrollbar || !scrollbarThumb || !sources.length) return;
+  if (!dialog || !closeButton || !image || !loading || !video || !videoFallback || !previousSlide || !nextSlide || !slideStatus || !title || !description || !category || !launch || !media || !scrollbar || !scrollbarThumb || !sources.length) return;
 
   let slides = [];
   let slideIndex = 0;
   let imageRequest = 0;
-  let nativeVideoFallback = '';
+  let currentVideoFallback = null;
   const loadImage = (src, alt) => {
     const request = ++imageRequest;
     dialog.classList.add('is-loading');
@@ -564,13 +564,18 @@ function setupWorkLightbox() {
     loading.querySelector('em').textContent = 'Loading visual…';
     window.requestAnimationFrame(syncScrollbar);
   });
-  video.addEventListener('error', () => {
-    if (!nativeVideoFallback || !dialog.classList.contains('is-video-work')) return;
+  const showVideoFallback = () => {
+    if (!currentVideoFallback || !dialog.classList.contains('is-video-work')) return;
     video.pause();
     video.hidden = true;
-    embed.hidden = false;
-    embed.src = nativeVideoFallback;
-  });
+    image.hidden = false;
+    videoFallback.hidden = false;
+    videoFallback.href = currentVideoFallback.permalink;
+    videoFallback.setAttribute('aria-label', `在 Instagram 觀看 ${currentVideoFallback.title}`);
+    dialog.classList.add('is-video-fallback');
+    loadImage(currentVideoFallback.src, currentVideoFallback.alt || currentVideoFallback.title);
+  };
+  video.addEventListener('error', showVideoFallback);
   window.addEventListener('resize', syncScrollbar);
 
   const open = (source) => {
@@ -598,8 +603,9 @@ function setupWorkLightbox() {
     if (slides.length > 1) renderSlide();
     else if (!isVideo) loadImage(item.src, item.alt || item.title);
     const hasNativeVideo = isVideo && item.videoSrc;
-    nativeVideoFallback = isVideo && item.embedSrc ? item.embedSrc : '';
+    currentVideoFallback = isVideo && item.permalink ? item : null;
     dialog.classList.toggle('is-video-work', isVideo);
+    dialog.classList.remove('is-video-fallback');
     const categoryLabel = window.NeoRealmWebProjects?.categories
       .find((entry) => entry.value === item.category)?.label;
     category.hidden = !isArchive || !categoryLabel;
@@ -609,7 +615,8 @@ function setupWorkLightbox() {
     else launch.removeAttribute('href');
     image.hidden = Boolean(isVideo);
     video.hidden = !hasNativeVideo;
-    embed.hidden = !isVideo || Boolean(hasNativeVideo);
+    videoFallback.hidden = true;
+    videoFallback.removeAttribute('href');
     if (hasNativeVideo) {
       dialog.classList.remove('is-loading');
       loading.hidden = true;
@@ -622,8 +629,7 @@ function setupWorkLightbox() {
       video.removeAttribute('poster');
       video.load();
     }
-    if (isVideo && !hasNativeVideo && item.embedSrc) embed.src = item.embedSrc;
-    else embed.removeAttribute('src');
+    if (isVideo && !hasNativeVideo) showVideoFallback();
     dialog.showModal();
     document.body.classList.add('work-lightbox-open');
     window.requestAnimationFrame(() => {
@@ -641,14 +647,16 @@ function setupWorkLightbox() {
       if (dialog.open) dialog.close();
       dialog.classList.remove('is-archive-work');
       dialog.classList.remove('is-video-work');
+      dialog.classList.remove('is-video-fallback');
       dialog.classList.remove('has-carousel');
       slides = [];
       video.pause();
       video.removeAttribute('src');
       video.removeAttribute('poster');
       video.load();
-      nativeVideoFallback = '';
-      embed.removeAttribute('src');
+      currentVideoFallback = null;
+      videoFallback.hidden = true;
+      videoFallback.removeAttribute('href');
       scrollbar.hidden = true;
       trigger?.focus({ preventScroll: true });
     };

@@ -413,7 +413,12 @@
               <em>Loading visual…</em>
             </div>
             <video data-lightbox-video controls playsinline preload="metadata" hidden aria-label="Instagram Reel 影片播放器"></video>
-            <iframe data-lightbox-embed title="Instagram Reel 影片播放器" allow="autoplay; fullscreen" allowfullscreen loading="lazy" scrolling="no" hidden></iframe>
+            <a class="work-lightbox-video-fallback" data-lightbox-video-fallback target="_blank" rel="noreferrer" hidden>
+              <span class="work-lightbox-video-fallback-play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="m9 6 10 6-10 6z" fill="currentColor" /></svg>
+              </span>
+              <span class="work-lightbox-video-fallback-label">Watch on Instagram</span>
+            </a>
             <div class="work-lightbox-carousel-controls" aria-label="輪播圖片控制">
               <button type="button" data-lightbox-previous hidden aria-label="上一張圖片">←</button>
               <span data-lightbox-slide-status hidden aria-live="polite"></span>
