@@ -1,6 +1,8 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const permittedOrigins = new Set([
+  'https://neorealmlab.com',
+  'https://www.neorealmlab.com',
   'https://kasseyciou.github.io',
   'http://127.0.0.1:4173',
   'http://localhost:4173',
@@ -9,7 +11,7 @@ const permittedOrigins = new Set([
 const corsHeaders = (origin: string | null) => ({
   'Access-Control-Allow-Origin': origin && permittedOrigins.has(origin)
     ? origin
-    : 'https://kasseyciou.github.io',
+    : 'https://neorealmlab.com',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   Vary: 'Origin',
