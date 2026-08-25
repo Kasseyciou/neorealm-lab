@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kasseyciou.github.io/neorealm-lab/sitemap.xml
+Sitemap: https://neorealmlab.com/sitemap.xml
