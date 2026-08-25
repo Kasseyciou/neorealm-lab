@@ -2692,6 +2692,20 @@ html {
     transform: none !important;
   }
 
+  .archive-flow .archive-case figcaption {
+    padding: 48px 10px 10px;
+  }
+
+  .archive-flow .archive-case figcaption strong {
+    display: block;
+    overflow: hidden;
+    font-size: 13px;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .colorful-hover-canvas {
     display: none;
   }
@@ -4086,6 +4100,7 @@ body.work-lightbox-open {
   display: block;
   width: auto;
   padding-top: 18px;
+  border-top: 0;
 }
 
 .work-lightbox.is-archive-work figcaption h2 {
@@ -4247,6 +4262,7 @@ body.work-lightbox-open {
     grid-row: 1;
     width: auto;
     padding-top: 12px;
+    border-top: 0;
   }
 
   .work-lightbox.is-archive-work figcaption h2 {
