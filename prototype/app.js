@@ -108,6 +108,7 @@ async function hydrateInstagramFeed() {
       image.loading = 'lazy';
       image.decoding = 'async';
       image.alt = tile.dataset.alt;
+      image.crossOrigin = 'anonymous';
       setMediaLoadingState(tile, image);
       image.src = item.src;
       tile.append(image);
@@ -386,6 +387,7 @@ function setupRandomizedGallery() {
     if (!item || !imageWrap || !image) return;
 
     setMediaLoadingState(imageWrap, image);
+    image.crossOrigin = 'anonymous';
     image.src = item.src;
     image.width = Number(item.width);
     image.height = Number(item.height);
@@ -737,6 +739,7 @@ async function setupWebArchive() {
 
   const createImage = (project) => {
     const image = document.createElement('img');
+    image.crossOrigin = 'anonymous';
     image.src = project.coverImage;
     image.alt = project.alt;
     image.width = 600;
