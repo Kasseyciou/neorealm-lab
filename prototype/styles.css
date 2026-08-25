@@ -4134,7 +4134,7 @@ body.work-lightbox-open {
 
   .work-lightbox-shell {
     --lightbox-bottom-clearance: max(84px, calc(env(safe-area-inset-bottom) + 28px));
-    padding: 74px 16px var(--lightbox-bottom-clearance);
+    padding: 18px 16px var(--lightbox-bottom-clearance);
   }
 
   .work-lightbox-close {
@@ -4153,14 +4153,14 @@ body.work-lightbox-open {
   }
 
   .work-lightbox:not(.is-archive-work):not(.is-video-work) .work-lightbox-media {
-    height: clamp(220px, calc(100dvh - 390px), 400px);
+    height: clamp(240px, calc(100dvh - 330px), 460px);
   }
 
   .work-lightbox-media video,
   .work-lightbox-media iframe {
     width: auto;
     max-width: 100%;
-    height: min(52dvh, calc(100dvh - 360px), calc((100vw - 32px) * 16 / 9));
+    height: min(56dvh, calc(100dvh - 330px), calc((100vw - 32px) * 16 / 9));
     max-height: none;
   }
 
