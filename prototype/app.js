@@ -949,18 +949,9 @@ function setupProjectDialog() {
       if (scroller) scroller.scrollTop = 0;
       closeButton?.focus({ preventScroll: true });
     });
-    // The verification iframe is refreshed after the overlay is visible. Keeping this
-    // overlay out of the native dialog top layer allows hCaptcha to open its own
-    // challenge surface above the form when it needs one.
-    window.setTimeout(() => {
-      window.hcaptcha?.reset?.();
-      // hCaptcha may claim focus while it refreshes. Reassert the intended entry
-      // point afterwards so opening the sheet never skips the pricing ledger.
-      window.setTimeout(() => {
-        if (scroller) scroller.scrollTop = 0;
-        closeButton?.focus({ preventScroll: true });
-      }, 180);
-    }, 180);
+    // Do not reset hCaptcha on entry: its iframe takes browser focus during a reset
+    // and scrolls this two-act sheet directly past the pricing ledger. It is reset
+    // after a successful send, on restart, or when an incomplete form is submitted.
   };
 
   const closeDialog = () => {
