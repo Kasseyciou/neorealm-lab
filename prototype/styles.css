@@ -2851,7 +2851,7 @@ html {
   z-index: -3;
   width: 108%;
   height: 108%;
-  background: url("./assets/hero-poster.png") center / cover no-repeat;
+  background: url("./assets/hero-poster.png?v=20260826-2") center / cover no-repeat;
   filter: saturate(0.76) contrast(1.08) brightness(0.84);
   opacity: 1;
   transform: translate3d(0, var(--kv-y, 0px), 0) scale(var(--kv-scale, 1.04));
