@@ -3224,6 +3224,18 @@ html {
 
   .kv-video {
     object-position: 58% center;
+    filter: saturate(0.82) contrast(1.05) brightness(0.96);
+  }
+
+  .kv-poster {
+    background-image: url("./assets/hero-poster-mobile.png?v=20260826-3");
+    filter: saturate(0.82) contrast(1.05) brightness(0.96);
+  }
+
+  .b-hero-scrim {
+    background:
+      linear-gradient(90deg, rgba(5, 6, 5, 0.52) 0%, rgba(5, 6, 5, 0.28) 46%, rgba(5, 6, 5, 0.04) 78%),
+      linear-gradient(0deg, rgba(5, 6, 5, 0.48), transparent 56%);
   }
 
   .b-hero-copy {
