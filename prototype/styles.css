@@ -2867,8 +2867,8 @@ html {
 .b-hero-scrim {
   z-index: -2;
   background:
-    linear-gradient(90deg, rgba(5, 6, 5, 0.9) 0%, rgba(5, 6, 5, 0.54) 46%, rgba(5, 6, 5, 0.16) 78%),
-    linear-gradient(0deg, rgba(5, 6, 5, 0.82), transparent 56%);
+    linear-gradient(90deg, rgba(5, 6, 5, 0.68) 0%, rgba(5, 6, 5, 0.4) 46%, rgba(5, 6, 5, 0.08) 78%),
+    linear-gradient(0deg, rgba(5, 6, 5, 0.62), transparent 56%);
 }
 
 .b-hero-copy {
