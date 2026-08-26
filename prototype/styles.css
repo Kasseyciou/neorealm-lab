@@ -4661,6 +4661,8 @@ body.project-dialog-open {
 }
 
 .project-inquiry-copy {
+  grid-column: 1;
+  grid-row: 1;
   position: sticky;
   top: 120px;
   height: max-content;
@@ -4677,6 +4679,8 @@ body.project-dialog-open {
 }
 
 .project-form-stage {
+  grid-column: 2;
+  grid-row: 1;
   min-width: 0;
   align-self: start;
 }
@@ -5038,8 +5042,15 @@ body.project-dialog-open {
   }
 
   .project-inquiry-copy {
+    grid-column: auto;
+    grid-row: auto;
     position: static;
     margin-bottom: 62px;
+  }
+
+  .project-form-stage {
+    grid-column: auto;
+    grid-row: auto;
   }
 
   .project-form {

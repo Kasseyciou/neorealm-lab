@@ -946,15 +946,21 @@ function setupProjectDialog() {
     document.body.classList.add('project-dialog-open');
     window.requestAnimationFrame(() => {
       dialog.classList.add('is-visible');
-      // The scroll container cannot reliably move while its overlay is hidden.
-      // Reset it after the overlay enters layout so every opening begins at pricing.
       if (scroller) scroller.scrollTop = 0;
       closeButton?.focus({ preventScroll: true });
     });
     // The verification iframe is refreshed after the overlay is visible. Keeping this
     // overlay out of the native dialog top layer allows hCaptcha to open its own
     // challenge surface above the form when it needs one.
-    window.setTimeout(() => window.hcaptcha?.reset?.(), 180);
+    window.setTimeout(() => {
+      window.hcaptcha?.reset?.();
+      // hCaptcha may claim focus while it refreshes. Reassert the intended entry
+      // point afterwards so opening the sheet never skips the pricing ledger.
+      window.setTimeout(() => {
+        if (scroller) scroller.scrollTop = 0;
+        closeButton?.focus({ preventScroll: true });
+      }, 180);
+    }, 180);
   };
 
   const closeDialog = () => {
