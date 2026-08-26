@@ -4683,6 +4683,7 @@ body.project-dialog-open {
   grid-row: 1;
   min-width: 0;
   align-self: start;
+  scroll-margin-block-start: 88px;
 }
 
 .project-form {
@@ -5055,6 +5056,7 @@ body.project-dialog-open {
   .project-form-stage {
     grid-column: auto;
     grid-row: auto;
+    scroll-margin-block-start: 78px;
   }
 
   .project-form {
