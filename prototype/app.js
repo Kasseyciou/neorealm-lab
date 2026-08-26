@@ -938,6 +938,9 @@ function setupProjectDialog() {
       dialog.classList.add('is-visible');
       closeButton?.focus({ preventScroll: true });
     });
+    // hCaptcha can time out while the dialog is closed or the visitor is reading prices.
+    // Resetting it when the dialog opens always presents a fresh, clickable checkbox.
+    window.setTimeout(() => window.hcaptcha?.reset?.(), 180);
   };
 
   const closeDialog = () => {
@@ -977,8 +980,9 @@ function setupProjectDialog() {
 
     const captchaToken = form.querySelector('textarea[name="h-captcha-response"]')?.value;
     if (!captchaToken) {
+      window.hcaptcha?.reset?.();
       status.className = 'project-form-status form-field-wide is-error';
-      status.textContent = '請先完成真人驗證，再送出需求。';
+      status.textContent = '請先勾選「我是實體訪客」並完成真人驗證，再送出需求。';
       form.querySelector('[data-project-captcha]')?.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
       return;
     }
