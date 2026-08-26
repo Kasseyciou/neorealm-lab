@@ -920,6 +920,7 @@ function setupProjectDialog() {
   const submitLabel = submit?.querySelector('span');
   const serviceSelect = form?.querySelector('#project-service');
   const nameInput = form?.querySelector('#project-name');
+  const formStage = form?.closest('.project-form-stage');
   let trigger = null;
 
   if (!dialog || !form || !openers.length) return;
@@ -930,6 +931,16 @@ function setupProjectDialog() {
     form.hidden = false;
     form.classList.remove('is-complete');
     form.removeAttribute('aria-hidden');
+  };
+
+  const scrollToFormStart = ({ focus = false } = {}) => {
+    formStage?.scrollIntoView({
+      behavior: reducedMotion.matches ? 'auto' : 'smooth',
+      block: 'start',
+    });
+    if (focus) {
+      window.setTimeout(() => nameInput?.focus({ preventScroll: true }), reducedMotion.matches ? 0 : 340);
+    }
   };
 
   const openDialog = (opener) => {
@@ -997,8 +1008,7 @@ function setupProjectDialog() {
   dialog.querySelectorAll('[data-plan-select]').forEach((button) => {
     button.addEventListener('click', () => {
       if (serviceSelect) serviceSelect.value = button.dataset.planSelect;
-      form.closest('.project-inquiry')?.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
-      window.setTimeout(() => nameInput?.focus({ preventScroll: true }), reducedMotion.matches ? 0 : 420);
+      scrollToFormStart({ focus: true });
     });
   });
 
@@ -1014,7 +1024,9 @@ function setupProjectDialog() {
       submit.disabled = false;
       submitLabel.textContent = '送出專案需求';
     }
-    nameInput?.focus({ preventScroll: true });
+    // hCaptcha can briefly claim focus when a fresh challenge is created.
+    // Reclaim the proposal's first row once its reset has settled.
+    window.setTimeout(() => scrollToFormStart({ focus: true }), reducedMotion.matches ? 0 : 220);
   });
 
   form.addEventListener('submit', async (event) => {
@@ -1049,7 +1061,6 @@ function setupProjectDialog() {
       if (!response.ok || !result?.success) throw new Error(result?.message || 'Form service unavailable');
 
       form.reset();
-      window.hcaptcha?.reset?.();
       status.className = 'project-form-status form-field-wide is-success';
       status.textContent = '需求已送出。我會閱讀內容，並回覆到你填寫的 Email。';
       submitLabel.textContent = '已送出';
@@ -1061,6 +1072,7 @@ function setupProjectDialog() {
         complete.hidden = false;
         window.requestAnimationFrame(() => {
           complete.classList.add('is-visible');
+          scrollToFormStart();
           complete.focus({ preventScroll: true });
         });
       }, reducedMotion.matches ? 0 : 260);
