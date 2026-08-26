@@ -139,7 +139,10 @@ function setupKv() {
   const scrollCue = section?.querySelector('.kv-scroll-cue');
   if (!section || !video) return;
 
-  const playbackStart = 6.2;
+  // The poster is only a loading fallback. Do not hold it for a fixed point
+  // in the timeline: replacement KV films can be shorter than the previous
+  // edit, which would leave the old poster covering a perfectly valid video.
+  const playbackStart = 0.2;
   let inView = true;
   let frame = 0;
 
@@ -174,6 +177,10 @@ function setupKv() {
 
   video.addEventListener('timeupdate', () => {
     section.classList.toggle('is-video-live', !reducedMotion.matches && video.currentTime >= playbackStart);
+  });
+
+  video.addEventListener('playing', () => {
+    if (!reducedMotion.matches && inView) section.classList.add('is-video-live');
   });
 
   new IntersectionObserver(([entry]) => {
