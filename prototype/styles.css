@@ -4330,7 +4330,10 @@ body.project-dialog-open {
 }
 
 .project-dialog {
+  position: fixed;
   inset: 0;
+  z-index: 110;
+  display: block;
   width: 100vw;
   max-width: none;
   height: 100dvh;
@@ -4343,10 +4346,8 @@ body.project-dialog-open {
   color: var(--b-ink);
 }
 
-.project-dialog::backdrop {
-  background: rgba(5, 6, 5, 0.86);
-  backdrop-filter: blur(16px) saturate(78%);
-  -webkit-backdrop-filter: blur(16px) saturate(78%);
+.project-dialog[hidden] {
+  display: none !important;
 }
 
 .project-dialog-shell {

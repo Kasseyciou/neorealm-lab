@@ -931,15 +931,17 @@ function setupProjectDialog() {
       submit.disabled = false;
       submitLabel.textContent = '送出專案需求';
     }
-    dialog.showModal();
+    dialog.removeAttribute('hidden');
+    dialog.setAttribute('aria-hidden', 'false');
     document.body.classList.add('project-dialog-open');
     if (scroller) scroller.scrollTop = 0;
     window.requestAnimationFrame(() => {
       dialog.classList.add('is-visible');
       closeButton?.focus({ preventScroll: true });
     });
-    // hCaptcha can time out while the dialog is closed or the visitor is reading prices.
-    // Resetting it when the dialog opens always presents a fresh, clickable checkbox.
+    // The verification iframe is refreshed after the overlay is visible. Keeping this
+    // overlay out of the native dialog top layer allows hCaptcha to open its own
+    // challenge surface above the form when it needs one.
     window.setTimeout(() => window.hcaptcha?.reset?.(), 180);
   };
 
@@ -947,8 +949,9 @@ function setupProjectDialog() {
     dialog.classList.remove('is-visible');
     document.body.classList.remove('project-dialog-open');
     const finish = () => {
-      if (dialog.open) dialog.close();
-      trigger?.focus();
+      dialog.setAttribute('aria-hidden', 'true');
+      dialog.setAttribute('hidden', '');
+      trigger?.focus({ preventScroll: true });
     };
     if (reducedMotion.matches) finish();
     else window.setTimeout(finish, 280);
@@ -957,13 +960,29 @@ function setupProjectDialog() {
   openers.forEach((opener) => opener.addEventListener('click', () => openDialog(opener)));
   closeButton?.addEventListener('click', closeDialog);
 
-  dialog.addEventListener('cancel', (event) => {
-    event.preventDefault();
-    closeDialog();
-  });
+  document.addEventListener('keydown', (event) => {
+    if (dialog.hidden) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeDialog();
+      return;
+    }
+    if (event.key !== 'Tab') return;
 
-  dialog.addEventListener('pointerdown', (event) => {
-    if (event.target === dialog) closeDialog();
+    const focusable = Array.from(dialog.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])',
+    )).filter((element) => !element.hidden && element.getClientRects().length);
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   });
 
   dialog.querySelectorAll('[data-plan-select]').forEach((button) => {
