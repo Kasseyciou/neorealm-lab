@@ -1006,6 +1006,14 @@ function setupProjectDialog() {
     resetCompleteState();
     form.reset();
     window.hcaptcha?.reset?.();
+    if (status) {
+      status.className = 'project-form-status form-field-wide';
+      status.textContent = '';
+    }
+    if (submit && submitLabel) {
+      submit.disabled = false;
+      submitLabel.textContent = '送出專案需求';
+    }
     nameInput?.focus({ preventScroll: true });
   });
 
