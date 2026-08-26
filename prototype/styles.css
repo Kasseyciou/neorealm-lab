@@ -4739,6 +4739,30 @@ body.project-dialog-open {
   opacity: 0 !important;
 }
 
+.project-captcha {
+  display: flex;
+  min-height: 88px;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 0;
+  border-top: 1px solid rgba(17, 17, 15, 0.28);
+  border-bottom: 1px solid rgba(17, 17, 15, 0.28);
+}
+
+.project-captcha .h-captcha {
+  flex: 0 0 auto;
+  min-width: 164px;
+  min-height: 40px;
+}
+
+.project-captcha p {
+  max-width: 34ch;
+  margin: 0;
+  color: rgba(17, 17, 15, 0.66);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
 .project-form-footer {
   display: flex;
   gap: 26px;
@@ -4907,6 +4931,12 @@ body.project-dialog-open {
   .project-form-footer {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .project-captcha {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .project-submit {

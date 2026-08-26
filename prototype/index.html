@@ -503,14 +503,14 @@
 
             <form
               class="project-form"
-              action="https://formsubmit.co/neorealmlab@gmail.com"
+              action="https://api.web3forms.com/submit"
               method="POST"
               data-project-form
             >
-              <input type="hidden" name="_subject" value="NeoRealm LAB｜新的專案需求" />
-              <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_next" value="https://neorealmlab.com/?project=sent" />
-              <input class="project-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" hidden />
+              <input type="hidden" name="access_key" value="2f418f22-cc13-41d7-8f5d-866d2f7ff67f" />
+              <input type="hidden" name="subject" value="NeoRealm LAB｜新的專案需求" />
+              <input type="hidden" name="from_name" value="NeoRealm LAB" />
+              <input class="project-honey" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
               <div class="form-field">
                 <label for="project-name">姓名</label>
@@ -522,7 +522,7 @@
               </div>
               <div class="form-field form-field-wide">
                 <label for="project-subject">專案名稱或主題</label>
-                <input id="project-subject" name="subject" type="text" required />
+                <input id="project-subject" name="project_subject" type="text" required />
               </div>
               <div class="form-field">
                 <label for="project-service">想解決的項目</label>
@@ -553,8 +553,13 @@
                 <textarea id="project-message" name="message" rows="7" required placeholder="目前遇到的問題、希望達成的結果、預計時程，以及手邊已有的素材"></textarea>
               </div>
 
+              <div class="project-captcha form-field-wide" data-project-captcha>
+                <div class="h-captcha" data-captcha="true" data-theme="dark" data-size="compact" data-lang="zh-TW"></div>
+                <p>完成真人驗證後即可送出需求。</p>
+              </div>
+
               <div class="project-form-footer form-field-wide">
-                <p>送出後，資料將由 FormSubmit 代為轉寄至 NeoRealm LAB。請勿填寫密碼或其他高度敏感資訊。</p>
+                <p>送出後，資料將安全轉寄至 NeoRealm LAB。請勿填寫密碼或其他高度敏感資訊。</p>
                 <button class="project-submit" type="submit">
                   <span>送出專案需求</span>
                   <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
@@ -568,5 +573,6 @@
         </div>
       </div>
     </dialog>
+    <script src="https://web3forms.com/client/script.js" async defer></script>
   </body>
 </html>

@@ -971,28 +971,52 @@ function setupProjectDialog() {
     });
   });
 
-  form.addEventListener('submit', () => {
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
     if (!form.reportValidity() || !submit || !submitLabel || !status) return;
+
+    const captchaToken = form.querySelector('textarea[name="h-captcha-response"]')?.value;
+    if (!captchaToken) {
+      status.className = 'project-form-status form-field-wide is-error';
+      status.textContent = '請先完成真人驗證，再送出需求。';
+      form.querySelector('[data-project-captcha]')?.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
+      return;
+    }
 
     submit.disabled = true;
     submitLabel.textContent = '傳送中…';
     status.className = 'project-form-status form-field-wide is-sending';
-    status.textContent = '正在進行真人驗證…';
-  });
+    status.textContent = '正在安全傳送你的需求…';
 
-  const url = new URL(window.location.href);
-  if (url.searchParams.get('project') === 'sent') {
-    url.searchParams.delete('project');
-    window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
-    openDialog(openers[0]);
-    if (status && submit && submitLabel) {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 20_000);
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+        signal: controller.signal,
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok || !result?.success) throw new Error(result?.message || 'Form service unavailable');
+
       form.reset();
+      window.hcaptcha?.reset?.();
       status.className = 'project-form-status form-field-wide is-success';
       status.textContent = '需求已送出。我會閱讀內容，並回覆到你填寫的 Email。';
-      submit.disabled = true;
       submitLabel.textContent = '已送出';
+    } catch (error) {
+      status.className = 'project-form-status form-field-wide is-error';
+      status.textContent = error.name === 'AbortError'
+        ? '傳送逾時，請確認網路後再試一次。'
+        : '目前無法送出需求，請稍後再試，或直接來信 neorealmlab@gmail.com。';
+      submit.disabled = false;
+      submitLabel.textContent = '再試一次';
+    } finally {
+      window.clearTimeout(timeout);
     }
-  }
+  });
 }
 
 async function boot() {
