@@ -944,9 +944,11 @@ function setupProjectDialog() {
     dialog.removeAttribute('hidden');
     dialog.setAttribute('aria-hidden', 'false');
     document.body.classList.add('project-dialog-open');
-    if (scroller) scroller.scrollTop = 0;
     window.requestAnimationFrame(() => {
       dialog.classList.add('is-visible');
+      // The scroll container cannot reliably move while its overlay is hidden.
+      // Reset it after the overlay enters layout so every opening begins at pricing.
+      if (scroller) scroller.scrollTop = 0;
       closeButton?.focus({ preventScroll: true });
     });
     // The verification iframe is refreshed after the overlay is visible. Keeping this
@@ -1018,7 +1020,7 @@ function setupProjectDialog() {
     if (!captchaToken) {
       window.hcaptcha?.reset?.();
       status.className = 'project-form-status form-field-wide is-error';
-      status.textContent = '請先勾選「我是實體訪客」並完成真人驗證，再送出需求。';
+      status.textContent = '請先勾選「我是真實訪客」並完成真人驗證，再送出需求。';
       form.querySelector('[data-project-captcha]')?.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
       return;
     }

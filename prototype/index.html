@@ -501,12 +501,13 @@
               <p>不需要先準備完整企劃。說明目前的問題、希望達成的結果與大致預算，我會協助整理適合的合作範圍。</p>
             </div>
 
-            <form
-              class="project-form"
-              action="https://api.web3forms.com/submit"
-              method="POST"
-              data-project-form
-            >
+            <div class="project-form-stage">
+              <form
+                class="project-form"
+                action="https://api.web3forms.com/submit"
+                method="POST"
+                data-project-form
+              >
               <input type="hidden" name="access_key" value="2f418f22-cc13-41d7-8f5d-866d2f7ff67f" />
               <input type="hidden" name="subject" value="NeoRealm LAB｜新的專案需求" />
               <input type="hidden" name="from_name" value="NeoRealm LAB" />
@@ -553,10 +554,10 @@
                 <textarea id="project-message" name="message" rows="7" required placeholder="目前遇到的問題、希望達成的結果、預計時程，以及手邊已有的素材"></textarea>
               </div>
 
-              <div class="project-captcha form-field-wide" data-project-captcha>
-                <div class="h-captcha" data-captcha="true" data-theme="light" data-size="normal" data-lang="zh-TW"></div>
-                <p id="project-captcha-hint"><strong>先勾選左側「我是實體訪客」的 checkbox。</strong>完成真人驗證後，才能送出需求；若驗證逾時，重新開啟此表單即可刷新。</p>
-              </div>
+                <div class="project-captcha form-field-wide" data-project-captcha>
+                  <div class="h-captcha" data-captcha="true" data-theme="light" data-size="normal" data-lang="zh-TW"></div>
+                  <p id="project-captcha-hint"><strong>先勾選左側「我是真實訪客」的 checkbox。</strong>完成真人驗證後，才能送出需求；若驗證逾時，重新開啟此表單即可刷新。</p>
+                </div>
 
               <div class="project-form-footer form-field-wide">
                 <p>送出後，資料將安全轉寄至 NeoRealm LAB。請勿填寫密碼或其他高度敏感資訊。</p>
@@ -567,21 +568,22 @@
                   </svg>
                 </button>
               </div>
-              <p class="project-form-status form-field-wide" data-form-status role="status" aria-live="polite"></p>
-            </form>
+                <p class="project-form-status form-field-wide" data-form-status role="status" aria-live="polite"></p>
+              </form>
 
-            <section class="project-form-complete" data-form-complete tabindex="-1" aria-live="polite" hidden>
-              <div class="project-form-complete-mark" aria-hidden="true">
-                <svg viewBox="0 0 56 56" fill="none">
-                  <path d="m12 29 10 10L45 16" />
-                </svg>
-              </div>
-              <div class="project-form-complete-copy">
-                <h3>需求已送出。</h3>
-                <p>我會閱讀內容，並回覆到你填寫的 Email。</p>
-              </div>
-              <button class="project-form-restart" type="button" data-project-restart>送出另一個需求</button>
-            </section>
+              <section class="project-form-complete" data-form-complete tabindex="-1" aria-live="polite" hidden>
+                <div class="project-form-complete-mark" aria-hidden="true">
+                  <svg viewBox="0 0 56 56" fill="none">
+                    <path d="m12 29 10 10L45 16" />
+                  </svg>
+                </div>
+                <div class="project-form-complete-copy">
+                  <h3>需求已送出。</h3>
+                  <p>我會閱讀內容，並回覆到你填寫的 Email。</p>
+                </div>
+                <button class="project-form-restart" type="button" data-project-restart>送出另一個需求</button>
+              </section>
+            </div>
           </section>
         </div>
       </div>
