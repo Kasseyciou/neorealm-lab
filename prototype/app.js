@@ -915,6 +915,7 @@ function setupProjectDialog() {
   const form = dialog?.querySelector('[data-project-form]');
   const scroller = dialog?.querySelector('.project-dialog-scroll');
   const status = dialog?.querySelector('[data-form-status]');
+  const complete = dialog?.querySelector('[data-form-complete]');
   const submit = form?.querySelector('.project-submit');
   const submitLabel = submit?.querySelector('span');
   const serviceSelect = form?.querySelector('#project-service');
@@ -923,8 +924,17 @@ function setupProjectDialog() {
 
   if (!dialog || !form || !openers.length) return;
 
+  const resetCompleteState = () => {
+    complete?.classList.remove('is-visible');
+    if (complete) complete.hidden = true;
+    form.hidden = false;
+    form.classList.remove('is-complete');
+    form.removeAttribute('aria-hidden');
+  };
+
   const openDialog = (opener) => {
     trigger = opener;
+    resetCompleteState();
     if (status && submit && submitLabel && !status.classList.contains('is-sending')) {
       status.className = 'project-form-status form-field-wide';
       status.textContent = '';
@@ -993,6 +1003,13 @@ function setupProjectDialog() {
     });
   });
 
+  dialog.querySelector('[data-project-restart]')?.addEventListener('click', () => {
+    resetCompleteState();
+    form.reset();
+    window.hcaptcha?.reset?.();
+    nameInput?.focus({ preventScroll: true });
+  });
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!form.reportValidity() || !submit || !submitLabel || !status) return;
@@ -1029,6 +1046,17 @@ function setupProjectDialog() {
       status.className = 'project-form-status form-field-wide is-success';
       status.textContent = '需求已送出。我會閱讀內容，並回覆到你填寫的 Email。';
       submitLabel.textContent = '已送出';
+      form.classList.add('is-complete');
+      form.setAttribute('aria-hidden', 'true');
+      window.setTimeout(() => {
+        form.hidden = true;
+        if (!complete) return;
+        complete.hidden = false;
+        window.requestAnimationFrame(() => {
+          complete.classList.add('is-visible');
+          complete.focus({ preventScroll: true });
+        });
+      }, reducedMotion.matches ? 0 : 260);
     } catch (error) {
       status.className = 'project-form-status form-field-wide is-error';
       status.textContent = error.name === 'AbortError'
