@@ -145,12 +145,18 @@ function setupKv() {
   const playbackStart = 0.2;
   let inView = true;
   let frame = 0;
+  let posterDismissed = false;
+
+  const dismissPoster = () => {
+    if (posterDismissed) return;
+    posterDismissed = true;
+    section.classList.add('is-video-live');
+  };
 
   const syncPlayback = () => {
     const shouldPlay = inView && !document.hidden && !reducedMotion.matches;
     if (shouldPlay) video.play().catch(() => {});
     else video.pause();
-    if (!shouldPlay) section.classList.remove('is-video-live');
   };
 
   const updateKv = () => {
@@ -176,12 +182,11 @@ function setupKv() {
   };
 
   video.addEventListener('timeupdate', () => {
-    section.classList.toggle('is-video-live', !reducedMotion.matches && video.currentTime >= playbackStart);
+    if (video.currentTime >= playbackStart) dismissPoster();
   });
 
-  video.addEventListener('playing', () => {
-    if (!reducedMotion.matches && inView) section.classList.add('is-video-live');
-  });
+  video.addEventListener('loadeddata', dismissPoster, { once: true });
+  video.addEventListener('playing', dismissPoster, { once: true });
 
   new IntersectionObserver(([entry]) => {
     inView = entry.isIntersecting;
