@@ -25,6 +25,8 @@ http://127.0.0.1:4173/#direction-b
 - `PRODUCT.md` — 產品與內容方向
 - `NeoRealm-LAB-Phase-1-Proposal.md` — 第一階段策略與設計提案
 - `.impeccable/design.json` — 可機讀的設計系統資料
+- `docs/instagram-sync.md` — NeoRealm LAB 現行 Instagram 同步架構
+- `docs/instagram-feed-service-blueprint.md` — 可複製銷售的 Instagram Feed Sync＋CMS 產品規格與建置 SOP
 
 ## Current capabilities
 
@@ -34,4 +36,3 @@ http://127.0.0.1:4173/#direction-b
 - AI 影音與 Web 服務內容
 - 過往網站案例瀑布流
 - Responsive 與 reduced-motion 支援
-
