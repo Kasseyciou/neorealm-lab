@@ -688,3 +688,139 @@ Meta 權限名稱、審查要求、token 生命週期與 endpoint 會變動；�
 - 同步失敗不會破壞已上線內容；管理者能辨識狀態並知道如何復原。
 - 權杖輪替、資料刪除、備份還原與版本升級都有文件。
 
+## 25. 客戶部署方案選型
+
+Supabase、GitHub 與虛擬主機解決的是不同問題，可以依預算、媒體量、所有權及維運能力組合。商品報價時應將「系統建置方案」與「前台視覺客製方案」分開，避免客戶誤以為購買 GitHub Pro 就等於取得完整正式主機。
+
+### 25.1 方案比較
+
+| 方案 | 建議組合 | 適合客戶 | 優點 | 主要限制／責任 |
+|---|---|---|---|---|
+| Starter／驗證版 | Supabase Free＋GitHub Actions＋一般靜態主機 | 低流量、少量圖片、概念驗證 | 初期成本低、建置快 | Free quota 較小；不適合累積大量 Reels 或正式 SLA |
+| Managed Pro／標準商用版 | Supabase Pro＋private GitHub repo＋Cloudflare Pages／Vercel／Netlify／客戶現有主機 | 多數品牌官網與工作室 | Auth、Database、Storage、Edge Function 集中管理；維運負擔低 | 仍須監控 Storage／egress／Actions；第三方平台費用由客戶承擔 |
+| Hybrid Media／影音強化版 | Supabase Pro 負責 Auth／Database＋S3／R2 類 object storage＋VPS worker | Reels 多、影片較大、需要轉檔與 CDN | 媒體與資料庫分流；FFmpeg、queue、重試及影片版本控制更有彈性 | 架構與帳單較複雜；需要 worker、object storage 與監控 |
+| Dedicated／全自管版 | VPS／雲端 VM＋Docker＋Postgres／self-hosted Supabase＋S3／MinIO＋Nginx＋worker | 有 IT 人員、資料主權或特殊整合需求 | 控制權最高，可自訂備份、網路與部署流程 | 維運、安全更新、備份、監控、擴充與事故處理由客戶或維護商負責 |
+
+### 25.2 Starter／驗證版
+
+建議架構：
+
+```text
+Static website hosting
+        ↓
+Supabase Free: Auth + Database + Storage
+        ↑
+GitHub Actions: scheduled Instagram sync
+```
+
+適合尚未確認需求、更新頻率低，且以圖片貼文為主的客戶。Supabase Free 目前提供有限的 Database、Storage 與 egress quota，應在合約中註明達到上限後需升級或清理內容。
+
+這個方案可以作為付費 PoC，但不建議承諾不中斷服務、長期大量影片保存或正式 SLA。
+
+### 25.3 Managed Pro／標準商用版
+
+這是預設推薦方案：
+
+```text
+Client domain
+     ↓
+Static / frontend hosting
+     ↓
+Supabase Pro: Auth + Postgres + Storage + Edge Functions
+     ↑
+Private GitHub repo + Actions sync worker
+```
+
+以 2026-08-28 官方資料為準，Supabase Pro 基本訂閱為每月 USD 25，另依 project compute 與超額用量計費；目前方案包含 100 GB Storage、250 GB egress、2 million Edge Function invocations 等組織層級 quota。付費 project 不會像 Free project 因閒置而暫停，適合正式客戶網站。實際費用與 quota 上線前仍須重新核對官方價格頁。
+
+建議設定 Spend Cap、usage monitoring 與 billing alert；Spend Cap 並不涵蓋所有附加項目，例如 compute、custom domain 或額外 IOPS。
+
+### 25.4 GitHub 付費的角色
+
+GitHub Pro／Team 適合作為工程與交付層，而不是 IG 媒體資料庫：
+
+- Private repository 與客戶程式碼權限管理。
+- GitHub Actions 執行排程同步、FFmpeg、測試與部署。
+- Pull request、版本紀錄、release 與 rollback。
+- Repository secrets 保存 Meta／Supabase worker credentials。
+- Actions budget 與使用量管理。
+
+不要將大量 Reels 長期提交進 Git repository。GitHub Pages 官方目前建議 source repository 與 published site 不超過 1 GB，並有每月 100 GB soft bandwidth limit；官方也說明 Pages 不應被當作主要商業 SaaS 或敏感交易平台。客戶官網若只是靜態展示仍可評估 Pages，但商品化服務建議將程式碼留在 GitHub，網站與影音交由正式 hosting／CDN。
+
+公開 repository 的標準 GitHub-hosted Actions runner 目前可免費使用；private repository 則依帳號方案有 included minutes，超額計費。因此 GitHub 是否需要付費，主要取決於程式碼是否必須 private、協作者數量及同步／轉檔分鐘數。
+
+### 25.5 客戶既有虛擬空間／共享主機
+
+若客戶已有 cPanel、FTP 或一般 PHP 虛擬主機，可採混合模式：
+
+```text
+Shared hosting: public website files
+Supabase: Auth + Database + Storage + Admin API
+GitHub Actions: Instagram sync + deployment over SFTP/FTP
+```
+
+優點是沿用客戶既有網域與主機，不必在虛擬空間自行部署 Node、Postgres 或 FFmpeg。只要主機能提供 HTTPS 與靜態檔案，即可讓前台直接讀 Supabase。
+
+若共享主機無法執行 Node／FFmpeg，不要把同步 worker 塞入主機；維持 GitHub Actions 或改用外部 worker。
+
+### 25.6 Hybrid Media／影音強化版
+
+當客戶大量發布 Reels，成本主因通常會從 Database 轉為影片 Storage、egress 與轉檔時間。建議：
+
+- Supabase 保留 Auth、Postgres、角色與內容編排。
+- 影片移至適合大量傳輸的 object storage／CDN。
+- VPS worker 執行 FFmpeg、queue、重試、thumbnail 與多尺寸輸出。
+- Database 只保存 object path、播放版本、checksum 與轉檔狀態。
+- 圖片仍可放 Supabase Storage，或與影片一起遷移。
+
+此方案應提供 `processing`、`ready`、`failed` 狀態，避免後台在影片尚未轉檔完成時誤判同步失敗。
+
+### 25.7 Dedicated／全自管 VPS
+
+建議最少元件：
+
+```text
+Nginx / Caddy
+Frontend application
+Admin application
+Postgres
+Object storage or S3-compatible service
+Node sync worker
+FFmpeg
+Queue / scheduler
+Backup target
+Monitoring + alerting
+```
+
+全自管不代表費用必然較低。客戶需負責或購買：
+
+- OS、Docker、Database 與套件安全更新。
+- Firewall、TLS、SSH、權限與 secret management。
+- Database／Storage 備份、異地副本與還原演練。
+- CPU、RAM、disk、bandwidth 與影片轉檔容量規劃。
+- Log、uptime、異常流量、queue 與 token 失效監控。
+- 事故回應與維護時段。
+
+除非客戶有 IT 人員、合規要求或高媒體量，否則不建議以全自管作為第一個商用方案。
+
+### 25.8 快速選擇規則
+
+| 客戶回答 | 推薦方案 |
+|---|---|
+| 想先測試、貼文少、暫時不保存大量影片 | Starter |
+| 正式品牌官網、希望穩定且不想自行維運 Server | Managed Pro |
+| 已有虛擬主機，只想加入 IG 同步與後台 | 既有主機＋Supabase 混合模式 |
+| 每月大量 Reels、影片流量明顯高於圖片 | Hybrid Media |
+| 有內部 IT／法規／資料主權／特殊網路要求 | Dedicated VPS |
+
+### 25.9 報價拆分
+
+建議報價單分成：
+
+1. **一次性建置費**：Meta、Supabase、GitHub、資料庫、同步與前後台串接。
+2. **前台客製費**：版型、動畫、燈箱、RWD 與品牌視覺。
+3. **第三方平台費**：Supabase、GitHub、hosting、object storage、CDN、網域；原則上由客戶帳號直接付款。
+4. **月／季維護費**：Token、API 版本、錯誤排查、套件、安全與備份檢查。
+5. **超額處理費**：大量影片轉檔、Storage migration、歷史資料修復或 API 改版。
+
+客戶若停止維護合約，仍應持有其 Meta、Supabase、GitHub、網域與 hosting 帳號，並取得最後一次可還原的程式碼、migration 與操作文件。
