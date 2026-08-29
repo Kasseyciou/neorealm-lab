@@ -444,6 +444,16 @@ function renderInstagramLibrary() {
     orderActions.className = 'instagram-order-actions';
     if (item.visible) {
       const selectedIndex = selected.findIndex((post) => post.id === item.id);
+      const pinButton = document.createElement('button');
+      pinButton.type = 'button';
+      pinButton.textContent = '置頂';
+      pinButton.setAttribute('aria-label', `將 ${item.title} 置頂`);
+      pinButton.disabled = instagramOrderSaving || selectedIndex === 0;
+      pinButton.onclick = async () => {
+        await reorderInstagramPosts(item.id, selected[0].id);
+      };
+      orderActions.append(pinButton);
+
       [['上移', -1, '向前移動'], ['下移', 1, '向後移動']].forEach(([symbol, offset, actionLabel]) => {
         const button = document.createElement('button');
         button.type = 'button';
