@@ -556,16 +556,69 @@ select:focus-visible {
 }
 
 .instagram-title-row {
+  position: relative;
   display: grid;
   grid-template-columns: 72px minmax(220px, 1fr) minmax(260px, auto);
   gap: 18px;
   align-items: center;
-  padding: 14px 0;
+  padding: 14px 0 14px 34px;
   border-bottom: 1px solid var(--line);
+  transition: opacity 160ms ease, background-color 160ms ease;
 }
 
 .instagram-title-row.is-selected {
   background: rgba(217, 244, 95, 0.035);
+}
+
+.instagram-title-row.is-dragging {
+  opacity: 0.38;
+}
+
+.instagram-title-row.is-drop-before::before,
+.instagram-title-row.is-drop-after::after {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: var(--accent);
+  content: '';
+  pointer-events: none;
+}
+
+.instagram-title-row.is-drop-before::before {
+  top: -1px;
+}
+
+.instagram-title-row.is-drop-after::after {
+  bottom: -1px;
+}
+
+.instagram-drag-handle {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  display: grid;
+  width: 24px;
+  height: 44px;
+  place-items: center;
+  color: var(--muted);
+  cursor: grab;
+  transform: translateY(-50%);
+}
+
+.instagram-drag-handle:active {
+  cursor: grabbing;
+}
+
+.instagram-drag-handle svg {
+  width: 16px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.instagram-title-row.is-draggable:hover .instagram-drag-handle {
+  color: var(--accent);
 }
 
 .instagram-title-row img {
@@ -741,6 +794,7 @@ select:focus-visible {
 
   .instagram-title-row {
     grid-template-columns: 58px minmax(0, 1fr);
+    padding-left: 30px;
   }
 
   .instagram-title-row img {

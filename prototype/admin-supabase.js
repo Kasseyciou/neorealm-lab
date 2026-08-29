@@ -26,7 +26,9 @@ let instagramTitleOverrides = {};
 const instagramTitleDrafts = new Map();
 let coverBlob = null;
 let pageBlob = null;
-let draggedId = '';
+let draggedProjectId = '';
+let draggedInstagramId = '';
+let instagramOrderSaving = false;
 let authorizationTask = null;
 
 const say = (message, error = false) => {
@@ -186,13 +188,13 @@ function renderProjects() {
     remove.setAttribute('aria-label', `刪除 ${project.title}`);
     remove.onclick = () => removeProject(project);
     actions.append(remove);
-    item.addEventListener('dragstart', () => { draggedId = project.id; item.classList.add('is-dragging'); });
-    item.addEventListener('dragend', () => { draggedId = ''; item.classList.remove('is-dragging'); });
+    item.addEventListener('dragstart', () => { draggedProjectId = project.id; item.classList.add('is-dragging'); });
+    item.addEventListener('dragend', () => { draggedProjectId = ''; item.classList.remove('is-dragging'); });
     item.addEventListener('dragover', (event) => event.preventDefault());
     item.addEventListener('drop', async (event) => {
       event.preventDefault();
-      if (!draggedId || draggedId === project.id) return;
-      const from = projects.findIndex(({ id }) => id === draggedId);
+      if (!draggedProjectId || draggedProjectId === project.id) return;
+      const from = projects.findIndex(({ id }) => id === draggedProjectId);
       const to = projects.findIndex(({ id }) => id === project.id);
       const [moved] = projects.splice(from, 1);
       projects.splice(to, 0, moved);
@@ -224,6 +226,60 @@ async function persistInstagramOrder(selectedPosts) {
   )));
   const failed = results.find(({ error }) => error);
   if (failed) throw failed.error;
+}
+
+function clearInstagramDropTargets() {
+  instagramTitleList.querySelectorAll('.is-drop-before, .is-drop-after').forEach((row) => {
+    row.classList.remove('is-drop-before', 'is-drop-after');
+  });
+}
+
+function applyLocalInstagramOrder(selectedPosts) {
+  const unselectedPosts = instagramPosts.filter((post) => !post.visible);
+  instagramPosts = [...selectedPosts, ...unselectedPosts];
+}
+
+async function reorderInstagramPosts(sourceId, targetId, placeAfter = false) {
+  if (instagramOrderSaving || !sourceId || !targetId || sourceId === targetId) return;
+
+  const selectedPosts = instagramPosts.filter((post) => post.visible);
+  const previousSelectedPosts = [...selectedPosts];
+  const sourceIndex = selectedPosts.findIndex((post) => post.id === sourceId);
+  const targetIndex = selectedPosts.findIndex((post) => post.id === targetId);
+  if (sourceIndex < 0 || targetIndex < 0) return;
+
+  const [movedPost] = selectedPosts.splice(sourceIndex, 1);
+  let insertIndex = targetIndex + (placeAfter ? 1 : 0);
+  if (sourceIndex < insertIndex) insertIndex -= 1;
+  selectedPosts.splice(insertIndex, 0, movedPost);
+  if (selectedPosts.every((post, index) => post.id === previousSelectedPosts[index]?.id)) return;
+
+  instagramOrderSaving = true;
+  applyLocalInstagramOrder(selectedPosts);
+  renderInstagramLibrary();
+  instagramTitleStatus.classList.remove('is-error');
+  instagramTitleStatus.textContent = '正在儲存前台 IG 順序…';
+
+  try {
+    await persistInstagramOrder(selectedPosts);
+    instagramTitleStatus.textContent = '前台 IG 順序已更新。';
+  } catch (error) {
+    instagramTitleStatus.classList.add('is-error');
+    try {
+      await persistInstagramOrder(previousSelectedPosts);
+      instagramTitleStatus.textContent = `排序儲存失敗，已還原原順序：${error.message}`;
+    } catch (rollbackError) {
+      instagramTitleStatus.textContent = `排序儲存失敗，且無法自動還原：${rollbackError.message}`;
+    }
+  }
+
+  instagramOrderSaving = false;
+  try {
+    await loadInstagramLibrary();
+  } catch (loadError) {
+    instagramTitleStatus.classList.add('is-error');
+    instagramTitleStatus.textContent = `排序已處理，但作品庫重新載入失敗：${loadError.message}`;
+  }
 }
 
 async function loadInstagramLibrary() {
@@ -293,6 +349,38 @@ function renderInstagramLibrary() {
     const row = document.createElement('article');
     row.className = 'instagram-title-row';
     row.classList.toggle('is-selected', item.visible);
+    row.dataset.instagramId = item.id;
+
+    if (item.visible) {
+      row.classList.add('is-draggable');
+      const dragHandle = document.createElement('span');
+      dragHandle.className = 'instagram-drag-handle';
+      dragHandle.draggable = !instagramOrderSaving;
+      dragHandle.title = '拖曳調整前台順序';
+      dragHandle.setAttribute('aria-hidden', 'true');
+      dragHandle.innerHTML = `
+        <svg viewBox="0 0 16 22" aria-hidden="true">
+          <circle cx="5" cy="5" r="1.1"></circle><circle cx="11" cy="5" r="1.1"></circle>
+          <circle cx="5" cy="11" r="1.1"></circle><circle cx="11" cy="11" r="1.1"></circle>
+          <circle cx="5" cy="17" r="1.1"></circle><circle cx="11" cy="17" r="1.1"></circle>
+        </svg>`;
+      dragHandle.addEventListener('dragstart', (event) => {
+        if (instagramOrderSaving) {
+          event.preventDefault();
+          return;
+        }
+        draggedInstagramId = item.id;
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', item.id);
+        requestAnimationFrame(() => row.classList.add('is-dragging'));
+      });
+      dragHandle.addEventListener('dragend', () => {
+        draggedInstagramId = '';
+        row.classList.remove('is-dragging');
+        clearInstagramDropTargets();
+      });
+      row.append(dragHandle);
+    }
 
     const image = new Image();
     image.src = item.src;
@@ -325,7 +413,7 @@ function renderInstagramLibrary() {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = item.visible;
-    checkbox.disabled = !item.visible && selected.length >= 20;
+    checkbox.disabled = instagramOrderSaving || (!item.visible && selected.length >= 20);
     checkbox.setAttribute('aria-label', `${item.visible ? '從前台移除' : '顯示於前台'} ${item.title}`);
     const visibilityText = document.createElement('span');
     visibilityText.textContent = item.visible ? '前台顯示' : '加入前台';
@@ -361,19 +449,10 @@ function renderInstagramLibrary() {
         button.type = 'button';
         button.textContent = symbol;
         button.setAttribute('aria-label', `${actionLabel} ${item.title}`);
-        button.disabled = offset < 0 ? selectedIndex === 0 : selectedIndex === selected.length - 1;
+        button.disabled = instagramOrderSaving || (offset < 0 ? selectedIndex === 0 : selectedIndex === selected.length - 1);
         button.onclick = async () => {
           const nextIndex = selectedIndex + offset;
-          [selected[selectedIndex], selected[nextIndex]] = [selected[nextIndex], selected[selectedIndex]];
-          try {
-            await persistInstagramOrder(selected);
-            instagramTitleStatus.classList.remove('is-error');
-            instagramTitleStatus.textContent = '前台 IG 順序已更新。';
-            await loadInstagramLibrary();
-          } catch (error) {
-            instagramTitleStatus.classList.add('is-error');
-            instagramTitleStatus.textContent = error.message;
-          }
+          await reorderInstagramPosts(item.id, selected[nextIndex].id, offset > 0);
         };
         orderActions.append(button);
       });
@@ -383,6 +462,7 @@ function renderInstagramLibrary() {
     save.type = 'button';
     save.className = 'secondary-action';
     save.textContent = '儲存標題';
+    save.disabled = instagramOrderSaving;
     save.onclick = async () => {
       save.disabled = true;
       const title = input.value.trim();
@@ -400,6 +480,25 @@ function renderInstagramLibrary() {
 
     actions.append(visibility, orderActions, save);
     row.append(image, field, actions);
+    if (item.visible) {
+      row.addEventListener('dragover', (event) => {
+        if (!draggedInstagramId || draggedInstagramId === item.id || instagramOrderSaving) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+        const placeAfter = event.clientY > row.getBoundingClientRect().top + row.offsetHeight / 2;
+        clearInstagramDropTargets();
+        row.classList.add(placeAfter ? 'is-drop-after' : 'is-drop-before');
+      });
+      row.addEventListener('drop', async (event) => {
+        event.preventDefault();
+        if (!draggedInstagramId || draggedInstagramId === item.id || instagramOrderSaving) return;
+        const placeAfter = row.classList.contains('is-drop-after');
+        const sourceId = draggedInstagramId;
+        draggedInstagramId = '';
+        clearInstagramDropTargets();
+        await reorderInstagramPosts(sourceId, item.id, placeAfter);
+      });
+    }
     instagramTitleList.append(row);
   });
 }
