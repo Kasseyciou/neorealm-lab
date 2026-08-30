@@ -2446,7 +2446,22 @@ html {
 
 .contact-studio-image {
   background: url("./assets/contact-studio.png") center / cover no-repeat;
+  background-color: var(--b-black);
   filter: saturate(0.7) contrast(1.08);
+}
+
+.contact-studio-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 520ms ease;
+}
+
+.contact-studio-image.is-video-live .contact-studio-video {
+  opacity: 1;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -3351,6 +3366,7 @@ html {
   .release-image::after {
     display: none;
   }
+
 }
 
 @media (max-width: 720px) and (orientation: portrait) {
@@ -5253,6 +5269,10 @@ body.project-dialog-open {
   }
 
   .release-image::after {
+    display: none;
+  }
+
+  .contact-studio-video {
     display: none;
   }
 }

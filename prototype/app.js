@@ -204,6 +204,43 @@ function setupKv() {
   syncPlayback();
 }
 
+function setupContactVideo() {
+  const section = document.querySelector('#b-contact');
+  const stage = section?.querySelector('.contact-studio-image');
+  const video = stage?.querySelector('.contact-studio-video');
+  if (!section || !stage || !video) return;
+
+  let inView = false;
+  let videoIsLive = false;
+
+  const revealVideo = () => {
+    if (videoIsLive || reducedMotion.matches || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+    videoIsLive = true;
+    window.requestAnimationFrame(() => stage.classList.add('is-video-live'));
+  };
+
+  const syncPlayback = () => {
+    const shouldPlay = inView && !document.hidden && !reducedMotion.matches;
+    if (shouldPlay) video.play().catch(() => {});
+    else video.pause();
+  };
+
+  video.addEventListener('loadeddata', revealVideo, { once: true });
+  video.addEventListener('playing', revealVideo, { once: true });
+  video.addEventListener('error', () => stage.classList.remove('is-video-live'), { once: true });
+
+  new IntersectionObserver(([entry]) => {
+    inView = entry.isIntersecting;
+    syncPlayback();
+  }, { threshold: 0.08 }).observe(section);
+
+  document.addEventListener('visibilitychange', syncPlayback);
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) stage.classList.remove('is-video-live');
+    syncPlayback();
+  });
+}
+
 function setupStudioStory() {
   const steps = Array.from(document.querySelectorAll('[data-studio-step]'));
   const images = Array.from(document.querySelectorAll('[data-studio-image]'));
@@ -1103,6 +1140,7 @@ function setupProjectDialog() {
 
 async function boot() {
   setupKv();
+  setupContactVideo();
   setupStudioStory();
   setupTextMotion();
   setupActiveNavigation();

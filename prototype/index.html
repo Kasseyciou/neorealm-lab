@@ -38,12 +38,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Serif+TC:wght@400;500;600;700;900&family=Zen+Old+Mincho:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./styles.css?v=20260826-1" />
+    <link rel="stylesheet" href="./styles.css?v=20260830-1" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="./supabase-client.js?v=20260825-1" defer></script>
     <script src="./web-projects.js?v=20260824-1" defer></script>
     <script src="./colorful-hover.js?v=20260825-5" defer></script>
-    <script src="./app.js?v=20260825-6" defer></script>
+    <script src="./app.js?v=20260830-1" defer></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -365,7 +365,11 @@
       </section>
 
       <section id="b-contact" class="b-contact" aria-labelledby="b-contact-title">
-        <div class="contact-image contact-studio-image" aria-hidden="true"></div>
+        <div class="contact-image contact-studio-image" aria-hidden="true">
+          <video class="contact-studio-video" muted loop playsinline preload="metadata" poster="./assets/contact-studio.png">
+            <source src="./assets/contact-studio.mp4?v=20260830-1" type="video/mp4" />
+          </video>
+        </div>
         <div class="contact-scrim"></div>
         <div class="contact-copy">
           <p>有想完成的計畫，或一個還沒理清的問題？</p>
