@@ -853,7 +853,31 @@ async function setupWebArchive() {
   const cards = Array.from(flow.querySelectorAll('[data-archive-category]'));
   const projectCount = (category) => projects.filter((project) => category === 'all' || project.category === category).length;
 
-  const filterArchive = (category) => {
+  const revealFirstProject = () => {
+    const firstVisibleCard = cards.find((card) => !card.hidden);
+    if (!firstVisibleCard) return;
+
+    // On phones the archive introduction remains sticky while a category is
+    // being changed. Reserve its visual footprint so the first new project
+    // begins below it instead of appearing to have vanished behind the copy.
+    const archiveCopy = flow.closest('.archive-waterfall')?.querySelector('.archive-copy');
+    const scrollPadding = Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 96;
+    const stickyCopyOverlap = window.matchMedia('(max-width: 720px)').matches && archiveCopy
+      // At the old category's end the sticky copy can already be outside the
+      // viewport, so its `bottom` is not a reliable measure. Its own height
+      // is stable and is exactly the space the new first card must clear.
+      ? Math.max(0, archiveCopy.getBoundingClientRect().height - scrollPadding)
+      : 0;
+    const safeViewportTop = scrollPadding + stickyCopyOverlap + 12;
+    const nextScrollTop = Math.max(0, window.scrollY + firstVisibleCard.getBoundingClientRect().top - safeViewportTop);
+
+    // Deliberately use the numeric form for an immediate reset. CSS smooth
+    // scrolling would briefly leave the visitor in the now-empty portion of
+    // the previous category, which is the disorienting state this avoids.
+    window.scrollTo(0, nextScrollTop);
+  };
+
+  const filterArchive = (category, { resetToFirst = false } = {}) => {
     const previousRects = new Map(cards.filter((card) => !card.hidden).map((card) => [card, card.getBoundingClientRect()]));
     cards.forEach((card) => {
       card.hidden = category !== 'all' && card.dataset.archiveCategory !== category;
@@ -891,11 +915,17 @@ async function setupWebArchive() {
           { duration: reducedMotion.matches ? 1 : 560, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
         );
       });
+
+      if (resetToFirst) {
+        // Wait one more frame for the multi-column flow to settle after
+        // hidden cards are removed; this makes the reset accurate on iOS too.
+        requestAnimationFrame(revealFirstProject);
+      }
     });
   };
 
   filters.forEach((filter) => {
-    filter.addEventListener('click', () => filterArchive(filter.dataset.archiveFilter));
+    filter.addEventListener('click', () => filterArchive(filter.dataset.archiveFilter, { resetToFirst: true }));
   });
   filterArchive('all');
 
