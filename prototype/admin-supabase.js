@@ -320,7 +320,8 @@ async function refreshInstagramLibrary() {
       return;
     }
 
-    instagramTitleStatus.textContent = '同步仍在背景執行，稍後重新整理後台即可查看最新作品。';
+    instagramTitleStatus.classList.add('is-error');
+    instagramTitleStatus.textContent = '尚未確認同步完成。請查看 GitHub Actions 的 Sync Instagram feed 執行結果；若授權已到期，需要重新連接 Instagram。';
   } catch (error) {
     instagramTitleStatus.classList.add('is-error');
     instagramTitleStatus.textContent = `無法啟動同步：${error.message || '請稍後再試。'}`;
