@@ -3,10 +3,11 @@ import path from 'node:path';
 import { tmpdir } from 'node:os';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { resolveInstagramToken } from './instagram-token.mjs';
 
 const execFileAsync = promisify(execFile);
 
-const token = process.env.INSTAGRAM_ACCESS_TOKEN;
+let token = process.env.INSTAGRAM_ACCESS_TOKEN;
 const userId = process.env.INSTAGRAM_USER_ID || 'me';
 const supabaseUrl = String(process.env.SUPABASE_URL || '').replace(/\/$/, '');
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
@@ -316,6 +317,7 @@ async function syncLatestStatic(allMedia) {
   console.log(`Synced ${items.length} latest Instagram posts to the static fallback. Add Supabase repository secrets to enable permanent history.`);
 }
 
+token = await resolveInstagramToken({ seedToken: token, supabaseUrl, serviceRoleKey });
 const allMedia = await fetchInstagramMedia();
 if (supabaseUrl && serviceRoleKey) await syncToSupabase(allMedia);
 else await syncLatestStatic(allMedia);

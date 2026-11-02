@@ -31,6 +31,12 @@ Implemented production flow:
 
 ## Editorial rules
 
+### Authorization recovery and renewal
+
+If Actions reports OAuthException code 190, reauthorize the account and replace the repository secret `INSTAGRAM_ACCESS_TOKEN` with a valid long-lived Instagram token. Expired tokens cannot be repaired by retrying synchronization.
+
+The sync job renews eligible tokens every seven days and stores the returned credential in the private `instagram-sync-private` Storage bucket using the existing service-role credential. It refuses public buckets. No public read policy should be added to this bucket. A SHA-256 fingerprint detects a replaced repository secret and gives the new authorization priority over the cached token. Credentials must never enter the public feed, workflow artifacts, or logs.
+
 - A new post enters the permanent library automatically but does not enter the public wall until selected in the admin.
 - The dashboard refresh button invokes the authenticated `refresh-instagram` Supabase Edge Function, which dispatches the existing GitHub Actions workflow without exposing the GitHub credential to the browser. The function keeps its `GITHUB_ACTIONS_TOKEN` in Supabase secrets.
 - Reels use their thumbnail in the wall and play their archived MP4 in the lightbox; the Instagram embed is a fallback only when Meta withholds the media file.
