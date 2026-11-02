@@ -7,14 +7,15 @@ export async function resolveInstagramToken({ seedToken, supabaseUrl, serviceRol
   const bucket = 'instagram-sync-private';
   const endpoint = `${supabaseUrl}/storage/v1`;
   const bucketResponse = await fetcher(`${endpoint}/bucket/${bucket}`, { headers });
-  if (bucketResponse.status === 404) {
+  const bucketInfo = await bucketResponse.json();
+  if (bucketResponse.status === 404 || (bucketResponse.status === 400 && /bucket not found/i.test(bucketInfo.message || ''))) {
     const created = await fetcher(`${endpoint}/bucket`, {
       method: 'POST', headers, body: JSON.stringify({ id: bucket, name: bucket, public: false }),
     });
     if (!created.ok) throw new Error(`Cannot create private credential storage (${created.status}).`);
   } else if (!bucketResponse.ok) {
     throw new Error(`Cannot inspect private credential storage (${bucketResponse.status}).`);
-  } else if ((await bucketResponse.json()).public !== false) {
+  } else if (bucketInfo.public !== false) {
     throw new Error('Credential bucket must be private. Refusing to store Instagram credentials.');
   }
   const objectUrl = `${endpoint}/object/${bucket}/token.json`;
